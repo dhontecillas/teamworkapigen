@@ -1,0 +1,7 @@
+{
+ "packageName": "pmv1",
+ "projectName": "teamwork-projects-legacy-api-v1",
+ "packageVersion": "1.0.0",
+ "packageUrl": "https://developer.teamwork.com",
+ "generateSourceCodeOnly": true
+}

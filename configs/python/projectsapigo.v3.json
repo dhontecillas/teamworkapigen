@@ -1,0 +1,7 @@
+{
+ "packageName": "projv3",
+ "projectName": "teamwork-projects-api-v3",
+ "packageVersion": "1.0.0",
+ "packageUrl": "https://developer.teamwork.com",
+ "generateSourceCodeOnly": true
+}
