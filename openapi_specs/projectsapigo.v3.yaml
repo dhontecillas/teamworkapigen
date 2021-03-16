@@ -21851,7 +21851,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/deadline.MilestoneMetricDeadline'
-  errors.BulkError:
+  apierrors.BulkError:
     title: BulkError
     description: |-
       BulkError stores details related to an error on an api request that
@@ -23942,7 +23942,7 @@ definitions:
       customFields:
         type: array
         items:
-          $ref: '#/definitions/customfieldtask.CustomFieldTask'
+          $ref: '#/definitions/task.CustomFieldTask'
       description:
         type: string
       dueAt:
