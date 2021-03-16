@@ -15527,7 +15527,6 @@ paths:
     get:
       operationId: GET_projects_api_v3_projects_teamwork_samples.json
       tags:
-      - Sample
       - Projects
       summary: Returns a list of teamwork sample projects
       description: Retrieve all sample projects for the provided filters.
