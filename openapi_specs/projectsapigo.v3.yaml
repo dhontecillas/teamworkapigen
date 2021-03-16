@@ -9,6 +9,8 @@ produces:
 tags:
 - name: Activity
 - name: Allocations
+- name: Apps
+- name: AppsSettings
 - name: BETA
 - name: Budgets
 - name: CalendarEvents
@@ -19,6 +21,10 @@ tags:
 - name: Dashboards
 - name: FileComments
 - name: Files
+- name: Forms
+- name: FormsAssignees
+- name: FormsPublic
+- name: FormsToken
 - name: Importers
 - name: Lockdowns
 - name: Messages
@@ -34,6 +40,7 @@ tags:
 - name: Projects
 - name: ResourceScheduling
 - name: Risks
+- name: Sample
 - name: Summary
 - name: Tags
 - name: TaskLists
@@ -346,6 +353,18 @@ paths:
         in: query
         description: define the format of the report
         type: string
+      - name: projectStatuses
+        in: query
+        description: filter by project statuses
+        type: string
+        items: {}
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
       - name: projectStatus
         in: query
         description: filter by project status
@@ -863,6 +882,133 @@ paths:
       summary: Delete many allocations at once.
       tags:
       - Allocations
+      x-private: true
+  /projects/api/v3/apps.json:
+    get:
+      operationId: GET_projects_api_v3_apps.json
+      parameters:
+      - default: "50"
+        description: number of items in a page
+        in: query
+        name: pageSize
+        type: integer
+      - default: "1"
+        description: page number
+        in: query
+        name: page
+        type: integer
+      - description: include
+        enum:
+        - appsettings
+        in: query
+        items:
+          type: string
+        name: include
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/app.AppsResponse'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+      summary: Get all apps.
+      tags:
+      - Apps
+      x-private: true
+  /projects/api/v3/apps/:appid/install.json:
+    post:
+      operationId: POST_projects_api_v3_apps_:appid_install.json
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 201 Created
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Install an app onto an installation
+      tags:
+      - Apps
+      x-private: true
+  /projects/api/v3/apps/:appid/settings/:settingid.json:
+    put:
+      consumes:
+      - application/json
+      operationId: PUT_projects_api_v3_apps_:appid_settings_:settingid.json
+      parameters:
+      - in: body
+        name: setting.Request
+        required: true
+        schema:
+          $ref: '#/definitions/setting.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/setting.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Update an existing setting.
+      tags:
+      - AppsSettings
+      x-private: true
+  /projects/api/v3/apps/:id.json:
+    get:
+      operationId: GET_projects_api_v3_apps_:id.json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Get a specific app.
+      tags:
+      - Apps
+      x-private: true
+  /projects/api/v3/apps/:id/uninstall.json:
+    post:
+      operationId: POST_projects_api_v3_apps_:id_uninstall.json
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: 204 No Content (no data)
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Uninstall an app from an installation
+      tags:
+      - Apps
       x-private: true
   /projects/api/v3/budget/notifications/:id.json:
     patch:
@@ -3808,6 +3954,484 @@ paths:
       tags:
       - Files
       x-private: true
+  /projects/api/v3/form/:id/assignees.json:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Replace the current assignees. An empty list deletes.
+
+        If some of the assignees are found to error, the correct
+        ones will be created, and the incorrect assignees will be
+        reported back in the response, under `.errors.[]`
+
+        If every assignee is found to not exist, the response will be
+        a 404.
+
+        If every assignee is found to be invalid, or a mix of invalid
+        and doesn't exist, the response will be a 400.
+      operationId: PUT_projects_api_v3_form_:id_assignees.json
+      parameters:
+      - in: body
+        name: assignee.Request
+        required: true
+        schema:
+          $ref: '#/definitions/assignee.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/assignee.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Update the existing assignees.
+      tags:
+      - FormsAssignees
+      x-private: true
+  /projects/api/v3/forms.json:
+    get:
+      description: Return a list of all forms.
+      operationId: GET_projects_api_v3_forms.json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/form.FormsResponse'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+      summary: Get all forms.
+      tags:
+      - Forms
+      x-private: true
+    post:
+      consumes:
+      - application/json
+      operationId: POST_projects_api_v3_forms.json
+      parameters:
+      - in: body
+        name: form.Request
+        required: true
+        schema:
+          $ref: '#/definitions/form.Request'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 201 Created
+          schema:
+            $ref: '#/definitions/form.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "409":
+          description: 409 Conflict
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+      summary: Create a new form.
+      tags:
+      - Forms
+      x-private: true
+  /projects/api/v3/forms/:id.json:
+    get:
+      operationId: GET_projects_api_v3_forms_:id.json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/form.Response'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/form.Response'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Get a specific form.
+      tags:
+      - Forms
+      x-private: true
+    patch:
+      consumes:
+      - application/json
+      operationId: PATCH_projects_api_v3_forms_:id.json
+      parameters:
+      - in: body
+        name: form.Request
+        required: true
+        schema:
+          $ref: '#/definitions/form.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/form.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+        "409":
+          description: 409 Conflict
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+      summary: Update an existing form.
+      tags:
+      - Forms
+      x-private: true
+    delete:
+      operationId: DELETE_projects_api_v3_forms_:id.json
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: 204 No Content (no data)
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Delete an existing form.
+      tags:
+      - Forms
+      x-private: true
+  /projects/api/v3/forms/:id/assignees.json:
+    get:
+      description: Get all assignees for a given form.
+      operationId: GET_projects_api_v3_forms_:id_assignees.json
+      parameters:
+      - default: asc
+        description: order mode
+        enum:
+        - asc
+        - desc
+        in: query
+        name: orderMode
+        type: string
+      - description: filter by user id
+        in: query
+        name: userId
+        type: integer
+      - default: "50"
+        description: number of items in a page
+        in: query
+        name: pageSize
+        type: integer
+      - default: "1"
+        description: page number
+        in: query
+        name: page
+        type: integer
+      - description: include
+        enum:
+        - companies
+        - teams
+        - users
+        in: query
+        items:
+          type: string
+        name: include
+        type: array
+      - enum:
+        - id
+        - firstName
+        - lastName
+        - email
+        - companyId
+        - isAdmin
+        - type
+        in: query
+        items:
+          type: string
+        name: fields[users]
+        type: array
+      - enum:
+        - id
+        - name
+        - teamLogo
+        - teamLogoIcon
+        - teamLogoColor
+        in: query
+        items:
+          type: string
+        name: fields[teams]
+        type: array
+      - enum:
+        - id
+        - type
+        in: query
+        items:
+          type: string
+        name: fields[formAssignees]
+        type: array
+      - enum:
+        - id
+        - name
+        - logoUploadedToServer
+        - logoImage
+        in: query
+        items:
+          type: string
+        name: fields[companies]
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/assignee.FormAssigneesResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Get all assignees for a given form.
+      tags:
+      - FormsAssignees
+      x-private: true
+  /projects/api/v3/forms/:id/draft.json:
+    get:
+      operationId: GET_projects_api_v3_forms_:id_draft.json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/form.Response'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/form.Response'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Get the draft version of a specific form.
+      tags:
+      - Forms
+      x-private: true
+  /projects/api/v3/forms/:id/token.json:
+    patch:
+      consumes:
+      - application/json
+      description: Update a form token
+      operationId: PATCH_projects_api_v3_forms_:id_token.json
+      parameters:
+      - in: body
+        name: token.Request
+        required: true
+        schema:
+          $ref: '#/definitions/token.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/token.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Update an existing token.
+      tags:
+      - FormsToken
+      x-private: true
+  /projects/api/v3/forms/:id/token/refresh.json:
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Used for invalidating current form URLs and generating
+        a new one.
+      operationId: PUT_projects_api_v3_forms_:id_token_refresh.json
+      parameters:
+      - in: body
+        name: token.Request
+        required: true
+        schema:
+          $ref: '#/definitions/token.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/token.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Refresh the value of a token
+      tags:
+      - FormsToken
+      x-private: true
+  /projects/api/v3/forms/public/:token.json:
+    get:
+      description: This endpoint does not require authentication.
+      operationId: GET_projects_api_v3_forms_public_:token.json
+      parameters:
+      - default: asc
+        description: order mode
+        enum:
+        - asc
+        - desc
+        in: query
+        name: orderMode
+        type: string
+      - description: query by form state
+        enum:
+        - active
+        - deleted
+        - draft
+        - latest
+        in: query
+        name: content.state
+        type: string
+      - description: filter by user id
+        in: query
+        name: userId
+        type: integer
+      - default: "50"
+        description: number of items in a page
+        in: query
+        name: pageSize
+        type: integer
+      - default: "1"
+        description: page number
+        in: query
+        name: page
+        type: integer
+      - description: filter by project ids
+        in: query
+        items:
+          type: integer
+        name: projectIds
+        type: array
+      - description: include
+        enum:
+        - projects
+        - users
+        in: query
+        items:
+          type: string
+        name: include
+        type: array
+      - enum:
+        - id
+        - firstName
+        - lastName
+        - email
+        - companyId
+        - isAdmin
+        - type
+        in: query
+        items:
+          type: string
+        name: fields[users]
+        type: array
+      - enum:
+        - id
+        - name
+        in: query
+        items:
+          type: string
+        name: fields[projects]
+        type: array
+      - enum:
+        - id
+        - confirmationMessage
+        - promptAdditionalSubmissions
+        - isShared
+        - state
+        - taskTitleFieldId
+        - token
+        - content
+        - hostObject
+        - installation
+        in: query
+        items:
+          type: string
+        name: fields[forms]
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/form.PublicResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Get a forms via its token.
+      tags:
+      - FormsPublic
+      x-private: true
+  /projects/api/v3/forms/public/:token/submit.json:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint does not require authentication.
+      operationId: POST_projects_api_v3_forms_public_:token_submit.json
+      parameters:
+      - in: body
+        name: form.SubmissionRequest
+        required: true
+        schema:
+          $ref: '#/definitions/form.SubmissionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/form.FormsResponse'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Submit a form response
+      tags:
+      - FormsPublic
+      x-private: true
   /projects/api/v3/importer/stats.json:
     get:
       operationId: GET_projects_api_v3_importer_stats.json
@@ -4834,6 +5458,10 @@ paths:
         in: query
         description: include companies and teams in the search term
         type: boolean
+      - name: searchAssignees
+        in: query
+        description: include assignees in the search
+        type: boolean
       - name: progress
         in: query
         description: include progress of each milestone
@@ -4848,6 +5476,12 @@ paths:
         description: filter by projects that the logged-in user is related
         type: boolean
         default: "false"
+      - name: onlyAdminProjects
+        in: query
+        description: |-
+          only include milestones from projects where the user is strictly a project admin.
+          site admins have visibility to all projects.
+        type: boolean
       - name: matchAllTags
         in: query
         description: match all milestone tags
@@ -4859,6 +5493,10 @@ paths:
       - name: isReportDownload
         in: query
         description: generate a report document
+        type: boolean
+      - name: includeUpdate
+        in: query
+        description: include milestones latest update action
         type: boolean
       - name: includeToday
         in: query
@@ -4878,6 +5516,10 @@ paths:
       - name: includeProgress
         in: query
         description: include percentage of tasks completed for all linked tasklists
+        type: boolean
+      - name: includeCompleted
+        in: query
+        description: optional to include completed milestones
         type: boolean
       - name: includeCompanyUserIds
         in: query
@@ -5238,6 +5880,10 @@ paths:
         in: query
         description: include companies and teams in the search term
         type: boolean
+      - name: searchAssignees
+        in: query
+        description: include assignees in the search
+        type: boolean
       - name: progress
         in: query
         description: include progress of each milestone
@@ -5252,6 +5898,12 @@ paths:
         description: filter by projects that the logged-in user is related
         type: boolean
         default: "false"
+      - name: onlyAdminProjects
+        in: query
+        description: |-
+          only include milestones from projects where the user is strictly a project admin.
+          site admins have visibility to all projects.
+        type: boolean
       - name: matchAllTags
         in: query
         description: match all milestone tags
@@ -5263,6 +5915,10 @@ paths:
       - name: isReportDownload
         in: query
         description: generate a report document
+        type: boolean
+      - name: includeUpdate
+        in: query
+        description: include milestones latest update action
         type: boolean
       - name: includeToday
         in: query
@@ -5282,6 +5938,10 @@ paths:
       - name: includeProgress
         in: query
         description: include percentage of tasks completed for all linked tasklists
+        type: boolean
+      - name: includeCompleted
+        in: query
+        description: optional to include completed milestones
         type: boolean
       - name: includeCompanyUserIds
         in: query
@@ -5643,6 +6303,10 @@ paths:
         in: query
         description: include companies and teams in the search term
         type: boolean
+      - name: searchAssignees
+        in: query
+        description: include assignees in the search
+        type: boolean
       - name: progress
         in: query
         description: include progress of each milestone
@@ -5657,6 +6321,12 @@ paths:
         description: filter by projects that the logged-in user is related
         type: boolean
         default: "false"
+      - name: onlyAdminProjects
+        in: query
+        description: |-
+          only include milestones from projects where the user is strictly a project admin.
+          site admins have visibility to all projects.
+        type: boolean
       - name: matchAllTags
         in: query
         description: match all milestone tags
@@ -5668,6 +6338,10 @@ paths:
       - name: isReportDownload
         in: query
         description: generate a report document
+        type: boolean
+      - name: includeUpdate
+        in: query
+        description: include milestones latest update action
         type: boolean
       - name: includeToday
         in: query
@@ -5687,6 +6361,10 @@ paths:
       - name: includeProgress
         in: query
         description: include percentage of tasks completed for all linked tasklists
+        type: boolean
+      - name: includeCompleted
+        in: query
+        description: optional to include completed milestones
         type: boolean
       - name: includeCompanyUserIds
         in: query
@@ -6049,6 +6727,10 @@ paths:
         in: query
         description: include companies and teams in the search term
         type: boolean
+      - name: searchAssignees
+        in: query
+        description: include assignees in the search
+        type: boolean
       - name: progress
         in: query
         description: include progress of each milestone
@@ -6063,6 +6745,12 @@ paths:
         description: filter by projects that the logged-in user is related
         type: boolean
         default: "false"
+      - name: onlyAdminProjects
+        in: query
+        description: |-
+          only include milestones from projects where the user is strictly a project admin.
+          site admins have visibility to all projects.
+        type: boolean
       - name: matchAllTags
         in: query
         description: match all milestone tags
@@ -6074,6 +6762,10 @@ paths:
       - name: isReportDownload
         in: query
         description: generate a report document
+        type: boolean
+      - name: includeUpdate
+        in: query
+        description: include milestones latest update action
         type: boolean
       - name: includeToday
         in: query
@@ -6093,6 +6785,10 @@ paths:
       - name: includeProgress
         in: query
         description: include percentage of tasks completed for all linked tasklists
+        type: boolean
+      - name: includeCompleted
+        in: query
+        description: optional to include completed milestones
         type: boolean
       - name: includeCompanyUserIds
         in: query
@@ -6453,6 +7149,10 @@ paths:
         in: query
         description: include companies and teams in the search term
         type: boolean
+      - name: searchAssignees
+        in: query
+        description: include assignees in the search
+        type: boolean
       - name: progress
         in: query
         description: include progress of each milestone
@@ -6467,6 +7167,12 @@ paths:
         description: filter by projects that the logged-in user is related
         type: boolean
         default: "false"
+      - name: onlyAdminProjects
+        in: query
+        description: |-
+          only include milestones from projects where the user is strictly a project admin.
+          site admins have visibility to all projects.
+        type: boolean
       - name: matchAllTags
         in: query
         description: match all milestone tags
@@ -6478,6 +7184,10 @@ paths:
       - name: isReportDownload
         in: query
         description: generate a report document
+        type: boolean
+      - name: includeUpdate
+        in: query
+        description: include milestones latest update action
         type: boolean
       - name: includeToday
         in: query
@@ -6497,6 +7207,10 @@ paths:
       - name: includeProgress
         in: query
         description: include percentage of tasks completed for all linked tasklists
+        type: boolean
+      - name: includeCompleted
+        in: query
+        description: optional to include completed milestones
         type: boolean
       - name: includeCompanyUserIds
         in: query
@@ -6853,6 +7567,10 @@ paths:
         in: query
         description: include companies and teams in the search term
         type: boolean
+      - name: searchAssignees
+        in: query
+        description: include assignees in the search
+        type: boolean
       - name: progress
         in: query
         description: include progress of each milestone
@@ -6867,6 +7585,12 @@ paths:
         description: filter by projects that the logged-in user is related
         type: boolean
         default: "false"
+      - name: onlyAdminProjects
+        in: query
+        description: |-
+          only include milestones from projects where the user is strictly a project admin.
+          site admins have visibility to all projects.
+        type: boolean
       - name: matchAllTags
         in: query
         description: match all milestone tags
@@ -6878,6 +7602,10 @@ paths:
       - name: isReportDownload
         in: query
         description: generate a report document
+        type: boolean
+      - name: includeUpdate
+        in: query
+        description: include milestones latest update action
         type: boolean
       - name: includeToday
         in: query
@@ -6897,6 +7625,10 @@ paths:
       - name: includeProgress
         in: query
         description: include percentage of tasks completed for all linked tasklists
+        type: boolean
+      - name: includeCompleted
+        in: query
+        description: optional to include completed milestones
         type: boolean
       - name: includeCompanyUserIds
         in: query
@@ -7327,6 +8059,8 @@ paths:
         - tags
         - users
         - notebookCategories
+        - companies
+        - teams
       - name: ids
         in: query
         description: filter by ids
@@ -7346,6 +8080,17 @@ paths:
         - companyId
         - isAdmin
         - type
+      - name: fields[teams]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - teamLogo
+        - teamLogoIcon
+        - teamLogoColor
       - name: fields[tags]
         in: query
         type: array
@@ -7369,6 +8114,16 @@ paths:
         type: array
         items:
           type: string
+      - name: fields[companies]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - logoUploadedToServer
+        - logoImage
       - name: creatorIds
         in: query
         description: filter by creators' ids
@@ -7400,6 +8155,95 @@ paths:
       summary: Get a specific notebook.
       produces:
       - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        description: filter by updated after date (deprecated, use updatedAfter)
+        type: string
+        format: date-time
+      - name: updatedAfter
+        in: query
+        description: filter by updated after date
+        type: string
+        format: date-time
+      - name: showDeleted
+        in: query
+        description: show deleted notebooks
+        type: boolean
+      - name: getEmoji
+        in: query
+        description: parse Emoji's
+        type: boolean
+      - name: include
+        in: query
+        description: include
+        type: array
+        items:
+          type: string
+        enum:
+        - projects
+        - tags
+        - users
+        - notebookCategories
+        - companies
+        - teams
+      - name: fields[users]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - firstName
+        - lastName
+        - email
+        - companyId
+        - isAdmin
+        - type
+      - name: fields[teams]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - teamLogo
+        - teamLogoIcon
+        - teamLogoColor
+      - name: fields[tags]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - color
+        - count
+      - name: fields[projects]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+      - name: fields[notebookCategories]
+        in: query
+        type: array
+        items:
+          type: string
+      - name: fields[companies]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - logoUploadedToServer
+        - logoImage
       responses:
         200:
           description: 200 OK
@@ -7427,6 +8271,80 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/notebook.Request'
+      - name: getEmoji
+        in: query
+        description: parse Emoji's
+        type: boolean
+      - name: include
+        in: query
+        description: include
+        type: array
+        items:
+          type: string
+        enum:
+        - projects
+        - tags
+        - users
+        - notebookCategories
+        - companies
+        - teams
+      - name: fields[users]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - firstName
+        - lastName
+        - email
+        - companyId
+        - isAdmin
+        - type
+      - name: fields[teams]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - teamLogo
+        - teamLogoIcon
+        - teamLogoColor
+      - name: fields[tags]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - color
+        - count
+      - name: fields[projects]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+      - name: fields[notebookCategories]
+        in: query
+        type: array
+        items:
+          type: string
+      - name: fields[companies]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - logoUploadedToServer
+        - logoImage
       responses:
         200:
           description: 200 OK
@@ -7481,6 +8399,48 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         403:
           description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        404:
+          description: 404 Not Found (no data)
+  /projects/api/v3/notebooks/:id/compare.json:
+    get:
+      operationId: GET_projects_api_v3_notebooks_:id_compare.json
+      tags:
+      - Notebooks
+      summary: Compare 2 notebook versions
+      description: Gets the contents diff between the contents of 2 notebook versions
+      produces:
+      - application/json
+      parameters:
+      - name: include
+        in: query
+        description: include
+        type: array
+        items:
+          type: string
+        enum:
+        - users
+      - name: fields[users]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - firstName
+        - lastName
+        - email
+        - companyId
+        - isAdmin
+        - type
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/notebook.VersionResponse'
+        400:
+          description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
         404:
@@ -8125,6 +9085,10 @@ paths:
         description: filter by max last activity date
         type: string
         format: date
+      - name: userId
+        in: query
+        description: filter by user id
+        type: integer
       - name: projectHealths
         in: query
         description: |-
@@ -8184,6 +9148,10 @@ paths:
         description: include custom fields
         type: boolean
         default: "false"
+      - name: includeCompletedStatus
+        in: query
+        description: optional to include completed projects when filtering by project statuses "current,late".
+        type: boolean
       - name: includeArchivedProjects
         in: query
         description: include archived projects
@@ -8533,6 +9501,10 @@ paths:
         description: filter by max last activity date
         type: string
         format: date
+      - name: userId
+        in: query
+        description: filter by user id
+        type: integer
       - name: projectHealths
         in: query
         description: |-
@@ -8592,6 +9564,10 @@ paths:
         description: include custom fields
         type: boolean
         default: "false"
+      - name: includeCompletedStatus
+        in: query
+        description: optional to include completed projects when filtering by project statuses "current,late".
+        type: boolean
       - name: includeArchivedProjects
         in: query
         description: include archived projects
@@ -8939,6 +9915,10 @@ paths:
         description: filter by max last activity date
         type: string
         format: date
+      - name: userId
+        in: query
+        description: filter by user id
+        type: integer
       - name: projectHealths
         in: query
         description: |-
@@ -8998,6 +9978,10 @@ paths:
         description: include custom fields
         type: boolean
         default: "false"
+      - name: includeCompletedStatus
+        in: query
+        description: optional to include completed projects when filtering by project statuses "current,late".
+        type: boolean
       - name: includeArchivedProjects
         in: query
         description: include archived projects
@@ -9349,6 +10333,10 @@ paths:
         description: filter by max last activity date
         type: string
         format: date
+      - name: userId
+        in: query
+        description: filter by user id
+        type: integer
       - name: projectHealths
         in: query
         description: |-
@@ -9408,6 +10396,10 @@ paths:
         description: include custom fields
         type: boolean
         default: "false"
+      - name: includeCompletedStatus
+        in: query
+        description: optional to include completed projects when filtering by project statuses "current,late".
+        type: boolean
       - name: includeArchivedProjects
         in: query
         description: include archived projects
@@ -9757,6 +10749,10 @@ paths:
         description: filter by max last activity date
         type: string
         format: date
+      - name: userId
+        in: query
+        description: filter by user id
+        type: integer
       - name: projectHealths
         in: query
         description: |-
@@ -9816,6 +10812,10 @@ paths:
         description: include custom fields
         type: boolean
         default: "false"
+      - name: includeCompletedStatus
+        in: query
+        description: optional to include completed projects when filtering by project statuses "current,late".
+        type: boolean
       - name: includeArchivedProjects
         in: query
         description: include archived projects
@@ -10159,6 +11159,10 @@ paths:
         description: filter by max last activity date
         type: string
         format: date
+      - name: userId
+        in: query
+        description: filter by user id
+        type: integer
       - name: projectHealths
         in: query
         description: |-
@@ -10218,6 +11222,10 @@ paths:
         description: include custom fields
         type: boolean
         default: "false"
+      - name: includeCompletedStatus
+        in: query
+        description: optional to include completed projects when filtering by project statuses "current,late".
+        type: boolean
       - name: includeArchivedProjects
         in: query
         description: include archived projects
@@ -10456,6 +11464,43 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
+  /projects/api/v3/projects/:id/featuresorder.json:
+    get:
+      operationId: GET_projects_api_v3_projects_:id_featuresorder.json
+      tags:
+      - Project
+      summary: Returns a project features order to display in tab
+      produces:
+      - application/json
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/project.FeatureOrderResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+    put:
+      operationId: PUT_projects_api_v3_projects_:id_featuresorder.json
+      tags:
+      - Project
+      summary: Sets the the features order to display in tab
+      produces:
+      - application/json
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/project.FeatureOrderResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        403:
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
   /projects/api/v3/projects/:id/files/usage.json:
     get:
       description: Retrieves all file space used on account for a specific project.
@@ -10582,6 +11627,10 @@ paths:
         in: query
         name: maxLastActivityDate
         type: string
+      - description: filter by user id
+        in: query
+        name: userId
+        type: integer
       - description: |-
           filter by project healths
 
@@ -10640,6 +11689,10 @@ paths:
         description: include custom fields
         in: query
         name: includeCustomFields
+        type: boolean
+      - description: optional to include completed projects when filtering by project statuses "current,late".
+        in: query
+        name: includeCompletedStatus
         type: boolean
       - default: "false"
         description: include archived projects
@@ -11422,6 +12475,10 @@ paths:
         in: query
         description: include companies and teams in the search term
         type: boolean
+      - name: searchAssignees
+        in: query
+        description: include assignees in the search
+        type: boolean
       - name: progress
         in: query
         description: include progress of each milestone
@@ -11436,6 +12493,12 @@ paths:
         description: filter by projects that the logged-in user is related
         type: boolean
         default: "false"
+      - name: onlyAdminProjects
+        in: query
+        description: |-
+          only include milestones from projects where the user is strictly a project admin.
+          site admins have visibility to all projects.
+        type: boolean
       - name: matchAllTags
         in: query
         description: match all milestone tags
@@ -11447,6 +12510,10 @@ paths:
       - name: isReportDownload
         in: query
         description: generate a report document
+        type: boolean
+      - name: includeUpdate
+        in: query
+        description: include milestones latest update action
         type: boolean
       - name: includeToday
         in: query
@@ -11466,6 +12533,10 @@ paths:
       - name: includeProgress
         in: query
         description: include percentage of tasks completed for all linked tasklists
+        type: boolean
+      - name: includeCompleted
+        in: query
+        description: optional to include completed milestones
         type: boolean
       - name: includeCompanyUserIds
         in: query
@@ -11708,6 +12779,80 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/notebook.Request'
+      - name: getEmoji
+        in: query
+        description: parse Emoji's
+        type: boolean
+      - name: include
+        in: query
+        description: include
+        type: array
+        items:
+          type: string
+        enum:
+        - projects
+        - tags
+        - users
+        - notebookCategories
+        - companies
+        - teams
+      - name: fields[users]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - firstName
+        - lastName
+        - email
+        - companyId
+        - isAdmin
+        - type
+      - name: fields[teams]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - teamLogo
+        - teamLogoIcon
+        - teamLogoColor
+      - name: fields[tags]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - color
+        - count
+      - name: fields[projects]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+      - name: fields[notebookCategories]
+        in: query
+        type: array
+        items:
+          type: string
+      - name: fields[companies]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - logoUploadedToServer
+        - logoImage
       responses:
         201:
           description: 201 Created
@@ -12887,6 +14032,18 @@ paths:
         in: query
         description: define the format of the report
         type: string
+      - name: projectStatuses
+        in: query
+        description: filter by project statuses
+        type: string
+        items: {}
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
       - name: projectStatus
         in: query
         description: filter by project status
@@ -13185,6 +14342,18 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: projectStatuses
+        in: query
+        description: filter by project statuses
+        type: string
+        items: {}
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
       - name: projectStatus
         in: query
         description: filter by project status
@@ -13544,8 +14713,20 @@ paths:
         - last6months
       - name: status
         in: query
-        description: project status (deprecated, use projectStatus)
+        description: project status (deprecated, use projectStatuses)
         type: string
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
+      - name: projectStatuses
+        in: query
+        description: project statuses
+        type: string
+        items: {}
         enum:
         - active
         - current
@@ -13860,6 +15041,27 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
+  /projects/api/v3/projects/featuresorder.json:
+    put:
+      operationId: PUT_projects_api_v3_projects_featuresorder.json
+      tags:
+      - Project
+      summary: Sets the default features order to display in tab
+      produces:
+      - application/json
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/project.FeatureOrderResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        403:
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
   /projects/api/v3/projects/metrics/active.json:
     get:
       operationId: GET_projects_api_v3_projects_metrics_active.json
@@ -13929,9 +15131,21 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: projectStatuses
+        in: query
+        description: filter by project statuses
+        type: string
+        items: {}
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
       - name: projectStatus
         in: query
-        description: project status
+        description: filter by project status
         type: string
         enum:
         - active
@@ -14313,6 +15527,7 @@ paths:
     get:
       operationId: GET_projects_api_v3_projects_teamwork_samples.json
       tags:
+      - Sample
       - Projects
       summary: Returns a list of teamwork sample projects
       description: Retrieve all sample projects for the provided filters.
@@ -14485,6 +15700,10 @@ paths:
         description: filter by max last activity date
         type: string
         format: date
+      - name: userId
+        in: query
+        description: filter by user id
+        type: integer
       - name: projectHealths
         in: query
         description: |-
@@ -14544,6 +15763,10 @@ paths:
         description: include custom fields
         type: boolean
         default: "false"
+      - name: includeCompletedStatus
+        in: query
+        description: optional to include completed projects when filtering by project statuses "current,late".
+        type: boolean
       - name: includeArchivedProjects
         in: query
         description: include archived projects
@@ -16155,6 +17378,11 @@ paths:
         in: query
         description: show also users without status
         type: boolean
+      - name: showDeleted
+        in: query
+        description: showDeleted statuses
+        type: boolean
+        default: "false"
       - name: includeSubteams
         in: query
         description: also include statuses from subteams
@@ -16232,6 +17460,11 @@ paths:
         description: page number
         type: integer
         default: "1"
+      - name: showDeleted
+        in: query
+        description: showDeleted statuses
+        type: boolean
+        default: "false"
       - name: includeSubteams
         in: query
         description: also include statuses from subteams
@@ -16339,8 +17572,20 @@ paths:
         - last6months
       - name: status
         in: query
-        description: project status (deprecated, use projectStatus)
+        description: project status (deprecated, use projectStatuses)
         type: string
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
+      - name: projectStatuses
+        in: query
+        description: project statuses
+        type: string
+        items: {}
         enum:
         - active
         - current
@@ -16896,6 +18141,708 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
+  /projects/api/v3/tasklists/:tasklistId/tasks.json:
+    post:
+      consumes:
+      - application/json
+      description: Create a new task in the provided task list.
+      operationId: POST_projects_api_v3_tasklists_:tasklistId_tasks.json
+      parameters:
+      - in: body
+        name: task.Request
+        required: true
+        schema:
+          $ref: '#/definitions/task.Request'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 201 Created
+          schema:
+            $ref: '#/definitions/task.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+      summary: Creates a task.
+      tags:
+      - Tasks
+      x-private: true
+  /projects/api/v3/tasks.json:
+    get:
+      description: Return multiple tasks according to the provided filter.
+      operationId: GET_projects_api_v3_tasks.json
+      parameters:
+      - description: filter by updated after date
+        format: date
+        in: query
+        name: updatedAfter
+        type: string
+      - description: filter by today
+        format: date-time
+        in: query
+        name: today
+        type: string
+      - description: filter by task included set
+        enum:
+        - overdue
+        - nodate
+        - nostartdate
+        - "noduedate\n\t\tnostartwithfutureduedate"
+        - taskListNames
+        - projectNames
+        in: query
+        items: {}
+        name: taskIncludedSet
+        type: string
+      - description: filter by a taskFilter
+        enum:
+        - all
+        - anytime
+        - completed
+        - created
+        - overdue
+        - "today\n\t\tyesterday"
+        - started
+        - tomorrow
+        - thisweek
+        - "within7\n\t\twithin14"
+        - within30
+        - within365
+        - nodate
+        - "noduedate\n\t\tnostartdate"
+        - newTaskDefaults
+        - hasDate
+        in: query
+        name: taskFilter
+        type: string
+      - description: filter by list of task status
+        enum:
+        - upcoming
+        - late
+        - all
+        in: query
+        items: {}
+        name: status
+        type: string
+      - description: filter on start date
+        format: date
+        in: query
+        name: startDate
+        type: string
+      - description: filter by search term
+        in: query
+        name: searchTerm
+        type: string
+      - description: filter by project status
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
+        in: query
+        items: {}
+        name: projectStatuses
+        type: string
+      - description: filter by task priority
+        in: query
+        name: priority
+        type: string
+      - default: asc
+        description: order mode
+        enum:
+        - asc
+        - desc
+        in: query
+        name: orderMode
+        type: string
+      - default: duedate
+        description: order by
+        enum:
+        - startdate
+        - dateadded
+        - priority
+        - project
+        - flattenedtasklist
+        - company
+        - "manual\n\tactive"
+        - datecompleted
+        - duestartdate
+        - alldates
+        - tasklistname
+        - tasklistdisplayorder
+        - tasklistid
+        - duedate
+        - dateupdated
+        - taskname
+        - createdby
+        - completedby
+        - assignedto
+        - taskstatus
+        - taskduedate
+        in: query
+        name: orderBy
+        type: string
+      - description: filter on end date
+        format: date
+        in: query
+        name: endDate
+        type: string
+      - description: filter on deleted after date
+        format: date-time
+        in: query
+        name: deletedAfter
+        type: string
+      - description: filter by created filter
+        enum:
+        - anytime
+        - today
+        - yesterday
+        - custom
+        in: query
+        name: createdFilter
+        type: string
+      - description: filter by created date code
+        in: query
+        name: createdDateCode
+        type: string
+      - description: filter by created before date
+        format: date
+        in: query
+        name: createdBefore
+        type: string
+      - description: filter by created after date
+        format: date-time
+        in: query
+        name: createdAfter
+        type: string
+      - description: filter by completed before date
+        format: date-time
+        in: query
+        name: completedBefore
+        type: string
+      - description: filter by completed after date
+        format: date-time
+        in: query
+        name: completedAfter
+        type: string
+      - description: |-
+          filter by project healths
+
+          0: not set
+          1: bad
+          2: ok
+          3: good
+        enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
+        in: query
+        items: {}
+        name: projectHealths
+        type: integer
+      - description: filter by parent task ids
+        in: query
+        name: parentTaskId
+        type: integer
+      - default: "50"
+        description: number of items in a page
+        in: query
+        name: pageSize
+        type: integer
+      - default: "1"
+        description: page number
+        in: query
+        name: page
+        type: integer
+      - description: include task id
+        in: query
+        name: includeTaskId
+        type: integer
+      - description: filter by completer user id
+        in: query
+        name: completedByUserId
+        type: integer
+      - description: use start dates for todays tasks
+        in: query
+        name: useStartDatesForTodaysTasks
+        type: boolean
+      - description: filter on all projects
+        in: query
+        name: useAllProjects
+        type: boolean
+      - default: "false"
+        description: include deleted items
+        in: query
+        name: showDeleted
+        type: boolean
+      - description: include tasks from completed lists
+        in: query
+        name: showCompletedLists
+        type: boolean
+      - description: include companies and teams in the search term
+        in: query
+        name: searchCompaniesTeams
+        type: boolean
+      - description: include assignees in the search
+        in: query
+        name: searchAssignees
+        type: boolean
+      - description: only untagged tasks
+        in: query
+        name: onlyUntaggedTasks
+        type: boolean
+      - description: filter by only tasks with unread comments
+        in: query
+        name: onlyTasksWithUnreadComments
+        type: boolean
+      - description: filter by only tasks with tickets
+        in: query
+        name: onlyTasksWithTickets
+        type: boolean
+      - description: filter by starred projects only
+        in: query
+        name: onlyStarredProjects
+        type: boolean
+      - description: |-
+          only include tasks from projects where the user is strictly a project admin.
+          site admins have visibility to all projects.
+        in: query
+        name: onlyAdminProjects
+        type: boolean
+      - description: nest sub tasks
+        in: query
+        name: nestSubTasks
+        type: boolean
+      - description: match all tags
+        in: query
+        name: matchAllTags
+        type: boolean
+      - description: match all project tags
+        in: query
+        name: matchAllProjectTags
+        type: boolean
+      - description: match all exclude tags
+        in: query
+        name: matchAllExcludedTags
+        type: boolean
+      - description: include tasks latest update action
+        in: query
+        name: includeUpdate
+        type: boolean
+      - description: include untagged tasks
+        in: query
+        name: includeUntaggedTasks
+        type: boolean
+      - description: filter by include today
+        in: query
+        name: includeToday
+        type: boolean
+      - description: include tasks without due dates
+        in: query
+        name: includeTasksWithoutDueDates
+        type: boolean
+      - description: include tasks with cards
+        in: query
+        name: includeTasksWithCards
+        type: boolean
+      - description: include tasks from deleted lists
+        in: query
+        name: includeTasksFromDeletedLists
+        type: boolean
+      - description: include reminders
+        in: query
+        name: includeReminders
+        type: boolean
+      - description: include ids of completed and active subtasks, dependencies, predecessors
+        in: query
+        name: includeRelatedTasks
+        type: boolean
+      - description: include private items
+        in: query
+        name: includePrivateItems
+        type: boolean
+      - description: include overdue tasks
+        in: query
+        name: includeOverdueTasks
+        type: boolean
+      - description: include original due date of a task
+        in: query
+        name: includeOriginalDueDate
+        type: boolean
+      - description: include logged time
+        in: query
+        name: includeLoggedTime
+        type: boolean
+      - description: include completed tasks
+        in: query
+        name: includeCompletedTasks
+        type: boolean
+      - description: include completed sub tasks
+        in: query
+        name: includeCompletedSubtasks
+        type: boolean
+      - description: filter by include crm deal ids
+        in: query
+        name: includeCRMDealIds
+        type: boolean
+      - description: filter by include blocked
+        in: query
+        name: includeBlocked
+        type: boolean
+      - description: include teams related to the responsible user ids
+        in: query
+        name: includeAssigneeTeams
+        type: boolean
+      - description: include companies related to the responsible user ids
+        in: query
+        name: includeAssigneeCompanies
+        type: boolean
+      - description: include all comments
+        in: query
+        name: includeAllComments
+        type: boolean
+      - description: group by tasklist
+        in: query
+        name: groupByTasklist
+        type: boolean
+      - description: get sub tasks
+        in: query
+        name: getSubTasks
+        type: boolean
+      - description: get files
+        in: query
+        name: getFiles
+        type: boolean
+      - description: exclude assignee not on project teams
+        in: query
+        name: excludeAssigneeNotOnProjectTeams
+        type: boolean
+      - description: only return tasks with estimated time
+        in: query
+        name: OnlyTasksWithEstimatedTime
+        type: boolean
+      - description: filter by tasklist ids
+        in: query
+        items:
+          type: integer
+        name: tasklistIds
+        type: array
+      - description: filter by tag values
+        in: query
+        items:
+          type: string
+        name: tags
+        type: array
+      - description: filter by tag ids
+        in: query
+        items:
+          type: integer
+        name: tagIds
+        type: array
+      - description: skip crm deal ids
+        in: query
+        items:
+          type: integer
+        name: skipCRMDealIds
+        type: array
+      - description: filter by responsible party ids
+        in: query
+        items:
+          type: integer
+        name: responsiblePartyIds
+        type: array
+      - description: filter by project tag ids
+        in: query
+        items:
+          type: integer
+        name: projectTagIds
+        type: array
+      - description: filter by project owner ids
+        in: query
+        items:
+          type: integer
+        name: projectOwnerIds
+        type: array
+      - description: filter by project ids
+        in: query
+        items:
+          type: integer
+        name: projectIds
+        type: array
+      - description: filter by company ids
+        in: query
+        items:
+          type: integer
+        name: projectCompanyIds
+        type: array
+      - description: filter by project category ids
+        in: query
+        items:
+          type: integer
+        name: projectCategoryIds
+        type: array
+      - description: include
+        enum:
+        - projects
+        - tasklists
+        - parentTasks
+        - companies
+        - "teams\n\tusers"
+        - milestones
+        - comments
+        - comments.users
+        - tags
+        - "cards\n\tcards.columns"
+        - timeTotals
+        in: query
+        items:
+          type: string
+        name: include
+        type: array
+      - description: filter by task ids
+        in: query
+        items:
+          type: integer
+        name: ids
+        type: array
+      - description: filter by followed by user ids
+        in: query
+        items:
+          type: integer
+        name: followedByUserIds
+        type: array
+      - description: filter by board column ids
+        in: query
+        items:
+          type: integer
+        name: filterBoardColumnIds
+        type: array
+      - enum:
+        - id
+        - firstName
+        - lastName
+        - email
+        - companyId
+        - isAdmin
+        - type
+        in: query
+        items:
+          type: string
+        name: fields[users]
+        type: array
+      - enum:
+        - id
+        - name
+        - teamLogo
+        - teamLogoIcon
+        - teamLogoColor
+        in: query
+        items:
+          type: string
+        name: fields[teams]
+        type: array
+      - enum:
+        - id
+        - name
+        - dateUpdated
+        - parentTaskId
+        - isPrivate
+        - status
+        - tasklistId
+        - startDate
+        - dueDate
+        in: query
+        items:
+          type: string
+        name: fields[tasks]
+        type: array
+      - enum:
+        - id
+        - name
+        - projectId
+        - milestoneId
+        in: query
+        items:
+          type: string
+        name: fields[tasklists]
+        type: array
+      - enum:
+        - id
+        - name
+        - color
+        - count
+        in: query
+        items:
+          type: string
+        name: fields[tags]
+        type: array
+      - enum:
+        - id
+        - name
+        in: query
+        items:
+          type: string
+        name: fields[projects]
+        type: array
+      - enum:
+        - id
+        - name
+        - description
+        - deadline
+        - completed
+        - projectId
+        - createdOn
+        - lastChangedOn
+        - creatorUserId
+        - reminder
+        - private
+        - lockdownId
+        - status
+        - completedOn
+        - completerId
+        - percentageComplete
+        in: query
+        items:
+          type: string
+        name: fields[milestones]
+        type: array
+      - enum:
+        - id
+        - name
+        - logoUploadedToServer
+        - logoImage
+        in: query
+        items:
+          type: string
+        name: fields[companies]
+        type: array
+      - enum:
+        - id
+        - objectType
+        - objectId
+        - title
+        in: query
+        items:
+          type: string
+        name: fields[comments]
+        type: array
+      - enum:
+        - id
+        - name
+        - color
+        - displayOrder
+        - createdAt
+        - updatedAt
+        - settings
+        - "sort\n\tsortOrder"
+        - deletedAt
+        - project
+        - hasTriggers
+        - deleted
+        - stats
+        - defaultTasklist
+        in: query
+        items:
+          type: string
+        name: fields[columns]
+        type: array
+      - enum:
+        - id
+        - displayOrder
+        - archived
+        - archivedAt
+        - archivedBy
+        - "createdAt\n\tcreateBy"
+        - updatedAt
+        - visible
+        - status
+        - deleteBy
+        - deletedAt
+        in: query
+        items:
+          type: string
+        name: fields[cards]
+        type: array
+      - description: filter by excluded tag ids
+        in: query
+        items:
+          type: integer
+        name: excludeTagIds
+        type: array
+      - description: filter by custom fields
+        in: query
+        items:
+          type: string
+        name: customFields
+        type: array
+      - description: filter by crm deal ids
+        in: query
+        items:
+          type: integer
+        name: crmDealIds
+        type: array
+      - description: filter by creator user ids
+        in: query
+        items:
+          type: integer
+        name: createdByUserIds
+        type: array
+      - description: filter by assignee team ids
+        in: query
+        items:
+          type: integer
+        name: assigneeTeamIds
+        type: array
+      - description: filter by assignee company ids
+        in: query
+        items:
+          type: integer
+        name: assigneeCompanyIds
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/task.TasksResponse'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+      summary: Get all tasks.
+      tags:
+      - Tasks
+      x-private: true
+  /projects/api/v3/tasks/:id.json:
+    get:
+      description: Returns the information about a specific task.
+      operationId: GET_projects_api_v3_tasks_:id.json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/task.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Get a specific task.
+      tags:
+      - Tasks
+      x-private: true
   /projects/api/v3/tasks/:taskId/customfields.json:
     get:
       description: Return all custom field values from a specific task.
@@ -17241,6 +19188,11 @@ paths:
         description: page number
         type: integer
         default: "1"
+      - name: showDeleted
+        in: query
+        description: showDeleted statuses
+        type: boolean
+        default: "false"
       - name: includeSubteams
         in: query
         description: also include statuses from subteams
@@ -17307,6 +19259,18 @@ paths:
         in: query
         description: define the format of the report
         type: string
+      - name: projectStatuses
+        in: query
+        description: filter by project statuses
+        type: string
+        items: {}
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
       - name: projectStatus
         in: query
         description: filter by project status
@@ -17605,6 +19569,18 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: projectStatuses
+        in: query
+        description: filter by project statuses
+        type: string
+        items: {}
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
       - name: projectStatus
         in: query
         description: filter by project status
@@ -19149,7 +21125,7 @@ definitions:
       endedAt:
         $ref: '#/definitions/payload.Date'
       hoursPerDay:
-        type: integer
+        type: number
       ignoreCollisions:
         type: boolean
       projectId:
@@ -19229,6 +21205,101 @@ definitions:
         $ref: '#/definitions/payload.Date'
       duration:
         type: integer
+  app.AppsResponse:
+    title: AppsResponse
+    description: AppsResponse contains information about a group of apps.
+    type: object
+    properties:
+      apps:
+        type: array
+        items:
+          $ref: '#/definitions/view.App'
+      included:
+        type: object
+        properties:
+          appsettings:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.AppSetting'
+      meta:
+        $ref: '#/definitions/view.Meta'
+  app.Response:
+    title: Response
+    description: Response contains information about a specific app.
+    type: object
+    properties:
+      app:
+        $ref: '#/definitions/view.App'
+      included:
+        type: object
+        properties:
+          appsettings:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.AppSetting'
+  assignee.FormAssignee:
+    title: FormAssignee
+    description: FormAssignee contains all the information returned from a assignee.
+    type: object
+    properties:
+      id:
+        type: integer
+      meta:
+        type: object
+      type:
+        type: string
+  assignee.FormAssigneesResponse:
+    title: FormAssigneesResponse
+    description: FormAssigneesResponse contains information about a group of assignees.
+    type: object
+    properties:
+      assignees:
+        type: array
+        items:
+          $ref: '#/definitions/view.FormAssignee'
+      included:
+        type: object
+        properties:
+          companies:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Company'
+          projects:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Project'
+          teams:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Team'
+          users:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.User'
+      meta:
+        $ref: '#/definitions/view.Meta'
+  assignee.Request:
+    title: Request
+    description: Request contains information of a assignee to be created or updated.
+    type: object
+    properties:
+      assignees:
+        type: array
+        items:
+          $ref: '#/definitions/assignee.FormAssignee'
+  assignee.Response:
+    title: Response
+    description: Response contains information about a specific assignee.
+    type: object
+    properties:
+      assignees:
+        type: array
+        items:
+          $ref: '#/definitions/view.FormAssignee'
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/apierrors.BulkError'
   availability.Response:
     title: Response
     description: Response contains information about a specific availability.
@@ -19681,7 +21752,7 @@ definitions:
         type: string
       options: {}
       privacy:
-        $ref: '#/definitions/payload.Privacy'
+        $ref: '#/definitions/payload.UserGroups'
       projectId:
         type: integer
       required:
@@ -19781,23 +21852,27 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/deadline.MilestoneMetricDeadline'
-  entity.UserGroups:
-    title: UserGroups
-    description: UserGroups are common lists for storing users, companies and teams ids together
+  errors.BulkError:
+    title: BulkError
+    description: |-
+      BulkError stores details related to an error on an api request that
+      we may want to present to the user, but do not wish to cancel the
+      request over
     type: object
     properties:
-      CompanyIDs:
-        type: array
-        items:
-          type: integer
-      TeamIDs:
-        type: array
-        items:
-          type: integer
-      UserIDs:
-        type: array
-        items:
-          type: integer
+      code:
+        type: string
+      detail:
+        type: string
+      id: {}
+      meta:
+        type: object
+      source:
+        type: string
+      statusCode:
+        type: integer
+      title:
+        type: string
   file.ArchiveRequest:
     title: ArchiveRequest
     description: ArchiveRequest contains all file IDs that will be grouped for download.
@@ -19840,7 +21915,7 @@ definitions:
       notifyCurrentUser:
         type: boolean
       privacy:
-        $ref: '#/definitions/payload.Privacy'
+        $ref: '#/definitions/payload.UserGroups'
       private:
         type: boolean
       tagIds:
@@ -20018,7 +22093,7 @@ definitions:
       pendingFileRef:
         type: string
       privacy:
-        $ref: '#/definitions/payload.Privacy'
+        $ref: '#/definitions/payload.UserGroups'
       private:
         type: boolean
       projectId:
@@ -20052,6 +22127,135 @@ definitions:
             type: object
             additionalProperties:
               $ref: '#/definitions/view.User'
+  form.Banner:
+    title: Banner
+    description: Banner contains information of a form banner to be created or updated.
+    type: object
+    properties:
+      url:
+        type: string
+      x:
+        type: number
+      "y":
+        type: number
+  form.Content:
+    title: Content
+    description: Content contains information of a form content to be created or updated.
+    type: object
+    properties:
+      banner:
+        $ref: '#/definitions/form.Banner'
+      definition:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      state:
+        type: string
+  form.Form:
+    title: Form
+    description: Form contains information of a form to be created or updated.
+    type: object
+    properties:
+      confirmationMessage:
+        type: string
+      content:
+        $ref: '#/definitions/form.Content'
+      hostObject:
+        $ref: '#/definitions/form.HostObject'
+      promptAdditionalSubmissions:
+        type: boolean
+      taskTitleFieldId:
+        type: string
+  form.FormsResponse:
+    title: FormsResponse
+    description: FormsResponse contains information about a group of forms.
+    type: object
+    properties:
+      forms:
+        type: array
+        items:
+          $ref: '#/definitions/view.Form'
+      included:
+        type: object
+        properties:
+          projects:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Project'
+          users:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.User'
+      meta:
+        $ref: '#/definitions/view.Meta'
+  form.HostObject:
+    title: HostObject
+    description: HostObject contains information of a form host object to be created or updated.
+    type: object
+    properties:
+      id:
+        type: integer
+      meta:
+        $ref: '#/definitions/form.HostObjectMeta'
+      type:
+        type: string
+  form.HostObjectMeta:
+    title: HostObjectMeta
+    description: HostObjectMeta contains information of a form host object meta to be created or updated.
+    type: object
+    properties:
+      tasklistId:
+        type: integer
+  form.PublicResponse:
+    title: PublicResponse
+    description: PublicResponse contains information about a specific public form.
+    type: object
+    properties:
+      form:
+        $ref: '#/definitions/view.PublicForm'
+  form.Request:
+    title: Request
+    description: Request contains information of a form to be created or updated.
+    type: object
+    properties:
+      form:
+        $ref: '#/definitions/form.Form'
+  form.Response:
+    title: Response
+    description: Response contains information about a specific form.
+    type: object
+    properties:
+      form:
+        $ref: '#/definitions/view.Form'
+      included:
+        type: object
+        properties:
+          projects:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Project'
+          users:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.User'
+  form.Submission:
+    title: Submission
+    description: Submission contains information of a form submitted by a user.
+    type: object
+    properties:
+      data:
+        type: object
+      version:
+        type: integer
+  form.SubmissionRequest:
+    title: SubmissionRequest
+    description: SubmissionRequest contains information of a form submitted by a user.
+    type: object
+    properties:
+      form:
+        $ref: '#/definitions/form.Submission'
   health.ProjectMetricHealth:
     title: ProjectMetricHealth
     description: ProjectMetricHealth stores a specific health counter.
@@ -20285,7 +22489,7 @@ definitions:
       notifyCurrentUser:
         type: boolean
       privacy:
-        $ref: '#/definitions/payload.Privacy'
+        $ref: '#/definitions/payload.UserGroups'
       secureContent:
         type: boolean
       sendDiff:
@@ -20304,6 +22508,10 @@ definitions:
       included:
         type: object
         properties:
+          companies:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Company'
           notebookCategories:
             type: object
             additionalProperties:
@@ -20316,6 +22524,10 @@ definitions:
             type: object
             additionalProperties:
               $ref: '#/definitions/view.Tag'
+          teams:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Team'
           users:
             type: object
             additionalProperties:
@@ -20341,6 +22553,10 @@ definitions:
       included:
         type: object
         properties:
+          companies:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Company'
           notebookCategories:
             type: object
             additionalProperties:
@@ -20353,6 +22569,10 @@ definitions:
             type: object
             additionalProperties:
               $ref: '#/definitions/view.Tag'
+          teams:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Team'
           users:
             type: object
             additionalProperties:
@@ -20460,7 +22680,7 @@ definitions:
     type: object
     properties:
       ids:
-        $ref: '#/definitions/entity.UserGroups'
+        $ref: '#/definitions/payload.UserGroups'
       type:
         type: string
   payload.NullableInt64Slice:
@@ -20491,23 +22711,19 @@ definitions:
         type: boolean
       Set:
         type: boolean
-  payload.Privacy:
-    title: Privacy
-    description: Privacy defines the access lists.
+  payload.UserGroups:
+    title: UserGroups
+    description: |-
+      UserGroups are common lists for storing users, companies and teams ids
+      together.
     type: object
     properties:
       companyIds:
-        type: array
-        items:
-          type: integer
+        $ref: '#/definitions/payload.NullableInt64Slice'
       teamIds:
-        type: array
-        items:
-          type: integer
+        $ref: '#/definitions/payload.NullableInt64Slice'
       userIds:
-        type: array
-        items:
-          type: integer
+        $ref: '#/definitions/payload.NullableInt64Slice'
   people.MultiResponse:
     title: MultiResponse
     description: MultiResponse contains information about a group of users.
@@ -20582,7 +22798,7 @@ definitions:
         description: percentage
         type: number
       estimateMinutesTotal:
-        type: integer
+        type: number
       lengthOfDayMinutes:
         type: number
       tasks:
@@ -20597,7 +22813,7 @@ definitions:
     type: object
     properties:
       estimateMinutes:
-        type: integer
+        type: number
       taskId:
         type: integer
   planner.WorkloadPlannersResponse:
@@ -20716,6 +22932,62 @@ definitions:
       id:
         type: integer
       value: {}
+  project.FeatureOrder:
+    title: FeatureOrder
+    description: |-
+      FeatureOrder contains the information of the feature
+      order to display in the UI for a project.
+    type: object
+    properties:
+      billing:
+        type: integer
+      board:
+        type: integer
+      comments:
+        type: integer
+      dashboard:
+        type: integer
+      files:
+        type: integer
+      gantt:
+        type: integer
+      id:
+        type: integer
+      installationId:
+        type: integer
+      links:
+        type: integer
+      list:
+        type: integer
+      messages:
+        type: integer
+      milestones:
+        type: integer
+      notebooks:
+        type: integer
+      numVisibleTabs:
+        type: integer
+      people:
+        type: integer
+      projectId:
+        type: integer
+      risks:
+        type: integer
+      settings:
+        type: integer
+      table:
+        type: integer
+      time:
+        type: integer
+  project.FeatureOrderResponse:
+    title: FeatureOrderResponse
+    description: |-
+      FeatureOrderResponse is the api response containing
+      information about the order to display the featues in the UI.
+    type: object
+    properties:
+      featureOrder:
+        $ref: '#/definitions/project.FeatureOrder'
   project.ProjectsResponse:
     title: ProjectsResponse
     description: ProjectsResponse contains information about a group of projects.
@@ -21052,6 +23324,27 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/view.UserSchedule'
+  setting.AppSetting:
+    title: AppSetting
+    description: AppSetting contains all the information returned from a setting.
+    type: object
+    properties:
+      value:
+        type: string
+  setting.Request:
+    title: Request
+    description: Request contains information of a setting to be created or updated.
+    type: object
+    properties:
+      appsetting:
+        $ref: '#/definitions/setting.AppSetting'
+  setting.Response:
+    title: Response
+    description: Response contains information about a specific setting.
+    type: object
+    properties:
+      appsetting:
+        $ref: '#/definitions/view.AppSetting'
   status.TimelineResponse:
     title: TimelineResponse
     description: TimelineResponse contains information about a group of statuses.
@@ -21404,6 +23697,13 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/task.EditCustomFieldTask'
+  task.Card:
+    title: Card
+    description: Card stores information about the card created with the task.
+    type: object
+    properties:
+      columnId:
+        type: integer
   task.CustomFieldTask:
     title: CustomFieldTask
     description: CustomFieldTask contains all the information returned from a customfield.
@@ -21448,20 +23748,298 @@ definitions:
       id:
         type: integer
       value: {}
+  task.File:
+    title: File
+    description: File stores information about a uploaded file.
+    type: object
+    properties:
+      categoryId:
+        type: integer
+      id:
+        type: integer
+  task.PendingFile:
+    title: PendingFile
+    description: PendingFile stores information about a file uploaded on-the-fly.
+    type: object
+    properties:
+      categoryId:
+        type: integer
+      reference:
+        type: string
+  task.Predecessor:
+    title: Predecessor
+    description: Predecessor stores information about task predecessors.
+    type: object
+    properties:
+      id:
+        type: integer
+      type:
+        type: string
+  task.Reminder:
+    title: Reminder
+    description: Reminder stores all necessary information to create a task reminder.
+    type: object
+    properties:
+      isRelative:
+        type: boolean
+      note:
+        type: string
+      peopleAssigned:
+        type: boolean
+      relativeNumberDays:
+        type: integer
+      remindAt:
+        type: string
+      type:
+        type: string
+      userId:
+        type: integer
+      usingOffsetDueDate:
+        type: boolean
+  task.RepeatOptions:
+    title: RepeatOptions
+    description: RepeatOptions stores recurring information for the task.
+    type: object
+    properties:
+      duration:
+        type: integer
+      endsAt:
+        $ref: '#/definitions/payload.Date'
+      frequency:
+        type: string
+      monthlyRepeatType:
+        type: string
+      selectedDays:
+        type: string
   task.Request:
     title: Request
-    description: Request contains information of a customfield to be created or updated.
+    description: Request contains information of a task to be created or updated.
     type: object
     properties:
-      customfieldTask:
-        $ref: '#/definitions/task.CustomFieldTask'
+      attachmentOptions:
+        type: object
+        properties:
+          removeOtherFiles:
+            type: boolean
+      attachments:
+        type: object
+        properties:
+          files:
+            type: array
+            items:
+              $ref: '#/definitions/task.File'
+          pendingFiles:
+            type: array
+            items:
+              $ref: '#/definitions/task.PendingFile'
+      card:
+        $ref: '#/definitions/task.Card'
+      predecessors:
+        type: array
+        items:
+          $ref: '#/definitions/task.Predecessor'
+      tags:
+        type: array
+        items:
+          $ref: '#/definitions/tag.Tag'
+      task:
+        $ref: '#/definitions/task.Task'
+      taskOptions:
+        type: object
+        properties:
+          everyoneMustDo:
+            type: boolean
+          isTemplate:
+            type: boolean
+          notify:
+            type: boolean
+          parseInlineTags:
+            type: boolean
+          positionAfterTaskId:
+            type: integer
+          shiftProjectDates:
+            type: boolean
+          useDefaults:
+            type: boolean
+          useNotifyViaTWIM:
+            type: boolean
   task.Response:
     title: Response
-    description: Response contains information about a specific task custom field value.
+    description: Response contains information about a specific task.
     type: object
     properties:
-      customfieldTask:
-        $ref: '#/definitions/view.CustomFieldTask'
+      included:
+        type: object
+        properties:
+          cards:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.TaskCard'
+          columns:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.BoardColumn'
+          comments:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Comment'
+          companies:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Company'
+          milestones:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Milestone'
+          projects:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Project'
+          tags:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Tag'
+          tasklists:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Tasklist'
+          teams:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Team'
+          timeTotals:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.TaskTimeTotals'
+          users:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.User'
+      task:
+        $ref: '#/definitions/view.Task'
+  task.Task:
+    title: Task
+    description: Task contains all the information returned from a task.
+    type: object
+    properties:
+      assignees:
+        $ref: '#/definitions/payload.UserGroups'
+      attachmentIds:
+        type: array
+        items:
+          type: integer
+      changeFollowers:
+        $ref: '#/definitions/payload.UserGroups'
+      commentFollowers:
+        $ref: '#/definitions/payload.UserGroups'
+      createdAt:
+        type: string
+      createdBy:
+        type: integer
+      crmDealIds:
+        type: array
+        items:
+          type: integer
+      customFields:
+        type: array
+        items:
+          $ref: '#/definitions/customfieldtask.CustomFieldTask'
+      description:
+        type: string
+      dueAt:
+        $ref: '#/definitions/payload.Date'
+      estimatedMinutes:
+        type: integer
+      grantAccessTo:
+        $ref: '#/definitions/payload.UserGroups'
+      name:
+        type: string
+      parentTaskId:
+        type: integer
+      priority:
+        type: string
+      private:
+        type: boolean
+      progress:
+        type: integer
+      reminders:
+        type: array
+        items:
+          $ref: '#/definitions/task.Reminder'
+      repeatOptions:
+        $ref: '#/definitions/task.RepeatOptions'
+      startAt:
+        $ref: '#/definitions/payload.Date'
+      status:
+        type: string
+      tagIds:
+        type: array
+        items:
+          type: integer
+      tasklistId:
+        type: integer
+      templateRoleName:
+        type: string
+      ticketId:
+        type: integer
+  task.TasksResponse:
+    title: TasksResponse
+    description: TasksResponse contains information about a group of tasks.
+    type: object
+    properties:
+      included:
+        type: object
+        properties:
+          cards:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.TaskCard'
+          columns:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.BoardColumn'
+          comments:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Comment'
+          companies:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Company'
+          milestones:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Milestone'
+          projects:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Project'
+          tags:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Tag'
+          tasklists:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Tasklist'
+          teams:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Team'
+          timeTotals:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.TaskTimeTotals'
+          users:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.User'
+      meta:
+        $ref: '#/definitions/view.Meta'
+      tasks:
+        type: array
+        items:
+          $ref: '#/definitions/view.Task'
   time.Location:
     title: Location
     description: |-
@@ -21607,6 +24185,31 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/view.Timer'
+  token.FormToken:
+    title: FormToken
+    description: FormToken contains all the information returned from a token.
+    type: object
+    properties:
+      expires:
+        type: boolean
+      expiryDate:
+        type: string
+      state:
+        type: string
+  token.Request:
+    title: Request
+    description: Request contains information of a token to be created or updated.
+    type: object
+    properties:
+      token:
+        $ref: '#/definitions/token.FormToken'
+  token.Response:
+    title: Response
+    description: Response contains information about a specific token.
+    type: object
+    properties:
+      token:
+        $ref: '#/definitions/view.FormToken'
   unbilled.ProjectMetricUnbilledResponse:
     title: ProjectMetricUnbilledResponse
     description: |-
@@ -21682,6 +24285,9 @@ definitions:
         $ref: '#/definitions/view.Relationship'
       assignedUserID:
         type: integer
+      availableDuration:
+        description: in minutes
+        type: integer
       color:
         type: string
       createdAt:
@@ -21702,7 +24308,7 @@ definitions:
       endedAt:
         $ref: '#/definitions/view.Date'
       hoursPerDay:
-        type: integer
+        type: number
       id:
         type: integer
       installation:
@@ -21725,6 +24331,113 @@ definitions:
         type: string
       updatedBy:
         type: integer
+  view.App:
+    title: App
+    description: App contains all the information returned from a app.
+    type: object
+    properties:
+      appsettings:
+        description: |-
+          Settings is an optional list of config settings for the App
+          can be used to build up an options panel
+        type: array
+        items:
+          $ref: '#/definitions/view.Relationship'
+      baseUrl:
+        description: BaseURL is the CDN location for the latest version of the App
+        type: string
+      code:
+        description: Code is a text unique identifier slug for the App
+        type: string
+      createdAt:
+        description: CreatedAt is the date the app was created
+        type: string
+      description:
+        description: Description is a detailed description of the App
+        type: string
+      id:
+        description: ID is the unique identifier for the App
+        type: integer
+      isInstalled:
+        description: IsInstalled denotes if the app can be used by the installation
+        type: boolean
+      isUninstallable:
+        description: |-
+          IsUninstallable denotes if the app can be removed, some apps are
+          added by default and can't be removed.
+        type: boolean
+      isVerified:
+        description: IsVerified denotes if the App has been verified by Teamwork for usage
+        type: boolean
+      logoURL:
+        description: LogoURL is the URL to the Apps logo if it has one
+        type: string
+      name:
+        description: name is the human readable name
+        type: string
+      publisher:
+        $ref: '#/definitions/view.Relationship'
+      shortDescription:
+        description: ShortDescription is a snippet of information detailing the app
+        type: string
+      updatedAt:
+        description: CreatedAt is the date the app was last updated
+        type: string
+      url:
+        description: URL is the location of the App feature page on the marketplace
+        type: string
+      verifiedAt:
+        description: VerifiedAt, if provided, is the date the App was verified by Teamwork
+        type: string
+  view.AppSetting:
+    title: AppSetting
+    description: AppSetting contains all the information returned from a setting.
+    type: object
+    properties:
+      defaultValue:
+        description: DefaultValue is the value returned if Value is empty.
+        type: string
+      displayName:
+        description: DisplayName is what the user should see when presented with the setting name.
+        type: string
+      id:
+        description: ID is the unique identifier for the setting.
+        type: integer
+      isSecret:
+        description: IsSecret if true the DefaultValue and Value fields will be redacted.
+        type: boolean
+      name:
+        description: Name is the code name for the setting - usually not displayed to a user.
+        type: string
+      type:
+        description: Type.
+        type: string
+        enum:
+        - STRING
+        - INT
+      value:
+        description: Value is the current value for the setting - if empty DefaultValue is used.
+        type: string
+  view.Audit:
+    title: Audit
+    description: Audit represents the changes of a field.
+    type: object
+    properties:
+      after: {}
+      before: {}
+      field:
+        type: string
+  view.Banner:
+    title: Banner
+    description: Banner contains all the information returned from a form banner.
+    type: object
+    properties:
+      url:
+        type: string
+      x:
+        type: number
+      "y":
+        type: number
   view.BoardColumn:
     title: BoardColumn
     description: BoardColumn contains all the information returned from a column.
@@ -21988,6 +24701,23 @@ definitions:
         type: string
       zip:
         type: string
+  view.Content:
+    title: Content
+    description: Content contains all the information returned from a form token.
+    type: object
+    properties:
+      banner:
+        $ref: '#/definitions/view.Banner'
+      definition:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      state:
+        type: string
+      version:
+        type: integer
   view.Country:
     title: Country
     description: Country represents all the information returned from a country.
@@ -22179,6 +24909,85 @@ definitions:
         type: integer
       versionNo:
         type: integer
+  view.Form:
+    title: Form
+    description: Form contains all the information returned from a form.
+    type: object
+    properties:
+      confirmationMessage:
+        type: string
+      content:
+        $ref: '#/definitions/view.Content'
+      createdAt:
+        type: string
+      createdBy:
+        $ref: '#/definitions/view.Relationship'
+      deletedAt:
+        type: string
+      deletedBy:
+        $ref: '#/definitions/view.Relationship'
+      hostObject:
+        $ref: '#/definitions/view.Relationship'
+      id:
+        type: integer
+      installation:
+        $ref: '#/definitions/view.Relationship'
+      isShared:
+        type: boolean
+      promptAdditionalSubmissions:
+        type: boolean
+      state:
+        type: string
+      taskTitleFieldId:
+        type: string
+      token:
+        $ref: '#/definitions/view.Token'
+      updatedAt:
+        type: string
+      updatedBy:
+        $ref: '#/definitions/view.Relationship'
+  view.FormAssignee:
+    title: FormAssignee
+    description: FormAssignee contains all the information returned from a assignee.
+    type: object
+    properties:
+      id:
+        type: integer
+      type:
+        type: string
+  view.FormToken:
+    title: FormToken
+    description: FormToken contains all the information returned from a token.
+    type: object
+    properties:
+      canonicalURL:
+        type: string
+      createdAt:
+        type: string
+      createdBy:
+        $ref: '#/definitions/view.Relationship'
+      deletedAt:
+        type: string
+      deletedBy:
+        $ref: '#/definitions/view.Relationship'
+      expires:
+        type: boolean
+      expiryDate:
+        type: string
+      form:
+        $ref: '#/definitions/view.Relationship'
+      id:
+        type: integer
+      installation:
+        $ref: '#/definitions/view.Relationship'
+      state:
+        type: string
+      updatedAt:
+        type: string
+      updatedBy:
+        $ref: '#/definitions/view.Relationship'
+      value:
+        type: string
   view.Industry:
     title: Industry
     description: Industry contains all the information returned from an industry.
@@ -22343,8 +25152,14 @@ definitions:
         type: string
       id:
         type: integer
+      isDeleted:
+        type: boolean
       lastChangedOn:
         type: string
+      latestUpdates:
+        type: array
+        items:
+          $ref: '#/definitions/view.Audit'
       lockdown:
         $ref: '#/definitions/view.Relationship'
       lockdownId:
@@ -22394,6 +25209,8 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/view.Relationship'
+      updatedBy:
+        type: integer
       userFollowingChanges:
         type: boolean
       userFollowingComments:
@@ -22470,6 +25287,10 @@ definitions:
         type: integer
       locked:
         type: boolean
+      lockedAt:
+        type: string
+      lockedBy:
+        type: integer
       name:
         type: string
       notebookVersion:
@@ -22613,11 +25434,19 @@ definitions:
         properties:
           billing:
             type: boolean
+          board:
+            type: boolean
           comments:
             type: boolean
           files:
             type: boolean
+          forms:
+            type: boolean
+          gantt:
+            type: boolean
           links:
+            type: boolean
+          list:
             type: boolean
           messages:
             type: boolean
@@ -22626,6 +25455,8 @@ definitions:
           notebooks:
             type: boolean
           riskRegister:
+            type: boolean
+          table:
             type: boolean
           tasks:
             type: boolean
@@ -23169,6 +26000,8 @@ definitions:
         type: integer
       health:
         type: integer
+      healthLabel:
+        type: string
       id:
         type: integer
       likeFromUserIDs:
@@ -23189,6 +26022,21 @@ definitions:
         type: string
       updatedAt:
         type: string
+  view.PublicForm:
+    title: PublicForm
+    description: PublicForm is a publically viewable version of Form
+    type: object
+    properties:
+      banner:
+        $ref: '#/definitions/view.Banner'
+      confirmationMessage:
+        type: string
+      content:
+        $ref: '#/definitions/view.Content'
+      promptAdditionalSubmissions:
+        type: boolean
+      token:
+        $ref: '#/definitions/view.Token'
   view.Reaction:
     title: Reaction
     description: Reaction is a reaction item type.
@@ -23262,6 +26110,8 @@ definitions:
     properties:
       id:
         type: integer
+      meta:
+        type: object
       type:
         type: string
   view.SampleProject:
@@ -23328,6 +26178,8 @@ definitions:
         type: string
       dateTime:
         type: string
+      deleted:
+        type: boolean
       emoji:
         type: string
       id:
@@ -23368,11 +26220,11 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/view.Relationship'
-      assigneeCompanyIDs:
+      assigneeCompanyIds:
         type: array
         items:
           type: integer
-      assigneeTeamIDs:
+      assigneeTeamIds:
         type: array
         items:
           type: integer
@@ -23380,7 +26232,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/view.Relationship'
-      assigneeUserIDs:
+      assigneeUserIds:
         type: array
         items:
           type: integer
@@ -23388,38 +26240,109 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/view.Relationship'
+      completedBy:
+        type: integer
+      completedOn:
+        type: string
       createdBy:
         type: integer
-      createdByUserID:
+      createdByUserId:
         type: integer
+      crmDealIds:
+        type: array
+        items:
+          type: integer
       dateUpdated:
         type: string
+      dependencyIds:
+        type: array
+        items:
+          type: integer
+      description:
+        type: string
+      displayOrder:
+        type: integer
       dueDate:
         type: string
       estimateMinutes:
         type: integer
+      hasDeskTickets:
+        type: boolean
       id:
         type: integer
       isPrivate:
         type: integer
+      latestUpdates:
+        type: array
+        items:
+          $ref: '#/definitions/view.Audit'
       name:
         type: string
+      originalDueDate:
+        $ref: '#/definitions/view.Date'
       parentTask:
         $ref: '#/definitions/view.Relationship'
       parentTaskId:
+        type: integer
+      predecessorIds:
+        type: array
+        items:
+          type: integer
+      priority:
+        type: string
+      progress:
         type: integer
       startDate:
         type: string
       status:
         type: string
+      subTaskIds:
+        type: array
+        items:
+          type: integer
+      tagIds:
+        type: array
+        items:
+          type: integer
       tasklist:
         $ref: '#/definitions/view.Relationship'
       tasklistId:
         type: integer
       updatedAt:
         type: string
+      updatedBy:
+        type: integer
       userPermissions:
         $ref: '#/definitions/view.TaskPermissions'
+  view.TaskCard:
+    title: TaskCard
+    description: TaskCard contains all the information returned from a card.
+    type: object
+    properties:
+      archived:
+        type: boolean
+      archivedAt:
+        type: string
+      archivedBy:
+        $ref: '#/definitions/view.Relationship'
+      createBy:
+        $ref: '#/definitions/view.Relationship'
+      createdAt:
+        type: string
+      deleteBy:
+        $ref: '#/definitions/view.Relationship'
+      deletedAt:
+        type: string
+      displayOrder:
+        type: integer
+      id:
+        type: integer
+      status:
+        type: string
+      updatedAt:
+        type: string
+      visible:
+        type: boolean
   view.TaskPermissions:
     title: TaskPermissions
     description: TaskPermissions is a user specific set of task permissions
@@ -23435,6 +26358,17 @@ definitions:
         type: boolean
       canViewEstTime:
         type: boolean
+  view.TaskTimeTotals:
+    title: TaskTimeTotals
+    description: TaskTimeTotals contains time total info for a task
+    type: object
+    properties:
+      billableLoggedMinutes:
+        type: integer
+      billedloggedMinutes:
+        type: integer
+      loggedMinutes:
+        type: integer
   view.Tasklist:
     title: Tasklist
     description: Tasklist contains all the information returned from a tasklist.
@@ -23640,6 +26574,15 @@ definitions:
       id:
         type: integer
       to:
+        type: string
+  view.Token:
+    title: Token
+    description: Token contains all the information returned from a form token.
+    type: object
+    properties:
+      canonicalURL:
+        type: string
+      value:
         type: string
   view.User:
     title: User

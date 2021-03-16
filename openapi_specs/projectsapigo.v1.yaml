@@ -6,6 +6,3328 @@ consumes:
 - application/json
 produces:
 - application/json
-paths: {}
-definitions: {}
+tags:
+- name: CFPort
+paths:
+  /projects/api/v1/completedtasks:
+    get:
+      operationId: GET_projects_api_v1_completedtasks
+      tags:
+      - CFPort
+      summary: Will return the completed tasks
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: type
+        in: query
+        type: string
+      - name: startDate
+        in: query
+        type: string
+      - name: sortOrder
+        in: query
+        type: string
+      - name: sortBy
+        in: query
+        type: string
+      - name: searchTerm
+        in: query
+        type: string
+      - name: reportFormat
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: priority
+        in: query
+        type: string
+      - name: filterBy
+        in: query
+        type: string
+      - name: endDate
+        in: query
+        type: string
+      - name: dateType
+        in: query
+        type: string
+      - name: userId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: onlyUntaggedTasks
+        in: query
+        type: boolean
+      - name: onlyTasksWithTickets
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: matchAllTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        type: boolean
+      - name: isReportDownload
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includeAssigneeTeams
+        in: query
+        type: boolean
+      - name: includeAssigneeCompanies
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: tagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: responsiblePartyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: followerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: excludeTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: creatorIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: completedByIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: assigneeTeamIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: assigneeCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/pendingfiles:
+    post:
+      operationId: POST_projects_api_v1_pendingfiles
+      tags:
+      - CFPort
+      summary: Posts a pending file
+      consumes:
+      - multipart/form-data
+      produces:
+      - application/json
+      parameters:
+      - name: type
+        in: query
+        type: string
+      - name: returnFormat
+        in: query
+        type: string
+      - name: imageType
+        in: query
+        type: string
+      - name: pendingfiles.PendingFilesForm
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/pendingfiles.PendingFilesForm'
+      - name: returnLocation
+        in: query
+        type: boolean
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/pendingfiles/presignedurl:
+    get:
+      operationId: GET_projects_api_v1_pendingfiles_presignedurl
+      tags:
+      - CFPort
+      summary: Get Presigned Url for Pending files
+      produces:
+      - application/json
+      parameters:
+      - name: fileName
+        in: query
+        type: string
+      - name: fileSize
+        in: query
+        type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/project/:projectId/completedtasks:
+    get:
+      operationId: GET_projects_api_v1_project_:projectId_completedtasks
+      tags:
+      - CFPort
+      summary: Will return the project completed tasks
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: type
+        in: query
+        type: string
+      - name: startDate
+        in: query
+        type: string
+      - name: sortOrder
+        in: query
+        type: string
+      - name: sortBy
+        in: query
+        type: string
+      - name: searchTerm
+        in: query
+        type: string
+      - name: reportFormat
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: priority
+        in: query
+        type: string
+      - name: filterBy
+        in: query
+        type: string
+      - name: endDate
+        in: query
+        type: string
+      - name: dateType
+        in: query
+        type: string
+      - name: userId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: onlyUntaggedTasks
+        in: query
+        type: boolean
+      - name: onlyTasksWithTickets
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: matchAllTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        type: boolean
+      - name: isReportDownload
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includeAssigneeTeams
+        in: query
+        type: boolean
+      - name: includeAssigneeCompanies
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: tagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: responsiblePartyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: followerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: excludeTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: creatorIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: completedByIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: assigneeTeamIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: assigneeCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/projectcategories/:projectCategoryId/tasks:
+    get:
+      operationId: GET_projects_api_v1_projectcategories_:projectCategoryId_tasks
+      tags:
+      - CFPort
+      summary: Will return the tasks
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: today
+        in: query
+        type: string
+      - name: tagIds
+        in: query
+        type: string
+      - name: tag-ids
+        in: query
+        type: string
+      - name: startdate
+        in: query
+        type: string
+      - name: startDate
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: responsible-party-ids
+        in: query
+        type: string
+      - name: responsible-party-id
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: include
+        in: query
+        type: string
+      - name: follower-ids
+        in: query
+        type: string
+      - name: followedByUserIds
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: enddate
+        in: query
+        type: string
+      - name: endDate
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: creator-ids
+        in: query
+        type: string
+      - name: createdBeforeDate
+        in: query
+        type: string
+      - name: createdAfterDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: callback
+        in: query
+        type: string
+      - name: tasklistId
+        in: query
+        type: integer
+      - name: taskId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: parentTaskId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: useStartDatesForTodaysTasks
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeTasksWithoutDueDates
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: ignore-start-dates
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: allowTemplateTasks
+        in: query
+        type: boolean
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/projects:
+    get:
+      operationId: GET_projects_api_v1_projects
+      tags:
+      - CFPort
+      summary: Get Projects (APICall_GET_projects)
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDateTime
+        in: query
+        type: string
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: status
+        in: query
+        description: project filters
+        type: string
+      - name: searchTerm
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: orderMode
+        in: query
+        type: string
+      - name: orderBy
+        in: query
+        type: string
+      - name: get
+        in: query
+        type: string
+      - name: firstLetter
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: createdAfterDateTime
+        in: query
+        type: string
+      - name: createdAfterDate
+        in: query
+        type: string
+      - name: completedBeforeDateTime
+        in: query
+        type: string
+      - name: completedAfterDateTime
+        in: query
+        type: string
+      - name: userId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: searchCompany
+        in: query
+        type: boolean
+      - name: returnLetters
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: matchAllTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: includeUpdates
+        in: query
+        type: boolean
+      - name: includeTopPeople
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includeProjectOwner
+        in: query
+        type: boolean
+      - name: includePeople
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: hideDesc
+        in: query
+        type: boolean
+      - name: getTruePermissions
+        in: query
+        type: boolean
+      - name: getPermissions
+        in: query
+        type: boolean
+      - name: getNotificationSettings
+        in: query
+        type: boolean
+      - name: getDeleted
+        in: query
+        type: boolean
+      - name: getCounts
+        in: query
+        type: boolean
+      - name: getCategoryPath
+        in: query
+        type: boolean
+      - name: getAll
+        in: query
+        type: boolean
+      - name: getActivePages
+        in: query
+        type: boolean
+      - name: formatMarkdown
+        in: query
+        type: boolean
+      - name: skipIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealth
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: filterTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: featuresEnabledOnProject
+        in: query
+        type: array
+        items:
+          type: string
+      - name: companyId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: categoryId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: catId
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/projects/:projectId/tasklists:
+    get:
+      operationId: GET_projects_api_v1_projects_:projectId_tasklists
+      tags:
+      - CFPort
+      summary: Get tasklists
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: status
+        in: query
+        type: string
+      - name: status
+        in: query
+        type: string
+      - name: sortBy
+        in: query
+        type: string
+      - name: searchTerm
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: filterText
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: userId
+        in: query
+        type: integer
+      - name: tasklistId
+        in: query
+        type: integer
+      - name: responsiblePartyId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: onlyUnattachedExceptMilestoneId
+        in: query
+        type: integer
+      - name: showPrivate
+        in: query
+        type: boolean
+      - name: showMilestones
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showCompleted
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: getTasks
+        in: query
+        type: boolean
+      - name: getOverdueCount
+        in: query
+        type: boolean
+      - name: getNewTaskDefaults
+        in: query
+        type: boolean
+      - name: getEmptyLists
+        in: query
+        type: boolean
+      - name: getDLMs
+        in: query
+        type: boolean
+      - name: getCompletedCount
+        in: query
+        type: boolean
+      - name: getCategoryPath
+        in: query
+        type: boolean
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/projects/:projectId/tasks:
+    get:
+      operationId: GET_projects_api_v1_projects_:projectId_tasks
+      tags:
+      - CFPort
+      summary: Will return the tasks
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: today
+        in: query
+        type: string
+      - name: tagIds
+        in: query
+        type: string
+      - name: tag-ids
+        in: query
+        type: string
+      - name: startdate
+        in: query
+        type: string
+      - name: startDate
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: responsible-party-ids
+        in: query
+        type: string
+      - name: responsible-party-id
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: include
+        in: query
+        type: string
+      - name: follower-ids
+        in: query
+        type: string
+      - name: followedByUserIds
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: enddate
+        in: query
+        type: string
+      - name: endDate
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: creator-ids
+        in: query
+        type: string
+      - name: createdBeforeDate
+        in: query
+        type: string
+      - name: createdAfterDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: callback
+        in: query
+        type: string
+      - name: tasklistId
+        in: query
+        type: integer
+      - name: taskId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: parentTaskId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: useStartDatesForTodaysTasks
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeTasksWithoutDueDates
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: ignore-start-dates
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: allowTemplateTasks
+        in: query
+        type: boolean
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/tasklists:
+    get:
+      operationId: GET_projects_api_v1_tasklists
+      tags:
+      - CFPort
+      summary: Get tasklists
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: status
+        in: query
+        type: string
+      - name: status
+        in: query
+        type: string
+      - name: sortBy
+        in: query
+        type: string
+      - name: searchTerm
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: filterText
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: userId
+        in: query
+        type: integer
+      - name: tasklistId
+        in: query
+        type: integer
+      - name: responsiblePartyId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: onlyUnattachedExceptMilestoneId
+        in: query
+        type: integer
+      - name: showPrivate
+        in: query
+        type: boolean
+      - name: showMilestones
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showCompleted
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: getTasks
+        in: query
+        type: boolean
+      - name: getOverdueCount
+        in: query
+        type: boolean
+      - name: getNewTaskDefaults
+        in: query
+        type: boolean
+      - name: getEmptyLists
+        in: query
+        type: boolean
+      - name: getDLMs
+        in: query
+        type: boolean
+      - name: getCompletedCount
+        in: query
+        type: boolean
+      - name: getCategoryPath
+        in: query
+        type: boolean
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/tasklists/:tasklistId:
+    get:
+      operationId: GET_projects_api_v1_tasklists_:tasklistId
+      tags:
+      - CFPort
+      summary: Get tasklists
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: status
+        in: query
+        type: string
+      - name: status
+        in: query
+        type: string
+      - name: sortBy
+        in: query
+        type: string
+      - name: searchTerm
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: filterText
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: userId
+        in: query
+        type: integer
+      - name: tasklistId
+        in: query
+        type: integer
+      - name: responsiblePartyId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: onlyUnattachedExceptMilestoneId
+        in: query
+        type: integer
+      - name: showPrivate
+        in: query
+        type: boolean
+      - name: showMilestones
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showCompleted
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: getTasks
+        in: query
+        type: boolean
+      - name: getOverdueCount
+        in: query
+        type: boolean
+      - name: getNewTaskDefaults
+        in: query
+        type: boolean
+      - name: getEmptyLists
+        in: query
+        type: boolean
+      - name: getDLMs
+        in: query
+        type: boolean
+      - name: getCompletedCount
+        in: query
+        type: boolean
+      - name: getCategoryPath
+        in: query
+        type: boolean
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/tasklists/:tasklistId/tasks:
+    get:
+      operationId: GET_projects_api_v1_tasklists_:tasklistId_tasks
+      tags:
+      - CFPort
+      summary: Will return the tasks
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: today
+        in: query
+        type: string
+      - name: tagIds
+        in: query
+        type: string
+      - name: tag-ids
+        in: query
+        type: string
+      - name: startdate
+        in: query
+        type: string
+      - name: startDate
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: responsible-party-ids
+        in: query
+        type: string
+      - name: responsible-party-id
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: include
+        in: query
+        type: string
+      - name: follower-ids
+        in: query
+        type: string
+      - name: followedByUserIds
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: enddate
+        in: query
+        type: string
+      - name: endDate
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: creator-ids
+        in: query
+        type: string
+      - name: createdBeforeDate
+        in: query
+        type: string
+      - name: createdAfterDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: callback
+        in: query
+        type: string
+      - name: tasklistId
+        in: query
+        type: integer
+      - name: taskId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: parentTaskId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: useStartDatesForTodaysTasks
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeTasksWithoutDueDates
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: ignore-start-dates
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: allowTemplateTasks
+        in: query
+        type: boolean
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/tasks:
+    get:
+      operationId: GET_projects_api_v1_tasks
+      tags:
+      - CFPort
+      summary: Will return the tasks
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: today
+        in: query
+        type: string
+      - name: tagIds
+        in: query
+        type: string
+      - name: tag-ids
+        in: query
+        type: string
+      - name: startdate
+        in: query
+        type: string
+      - name: startDate
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: responsible-party-ids
+        in: query
+        type: string
+      - name: responsible-party-id
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: include
+        in: query
+        type: string
+      - name: follower-ids
+        in: query
+        type: string
+      - name: followedByUserIds
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: enddate
+        in: query
+        type: string
+      - name: endDate
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: creator-ids
+        in: query
+        type: string
+      - name: createdBeforeDate
+        in: query
+        type: string
+      - name: createdAfterDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: callback
+        in: query
+        type: string
+      - name: tasklistId
+        in: query
+        type: integer
+      - name: taskId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: parentTaskId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: useStartDatesForTodaysTasks
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeTasksWithoutDueDates
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: ignore-start-dates
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: allowTemplateTasks
+        in: query
+        type: boolean
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/tasks/:taskId:
+    get:
+      operationId: GET_projects_api_v1_tasks_:taskId
+      tags:
+      - CFPort
+      summary: Will return the tasks
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: today
+        in: query
+        type: string
+      - name: tagIds
+        in: query
+        type: string
+      - name: tag-ids
+        in: query
+        type: string
+      - name: startdate
+        in: query
+        type: string
+      - name: startDate
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: responsible-party-ids
+        in: query
+        type: string
+      - name: responsible-party-id
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: include
+        in: query
+        type: string
+      - name: follower-ids
+        in: query
+        type: string
+      - name: followedByUserIds
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: enddate
+        in: query
+        type: string
+      - name: endDate
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: creator-ids
+        in: query
+        type: string
+      - name: createdBeforeDate
+        in: query
+        type: string
+      - name: createdAfterDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: callback
+        in: query
+        type: string
+      - name: tasklistId
+        in: query
+        type: integer
+      - name: taskId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: parentTaskId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: useStartDatesForTodaysTasks
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeTasksWithoutDueDates
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: ignore-start-dates
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: allowTemplateTasks
+        in: query
+        type: boolean
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/tasks/:taskId/subtasks:
+    get:
+      operationId: GET_projects_api_v1_tasks_:taskId_subtasks
+      tags:
+      - CFPort
+      summary: Will return the tasks
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: today
+        in: query
+        type: string
+      - name: tagIds
+        in: query
+        type: string
+      - name: tag-ids
+        in: query
+        type: string
+      - name: startdate
+        in: query
+        type: string
+      - name: startDate
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: responsible-party-ids
+        in: query
+        type: string
+      - name: responsible-party-id
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: include
+        in: query
+        type: string
+      - name: follower-ids
+        in: query
+        type: string
+      - name: followedByUserIds
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: enddate
+        in: query
+        type: string
+      - name: endDate
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: creator-ids
+        in: query
+        type: string
+      - name: createdBeforeDate
+        in: query
+        type: string
+      - name: createdAfterDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: callback
+        in: query
+        type: string
+      - name: tasklistId
+        in: query
+        type: integer
+      - name: taskId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: query
+        type: integer
+      - name: parentTaskId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: companyId
+        in: query
+        type: integer
+      - name: useStartDatesForTodaysTasks
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeTasksWithoutDueDates
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeCompletedPredecessors
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: ignore-start-dates
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: allowTemplateTasks
+        in: query
+        type: boolean
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project *filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/time:
+    get:
+      operationId: GET_projects_api_v1_time
+      tags:
+      - CFPort
+      summary: APICall_GET_time_entries
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: toDate
+        in: query
+        type: string
+      - name: sortOrder
+        in: query
+        type: string
+      - name: sortBy
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: invoicedType
+        in: query
+        type: string
+      - name: fromDate
+        in: query
+        type: string
+      - name: billableType
+        in: query
+        type: string
+      - name: timeLogId
+        in: query
+        type: integer
+      - name: ticketId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: includeTimelogId
+        in: query
+        type: integer
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: matchAllTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTagIds
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includeMainTask
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: getTotals
+        in: query
+        type: boolean
+      - name: userId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: taskTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: tagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectsFromCompanyId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealth
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: companyId
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/time_entries:
+    get:
+      operationId: GET_projects_api_v1_time_entries
+      tags:
+      - CFPort
+      summary: APICall_GET_time_entries
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: toDate
+        in: query
+        type: string
+      - name: sortOrder
+        in: query
+        type: string
+      - name: sortBy
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: invoicedType
+        in: query
+        type: string
+      - name: fromDate
+        in: query
+        type: string
+      - name: billableType
+        in: query
+        type: string
+      - name: timeLogId
+        in: query
+        type: integer
+      - name: ticketId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: includeTimelogId
+        in: query
+        type: integer
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: matchAllTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTagIds
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includeMainTask
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: getTotals
+        in: query
+        type: boolean
+      - name: userId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: taskTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: tagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectsFromCompanyId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealth
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: companyId
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+definitions:
+  pendingfiles.PendingFilesForm:
+    title: PendingFilesForm
+    type: object
+    properties:
+      File:
+        type: string
 
