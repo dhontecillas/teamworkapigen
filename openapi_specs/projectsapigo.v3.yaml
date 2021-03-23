@@ -22607,7 +22607,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/deadline.MilestoneMetricDeadline'
-  errors.BulkError:
+  apierrors.BulkError:
     title: BulkError
     description: |-
       BulkError stores details related to an error on an api request that
@@ -24477,7 +24477,7 @@ definitions:
       customfieldTasks:
         type: array
         items:
-          $ref: '#/definitions/view.CustomFieldTask'
+          $ref: '#/definitions/task.CustomFieldTask'
       included:
         type: object
         properties:
@@ -24523,6 +24523,18 @@ definitions:
         type: integer
       id:
         type: integer
+  task.CommonOptions:
+    title: CommonOptions
+    description: |-
+      CommonOptions contains common options
+    type: object
+    properties:
+      fireWebhook:
+        type: boolean
+      logActivity:
+        type: boolean
+      useNotifyViaTWIM:
+        type: boolean
   task.Options:
     title: Options
     description: |-
@@ -25580,7 +25592,7 @@ definitions:
       projectId:
         type: integer
       value: {}
-  view.CustomFieldTask:
+  customfieldtask.CustomFieldTask:
     title: CustomFieldTask
     description: |-
       CustomFieldTask contains all the information returned from a task customfield

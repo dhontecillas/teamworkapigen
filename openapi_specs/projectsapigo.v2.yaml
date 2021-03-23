@@ -7402,7 +7402,7 @@ paths:
         200:
           description: 200 OK (application/json data)
 definitions:
-  account.AnnouncementResponse:
+  twdataaccount.AnnouncementResponse:
     title: AnnouncementResponse
     type: object
     properties:
@@ -8107,7 +8107,7 @@ definitions:
         type: number
       timezone:
         type: string
-  tags.Tag:
+  twcoreTags.Tag:
     title: Tag
     type: object
     properties:
@@ -8119,7 +8119,7 @@ definitions:
         type: string
       projectId:
         type: integer
-  users.FilterResponse:
+  twdatausers.FilterResponse:
     title: FilterResponse
     type: object
     properties:
@@ -8161,7 +8161,7 @@ definitions:
         type: string
       userId:
         type: integer
-  usersbase.Account:
+  twcoreusersbase.Account:
     title: Account
     type: object
     properties:
