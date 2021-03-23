@@ -9,13 +9,12 @@ produces:
 tags:
 - name: CFPort
 paths:
-  /projects/api/v2/companies/:companyId/people":
+  /projects/api/v2/companies/{companyId}/people:
     get:
-      operationId: GET_projects_api_v2_companies_:companyId_people"
+      operationId: GET_projects_api_v2_companies_{companyId}_people
       tags:
       - CFPort
-      summary: Retrieves the details for all the people from the submitted company
-        (excluding those you don’t have permission to see).
+      summary: Retrieves the details for all the people from the submitted company (excluding those you don’t have permission to see).
       produces:
       - application/json
       parameters:
@@ -55,6 +54,9 @@ paths:
       - name: projectId
         in: query
         type: integer
+      - name: projectCompanyId
+        in: query
+        type: integer
       - name: pageSize
         in: query
         type: integer
@@ -64,6 +66,10 @@ paths:
       - name: excludeProjectId
         in: query
         type: integer
+      - name: companyId
+        in: path
+        type: integer
+        required: true
       - name: showDeleted
         in: query
         type: boolean
@@ -88,10 +94,16 @@ paths:
       - name: includeObservers
         in: query
         type: boolean
+      - name: includeContacts
+        in: query
+        type: boolean
       - name: includeCompanyDetails
         in: query
         type: boolean
       - name: includeClockIn
+        in: query
+        type: boolean
+      - name: includeClients
         in: query
         type: boolean
       - name: groupByCompany
@@ -124,9 +136,9 @@ paths:
           description: 200 OK
           schema:
             $ref: '#/definitions/people.response'
-  /projects/api/v2/companies/:compnayId/projects:
+  /projects/api/v2/companies/{companyId}/projects:
     get:
-      operationId: GET_projects_api_v2_companies_:compnayId_projects
+      operationId: GET_projects_api_v2_companies_{companyId}_projects
       tags:
       - CFPort
       summary: Returns the company projects
@@ -173,7 +185,14 @@ paths:
       - name: page
         in: query
         type: integer
+      - name: companyId
+        in: path
+        type: integer
+        required: true
       - name: searchCompany
+        in: query
+        type: boolean
+      - name: searchCategory
         in: query
         type: boolean
       - name: returnLetters
@@ -292,9 +311,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/files/:objectId/project:
+  /projects/api/v2/files/{objectId}/project:
     get:
-      operationId: GET_projects_api_v2_files_:objectId_project
+      operationId: GET_projects_api_v2_files_{objectId}_project
       tags:
       - CFPort
       summary: Get the project for the file
@@ -307,6 +326,10 @@ paths:
       - name: objectId
         in: query
         type: integer
+      - name: objectId
+        in: path
+        type: integer
+        required: true
       - name: showDeleted
         in: query
         type: boolean
@@ -379,6 +402,9 @@ paths:
       - name: skipES
         in: query
         type: boolean
+      - name: separateUsers
+        in: query
+        type: boolean
       - name: searchWithTags
         in: query
         type: boolean
@@ -403,6 +429,9 @@ paths:
       - name: getUsers
         in: query
         type: boolean
+      - name: eventsInUTC
+        in: query
+        type: boolean
       - name: tags
         in: query
         type: array
@@ -416,9 +445,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/links/:objectId/project:
+  /projects/api/v2/links/{objectId}/project:
     get:
-      operationId: GET_projects_api_v2_links_:objectId_project
+      operationId: GET_projects_api_v2_links_{objectId}_project
       tags:
       - CFPort
       summary: Get the project for the link
@@ -431,6 +460,10 @@ paths:
       - name: objectId
         in: query
         type: integer
+      - name: objectId
+        in: path
+        type: integer
+        required: true
       - name: showDeleted
         in: query
         type: boolean
@@ -476,396 +509,59 @@ paths:
       produces:
       - application/json
       parameters:
-      - name: SharedFilter
+      - name: sharedFilter
         in: query
         type: string
-      - name: GetDefaultFilters
+      - name: getDefaultFilters
         in: query
         type: string
-      - name: UserId
-        in: query
-        type: integer
-      - name: ShowDeleted
-        in: query
-        type: boolean
-      - name: IncludeTags
-        in: query
-        type: boolean
-      - name: IncludeClockIn
-        in: query
-        type: boolean
-      - name: IncludeAuth
-        in: query
-        type: boolean
-      - name: GetTeamsStats
-        in: query
-        type: boolean
-      - name: GetTasksStats
-        in: query
-        type: boolean
-      - name: GetProjectsStats
-        in: query
-        type: boolean
-      - name: GetPreferences
-        in: query
-        type: boolean
-      - name: GetPermissions
-        in: query
-        type: boolean
-      - name: GetMilestonesStats
-        in: query
-        type: boolean
-      - name: GetInitialPage
-        in: query
-        type: boolean
-      - name: GetAllStats
-        in: query
-        description: statistics
-        type: boolean
-      - name: GetAccounts
-        in: query
-        type: boolean
-      - name: Fullprofile
-        in: query
-        type: boolean
-      - name: CleanPreferences
-        in: query
-        type: boolean
-      responses:
-        200:
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/people.personResponse'
-  /projects/api/v2/messages/:objectId/project:
-    get:
-      operationId: GET_projects_api_v2_messages_:objectId_project
-      tags:
-      - CFPort
-      summary: Get the project for the message
-      produces:
-      - application/json
-      parameters:
-      - name: userId
-        in: query
-        type: integer
-      - name: objectId
+      - name: userID
         in: query
         type: integer
       - name: showDeleted
         in: query
         type: boolean
       - name: includeTags
-        in: query
-        type: boolean
-      - name: includePeople
-        in: query
-        type: boolean
-      - name: getTruePermissions
-        in: query
-        type: boolean
-      - name: getPermissions
-        in: query
-        type: boolean
-      - name: getNotificationSettings
-        in: query
-        type: boolean
-      - name: getEmoji
-        in: query
-        type: boolean
-      - name: getEmailAddress
-        in: query
-        type: boolean
-      - name: getDateInfo
-        in: query
-        type: boolean
-      - name: getActivePages
-        in: query
-        type: boolean
-      - name: formatMarkdown
-        in: query
-        type: boolean
-      responses:
-        200:
-          description: 200 OK (application/json data)
-  /projects/api/v2/milestones/:objectId/project:
-    get:
-      operationId: GET_projects_api_v2_milestones_:objectId_project
-      tags:
-      - CFPort
-      summary: Get the project for the milestone
-      produces:
-      - application/json
-      parameters:
-      - name: userId
-        in: query
-        type: integer
-      - name: objectId
-        in: query
-        type: integer
-      - name: showDeleted
-        in: query
-        type: boolean
-      - name: includeTags
-        in: query
-        type: boolean
-      - name: includePeople
-        in: query
-        type: boolean
-      - name: getTruePermissions
-        in: query
-        type: boolean
-      - name: getPermissions
-        in: query
-        type: boolean
-      - name: getNotificationSettings
-        in: query
-        type: boolean
-      - name: getEmoji
-        in: query
-        type: boolean
-      - name: getEmailAddress
-        in: query
-        type: boolean
-      - name: getDateInfo
-        in: query
-        type: boolean
-      - name: getActivePages
-        in: query
-        type: boolean
-      - name: formatMarkdown
-        in: query
-        type: boolean
-      responses:
-        200:
-          description: 200 OK (application/json data)
-  /projects/api/v2/notebooks/:objectId/project:
-    get:
-      operationId: GET_projects_api_v2_notebooks_:objectId_project
-      tags:
-      - CFPort
-      summary: Get the project for the notebook
-      produces:
-      - application/json
-      parameters:
-      - name: userId
-        in: query
-        type: integer
-      - name: objectId
-        in: query
-        type: integer
-      - name: showDeleted
-        in: query
-        type: boolean
-      - name: includeTags
-        in: query
-        type: boolean
-      - name: includePeople
-        in: query
-        type: boolean
-      - name: getTruePermissions
-        in: query
-        type: boolean
-      - name: getPermissions
-        in: query
-        type: boolean
-      - name: getNotificationSettings
-        in: query
-        type: boolean
-      - name: getEmoji
-        in: query
-        type: boolean
-      - name: getEmailAddress
-        in: query
-        type: boolean
-      - name: getDateInfo
-        in: query
-        type: boolean
-      - name: getActivePages
-        in: query
-        type: boolean
-      - name: formatMarkdown
-        in: query
-        type: boolean
-      responses:
-        200:
-          description: 200 OK (application/json data)
-  /projects/api/v2/people:
-    get:
-      operationId: GET_projects_api_v2_people
-      tags:
-      - CFPort
-      summary: All people visible to the user will be returned, including the user
-        themselves. By default 100 records are returned at a time.
-      produces:
-      - application/json
-      parameters:
-      - name: updatedAfterDateTime
-        in: query
-        type: string
-      - name: updatedAfterDate
-        in: query
-        type: string
-      - name: type
-        in: query
-        type: string
-      - name: sortOrder
-        in: query
-        type: string
-      - name: sort
-        in: query
-        type: string
-      - name: searchTerm
-        in: query
-        type: string
-      - name: projectType
-        in: query
-        type: string
-      - name: inviteStatus
-        in: query
-        type: string
-      - name: firstLetter
-        in: query
-        type: string
-      - name: emailAddress
-        in: query
-        type: string
-      - name: dataSet
-        in: query
-        type: string
-      - name: projectId
-        in: query
-        type: integer
-      - name: pageSize
-        in: query
-        type: integer
-      - name: page
-        in: query
-        type: integer
-      - name: excludeProjectId
-        in: query
-        type: integer
-      - name: showDeleted
-        in: query
-        type: boolean
-      - name: returnTeams
-        in: query
-        type: boolean
-      - name: returnProjectIds
-        in: query
-        type: boolean
-      - name: returnLetters
-        in: query
-        type: boolean
-      - name: ownerCompanyFirst
-        in: query
-        type: boolean
-      - name: onlyids
-        in: query
-        type: boolean
-      - name: includeTags
-        in: query
-        type: boolean
-      - name: includeObservers
-        in: query
-        type: boolean
-      - name: includeCompanyDetails
         in: query
         type: boolean
       - name: includeClockIn
         in: query
         type: boolean
-      - name: groupByCompany
+      - name: includeAuth
         in: query
         type: boolean
-      - name: getProjectRoles
+      - name: getTeamsStats
         in: query
         type: boolean
-      - name: getCounts
+      - name: getTasksStats
+        in: query
+        type: boolean
+      - name: getProjectsStats
+        in: query
+        type: boolean
+      - name: getPreferences
+        in: query
+        type: boolean
+      - name: getPermissions
+        in: query
+        type: boolean
+      - name: getMilestonesStats
+        in: query
+        type: boolean
+      - name: getInitialPage
+        in: query
+        type: boolean
+      - name: getAllStats
+        in: query
+        description: statistics
+        type: boolean
+      - name: getAccounts
         in: query
         type: boolean
       - name: fullprofile
         in: query
         type: boolean
-      - name: countOnly
-        in: query
-        type: boolean
-      - name: userIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: companyId
-        in: query
-        type: array
-        items:
-          type: integer
-      responses:
-        200:
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/people.response'
-  /projects/api/v2/people/:userId:
-    get:
-      operationId: GET_projects_api_v2_people_:userId
-      tags:
-      - CFPort
-      summary: Retrieves the user details for the ID submitted.
-      produces:
-      - application/json
-      parameters:
-      - name: SharedFilter
-        in: query
-        type: string
-      - name: GetDefaultFilters
-        in: query
-        type: string
-      - name: UserId
-        in: query
-        type: integer
-      - name: ShowDeleted
-        in: query
-        type: boolean
-      - name: IncludeTags
-        in: query
-        type: boolean
-      - name: IncludeClockIn
-        in: query
-        type: boolean
-      - name: IncludeAuth
-        in: query
-        type: boolean
-      - name: GetTeamsStats
-        in: query
-        type: boolean
-      - name: GetTasksStats
-        in: query
-        type: boolean
-      - name: GetProjectsStats
-        in: query
-        type: boolean
-      - name: GetPreferences
-        in: query
-        type: boolean
-      - name: GetPermissions
-        in: query
-        type: boolean
-      - name: GetMilestonesStats
-        in: query
-        type: boolean
-      - name: GetInitialPage
-        in: query
-        type: boolean
-      - name: GetAllStats
-        in: query
-        description: statistics
-        type: boolean
-      - name: GetAccounts
-        in: query
-        type: boolean
-      - name: Fullprofile
-        in: query
-        type: boolean
-      - name: CleanPreferences
+      - name: cleanPreferences
         in: query
         type: boolean
       responses:
@@ -873,249 +569,9 @@ paths:
           description: 200 OK
           schema:
             $ref: '#/definitions/people.personResponse'
-  /projects/api/v2/people/:userId/avatar:
+  /projects/api/v2/me/personaltasks:
     get:
-      operationId: GET_projects_api_v2_people_:userId_avatar
-      summary: Get user avatar
-      produces:
-      - application/json
-      responses:
-        301:
-          description: 301 Moved Permanently (no data)
-  /projects/api/v2/people/:userId/projects:
-    get:
-      operationId: GET_projects_api_v2_people_:userId_projects
-      tags:
-      - CFPort
-      summary: APICall_GET_projects
-      produces:
-      - application/json
-      parameters:
-      - name: workedOnAfterDateTime
-        in: query
-        type: string
-      - name: updatedAfterDateTime
-        in: query
-        type: string
-      - name: updatedAfterDate
-        in: query
-        type: string
-      - name: status
-        in: query
-        description: common project filters
-        type: string
-      - name: searchTerm
-        in: query
-        type: string
-      - name: projectType
-        in: query
-        type: string
-      - name: projectStatus
-        in: query
-        type: string
-      - name: orderMode
-        in: query
-        type: string
-      - name: orderBy
-        in: query
-        type: string
-      - name: get
-        in: query
-        type: string
-      - name: firstLetter
-        in: query
-        type: string
-      - name: dataSet
-        in: query
-        type: string
-      - name: createdAfterDateTime
-        in: query
-        type: string
-      - name: createdAfterDate
-        in: query
-        type: string
-      - name: completedBeforeDateTime
-        in: query
-        type: string
-      - name: completedAfterDateTime
-        in: query
-        type: string
-      - name: userId
-        in: query
-        type: integer
-      - name: pageSize
-        in: query
-        type: integer
-      - name: page
-        in: query
-        type: integer
-      - name: searchCompany
-        in: query
-        type: boolean
-      - name: sanitizeName
-        in: query
-        type: boolean
-      - name: returnLetters
-        in: query
-        type: boolean
-      - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyProjectsWithExplicitMembership
-        in: query
-        type: boolean
-      - name: onlyArchivedProjects
-        in: query
-        type: boolean
-      - name: matchAllTags
-        in: query
-        type: boolean
-      - name: matchAllProjectTags
-        in: query
-        type: boolean
-      - name: includeUpdates
-        in: query
-        type: boolean
-      - name: includeTopPeople
-        in: query
-        type: boolean
-      - name: includeTags
-        in: query
-        type: boolean
-      - name: includeProjectOwner
-        in: query
-        type: boolean
-      - name: includePeople
-        in: query
-        type: boolean
-      - name: includeCustomFields
-        in: query
-        type: boolean
-      - name: includeCrmDealIds
-        in: query
-        type: boolean
-      - name: includeArchivedProjects
-        in: query
-        type: boolean
-      - name: hideObservedProjects
-        in: query
-        type: boolean
-      - name: hideDesc
-        in: query
-        type: boolean
-      - name: getTruePermissions
-        in: query
-        type: boolean
-      - name: getPermissions
-        in: query
-        type: boolean
-      - name: getNotificationSettings
-        in: query
-        type: boolean
-      - name: getDeleted
-        in: query
-        type: boolean
-      - name: getCounts
-        in: query
-        type: boolean
-      - name: getCategoryPath
-        in: query
-        type: boolean
-      - name: getAll
-        in: query
-        type: boolean
-      - name: getActivePages
-        in: query
-        type: boolean
-      - name: formatMarkdown
-        in: query
-        type: boolean
-      - name: skipIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: skipCrmDealIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectTagIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectHealths
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectHealth
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCategoryIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: portfolioColumnIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: portfolioBoardIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: filterTagIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: featuresEnabledOnProject
-        in: query
-        type: array
-        items:
-          type: string
-      - name: crmDealIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: companyId
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: categoryId
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: catId
-        in: query
-        type: array
-        items:
-          type: integer
-      responses:
-        200:
-          description: 200 OK (application/json data)
-  /projects/api/v2/projectcategories/:projectCategoryId/tasks:
-    get:
-      operationId: GET_projects_api_v2_projectcategories_:projectCategoryId_tasks
+      operationId: GET_projects_api_v2_me_personaltasks
       tags:
       - CFPort
       summary: Get Tasks
@@ -1309,6 +765,1289 @@ paths:
         in: query
         type: boolean
       - name: getFiles
+        in: query
+        type: boolean
+      - name: excludeAssigneeNotOnProjectTeams
+        in: query
+        type: boolean
+      - name: allowTemplateTasks
+        in: query
+        type: boolean
+      - name: tasklistId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: taskIdList
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: tags
+        in: query
+        type: array
+        items:
+          type: string
+      - name: tagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: skipCrmDealIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: responsiblePartyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealth
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: follower-ids
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: filterText
+        in: query
+        type: array
+        items:
+          type: string
+      - name: filterBoardColumnIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: excludeTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: crmDealIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: creatorIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: companyId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: assigneeTeamIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: assigneeCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v2/me/personaltasks/{taskId}:
+    get:
+      operationId: GET_projects_api_v2_me_personaltasks_{taskId}
+      tags:
+      - CFPort
+      summary: Get Tasks
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: today
+        in: query
+        type: string
+      - name: startDate
+        in: query
+        type: string
+      - name: sortOrder
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: reportFormat
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: priority
+        in: query
+        type: string
+      - name: include
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: endDate
+        in: query
+        type: string
+      - name: deletedAfterDate
+        in: query
+        type: string
+      - name: dateCode
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: createdFilter
+        in: query
+        type: string
+      - name: createdDateCode
+        in: query
+        type: string
+      - name: createdBeforeDate
+        in: query
+        type: string
+      - name: createdAfterDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: callback
+        in: query
+        type: string
+      - name: taskId
+        in: query
+        type: integer
+      - name: taskId
+        in: path
+        type: integer
+        required: true
+      - name: parentTaskId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: offsetCount
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: useStartDatesForTodaysTasks
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: onlyUntaggedTasks
+        in: query
+        type: boolean
+      - name: onlyTasksWithUnreadComments
+        in: query
+        type: boolean
+      - name: onlyTasksWithTickets
+        in: query
+        type: boolean
+      - name: onlyTasksWithEstimatedTime
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: matchAllTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTagIds
+        in: query
+        type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        type: boolean
+      - name: isReportDownload
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeTeamUserIds
+        in: query
+        type: boolean
+      - name: includeTasksWithoutDueDates
+        in: query
+        type: boolean
+      - name: includeTasksWithCards
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeCustomFields
+        in: query
+        type: boolean
+      - name: includeCrmDealIds
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompanyUserIds
+        in: query
+        type: boolean
+      - name: includeBlockedTasks
+        in: query
+        type: boolean
+      - name: includeAssigneeTeams
+        in: query
+        type: boolean
+      - name: includeAssigneeCompanies
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: ignoreStartDates
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: excludeAssigneeNotOnProjectTeams
+        in: query
+        type: boolean
+      - name: allowTemplateTasks
+        in: query
+        type: boolean
+      - name: tasklistId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: taskIdList
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: tags
+        in: query
+        type: array
+        items:
+          type: string
+      - name: tagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: skipCrmDealIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: responsiblePartyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectId
+        in: query
+        description: project filters
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealth
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: follower-ids
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: filterText
+        in: query
+        type: array
+        items:
+          type: string
+      - name: filterBoardColumnIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: excludeTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: crmDealIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: creatorIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: companyId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: assigneeTeamIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: assigneeCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v2/messages/{objectId}/project:
+    get:
+      operationId: GET_projects_api_v2_messages_{objectId}_project
+      tags:
+      - CFPort
+      summary: Get the project for the message
+      produces:
+      - application/json
+      parameters:
+      - name: userId
+        in: query
+        type: integer
+      - name: objectId
+        in: query
+        type: integer
+      - name: objectId
+        in: path
+        type: integer
+        required: true
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includePeople
+        in: query
+        type: boolean
+      - name: getTruePermissions
+        in: query
+        type: boolean
+      - name: getPermissions
+        in: query
+        type: boolean
+      - name: getNotificationSettings
+        in: query
+        type: boolean
+      - name: getEmoji
+        in: query
+        type: boolean
+      - name: getEmailAddress
+        in: query
+        type: boolean
+      - name: getDateInfo
+        in: query
+        type: boolean
+      - name: getActivePages
+        in: query
+        type: boolean
+      - name: formatMarkdown
+        in: query
+        type: boolean
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v2/milestones/{objectId}/project:
+    get:
+      operationId: GET_projects_api_v2_milestones_{objectId}_project
+      tags:
+      - CFPort
+      summary: Get the project for the milestone
+      produces:
+      - application/json
+      parameters:
+      - name: userId
+        in: query
+        type: integer
+      - name: objectId
+        in: query
+        type: integer
+      - name: objectId
+        in: path
+        type: integer
+        required: true
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includePeople
+        in: query
+        type: boolean
+      - name: getTruePermissions
+        in: query
+        type: boolean
+      - name: getPermissions
+        in: query
+        type: boolean
+      - name: getNotificationSettings
+        in: query
+        type: boolean
+      - name: getEmoji
+        in: query
+        type: boolean
+      - name: getEmailAddress
+        in: query
+        type: boolean
+      - name: getDateInfo
+        in: query
+        type: boolean
+      - name: getActivePages
+        in: query
+        type: boolean
+      - name: formatMarkdown
+        in: query
+        type: boolean
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v2/notebooks/{objectId}/project:
+    get:
+      operationId: GET_projects_api_v2_notebooks_{objectId}_project
+      tags:
+      - CFPort
+      summary: Get the project for the notebook
+      produces:
+      - application/json
+      parameters:
+      - name: userId
+        in: query
+        type: integer
+      - name: objectId
+        in: query
+        type: integer
+      - name: objectId
+        in: path
+        type: integer
+        required: true
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includePeople
+        in: query
+        type: boolean
+      - name: getTruePermissions
+        in: query
+        type: boolean
+      - name: getPermissions
+        in: query
+        type: boolean
+      - name: getNotificationSettings
+        in: query
+        type: boolean
+      - name: getEmoji
+        in: query
+        type: boolean
+      - name: getEmailAddress
+        in: query
+        type: boolean
+      - name: getDateInfo
+        in: query
+        type: boolean
+      - name: getActivePages
+        in: query
+        type: boolean
+      - name: formatMarkdown
+        in: query
+        type: boolean
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v2/people:
+    get:
+      operationId: GET_projects_api_v2_people
+      tags:
+      - CFPort
+      summary: All people visible to the user will be returned, including the user themselves. By default 100 records are returned at a time.
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDateTime
+        in: query
+        type: string
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: type
+        in: query
+        type: string
+      - name: sortOrder
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: searchTerm
+        in: query
+        type: string
+      - name: projectType
+        in: query
+        type: string
+      - name: inviteStatus
+        in: query
+        type: string
+      - name: firstLetter
+        in: query
+        type: string
+      - name: emailAddress
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: projectId
+        in: query
+        type: integer
+      - name: projectCompanyId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: excludeProjectId
+        in: query
+        type: integer
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: returnTeams
+        in: query
+        type: boolean
+      - name: returnProjectIds
+        in: query
+        type: boolean
+      - name: returnLetters
+        in: query
+        type: boolean
+      - name: ownerCompanyFirst
+        in: query
+        type: boolean
+      - name: onlyids
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includeObservers
+        in: query
+        type: boolean
+      - name: includeContacts
+        in: query
+        type: boolean
+      - name: includeCompanyDetails
+        in: query
+        type: boolean
+      - name: includeClockIn
+        in: query
+        type: boolean
+      - name: includeClients
+        in: query
+        type: boolean
+      - name: groupByCompany
+        in: query
+        type: boolean
+      - name: getProjectRoles
+        in: query
+        type: boolean
+      - name: getCounts
+        in: query
+        type: boolean
+      - name: fullprofile
+        in: query
+        type: boolean
+      - name: countOnly
+        in: query
+        type: boolean
+      - name: userIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: companyId
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/people.response'
+  /projects/api/v2/people/{userId}:
+    get:
+      operationId: GET_projects_api_v2_people_{userId}
+      tags:
+      - CFPort
+      summary: Retrieves the user details for the ID submitted.
+      produces:
+      - application/json
+      parameters:
+      - name: sharedFilter
+        in: query
+        type: string
+      - name: getDefaultFilters
+        in: query
+        type: string
+      - name: userId
+        in: path
+        type: integer
+        required: true
+      - name: userID
+        in: query
+        type: integer
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includeClockIn
+        in: query
+        type: boolean
+      - name: includeAuth
+        in: query
+        type: boolean
+      - name: getTeamsStats
+        in: query
+        type: boolean
+      - name: getTasksStats
+        in: query
+        type: boolean
+      - name: getProjectsStats
+        in: query
+        type: boolean
+      - name: getPreferences
+        in: query
+        type: boolean
+      - name: getPermissions
+        in: query
+        type: boolean
+      - name: getMilestonesStats
+        in: query
+        type: boolean
+      - name: getInitialPage
+        in: query
+        type: boolean
+      - name: getAllStats
+        in: query
+        description: statistics
+        type: boolean
+      - name: getAccounts
+        in: query
+        type: boolean
+      - name: fullprofile
+        in: query
+        type: boolean
+      - name: cleanPreferences
+        in: query
+        type: boolean
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/people.personResponse'
+  /projects/api/v2/people/{userId}/avatar:
+    get:
+      operationId: GET_projects_api_v2_people_{userId}_avatar
+      summary: Get user avatar
+      produces:
+      - application/json
+      parameters:
+      - name: userId
+        in: path
+        type: integer
+        required: true
+      responses:
+        301:
+          description: 301 Moved Permanently (no data)
+  /projects/api/v2/people/{userId}/projects:
+    get:
+      operationId: GET_projects_api_v2_people_{userId}_projects
+      tags:
+      - CFPort
+      summary: APICall_GET_projects
+      produces:
+      - application/json
+      parameters:
+      - name: workedOnAfterDateTime
+        in: query
+        type: string
+      - name: updatedAfterDateTime
+        in: query
+        type: string
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: status
+        in: query
+        description: common project filters
+        type: string
+      - name: searchTerm
+        in: query
+        type: string
+      - name: projectType
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: orderMode
+        in: query
+        type: string
+      - name: orderBy
+        in: query
+        type: string
+      - name: get
+        in: query
+        type: string
+      - name: firstLetter
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: createdAfterDateTime
+        in: query
+        type: string
+      - name: createdAfterDate
+        in: query
+        type: string
+      - name: completedBeforeDateTime
+        in: query
+        type: string
+      - name: completedAfterDateTime
+        in: query
+        type: string
+      - name: userId
+        in: query
+        type: integer
+      - name: userId
+        in: path
+        type: integer
+        required: true
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: searchCompany
+        in: query
+        type: boolean
+      - name: searchCategory
+        in: query
+        type: boolean
+      - name: sanitizeName
+        in: query
+        type: boolean
+      - name: returnLetters
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: onlyProjectsWithExplicitMembership
+        in: query
+        type: boolean
+      - name: onlyCustomFieldValues
+        in: query
+        type: boolean
+      - name: onlyArchivedProjects
+        in: query
+        type: boolean
+      - name: matchAllTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: includeUpdates
+        in: query
+        type: boolean
+      - name: includeTopPeople
+        in: query
+        type: boolean
+      - name: includeTags
+        in: query
+        type: boolean
+      - name: includeProjectOwner
+        in: query
+        type: boolean
+      - name: includePeople
+        in: query
+        type: boolean
+      - name: includeCustomFields
+        in: query
+        type: boolean
+      - name: includeCrmDealIds
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: hideObservedProjects
+        in: query
+        type: boolean
+      - name: hideDesc
+        in: query
+        type: boolean
+      - name: getTruePermissions
+        in: query
+        type: boolean
+      - name: getPermissions
+        in: query
+        type: boolean
+      - name: getNotificationSettings
+        in: query
+        type: boolean
+      - name: getDeleted
+        in: query
+        type: boolean
+      - name: getCounts
+        in: query
+        type: boolean
+      - name: getCategoryPath
+        in: query
+        type: boolean
+      - name: getAll
+        in: query
+        type: boolean
+      - name: getActivePages
+        in: query
+        type: boolean
+      - name: formatMarkdown
+        in: query
+        type: boolean
+      - name: skipIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: skipCrmDealIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealths
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectHealth
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: portfolioColumnIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: portfolioBoardIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: filterTagIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: featuresEnabledOnProject
+        in: query
+        type: array
+        items:
+          type: string
+      - name: crmDealIds
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: companyId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: categoryId
+        in: query
+        type: array
+        items:
+          type: integer
+      - name: catId
+        in: query
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v2/projectcategories/{projectCategoryId}/tasks:
+    get:
+      operationId: GET_projects_api_v2_projectcategories_{projectCategoryId}_tasks
+      tags:
+      - CFPort
+      summary: Get Tasks
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfterDate
+        in: query
+        type: string
+      - name: today
+        in: query
+        type: string
+      - name: startDate
+        in: query
+        type: string
+      - name: sortOrder
+        in: query
+        type: string
+      - name: sort
+        in: query
+        type: string
+      - name: reportFormat
+        in: query
+        type: string
+      - name: projectStatus
+        in: query
+        type: string
+      - name: priority
+        in: query
+        type: string
+      - name: include
+        in: query
+        type: string
+      - name: filter
+        in: query
+        type: string
+      - name: endDate
+        in: query
+        type: string
+      - name: deletedAfterDate
+        in: query
+        type: string
+      - name: dateCode
+        in: query
+        type: string
+      - name: dataSet
+        in: query
+        type: string
+      - name: createdFilter
+        in: query
+        type: string
+      - name: createdDateCode
+        in: query
+        type: string
+      - name: createdBeforeDate
+        in: query
+        type: string
+      - name: createdAfterDate
+        in: query
+        type: string
+      - name: completedBeforeDate
+        in: query
+        type: string
+      - name: completedAfterDate
+        in: query
+        type: string
+      - name: callback
+        in: query
+        type: string
+      - name: taskId
+        in: query
+        type: integer
+      - name: projectCategoryId
+        in: path
+        type: integer
+        required: true
+      - name: parentTaskId
+        in: query
+        type: integer
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
+        in: query
+        type: integer
+      - name: offsetCount
+        in: query
+        type: integer
+      - name: includeTaskId
+        in: query
+        type: integer
+      - name: useStartDatesForTodaysTasks
+        in: query
+        type: boolean
+      - name: useAllProjects
+        in: query
+        type: boolean
+      - name: starredProjectsOnly
+        in: query
+        type: boolean
+      - name: showDeleted
+        in: query
+        type: boolean
+      - name: showCompletedLists
+        in: query
+        type: boolean
+      - name: onlyUntaggedTasks
+        in: query
+        type: boolean
+      - name: onlyTasksWithUnreadComments
+        in: query
+        type: boolean
+      - name: onlyTasksWithTickets
+        in: query
+        type: boolean
+      - name: onlyTasksWithEstimatedTime
+        in: query
+        type: boolean
+      - name: onlyStarredProjects
+        in: query
+        type: boolean
+      - name: nestSubTasks
+        in: query
+        type: boolean
+      - name: matchAllTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        type: boolean
+      - name: matchAllProjectTagIds
+        in: query
+        type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        type: boolean
+      - name: isReportDownload
+        in: query
+        type: boolean
+      - name: includeUntaggedTasks
+        in: query
+        type: boolean
+      - name: includeToday
+        in: query
+        type: boolean
+      - name: includeTeamUserIds
+        in: query
+        type: boolean
+      - name: includeTasksWithoutDueDates
+        in: query
+        type: boolean
+      - name: includeTasksWithCards
+        in: query
+        type: boolean
+      - name: includeTasksFromDeletedLists
+        in: query
+        type: boolean
+      - name: includeReminders
+        in: query
+        type: boolean
+      - name: includeLoggedTime
+        in: query
+        type: boolean
+      - name: includeCustomFields
+        in: query
+        type: boolean
+      - name: includeCrmDealIds
+        in: query
+        type: boolean
+      - name: includeCompletedTasks
+        in: query
+        type: boolean
+      - name: includeCompletedSubtasks
+        in: query
+        type: boolean
+      - name: includeCompanyUserIds
+        in: query
+        type: boolean
+      - name: includeBlockedTasks
+        in: query
+        type: boolean
+      - name: includeAssigneeTeams
+        in: query
+        type: boolean
+      - name: includeAssigneeCompanies
+        in: query
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        type: boolean
+      - name: ignoreStartDates
+        in: query
+        type: boolean
+      - name: getSubTasks
+        in: query
+        type: boolean
+      - name: getFiles
+        in: query
+        type: boolean
+      - name: excludeAssigneeNotOnProjectTeams
         in: query
         type: boolean
       - name: allowTemplateTasks
@@ -1508,6 +2247,9 @@ paths:
       - name: searchCompany
         in: query
         type: boolean
+      - name: searchCategory
+        in: query
+        type: boolean
       - name: sanitizeName
         in: query
         type: boolean
@@ -1518,6 +2260,9 @@ paths:
         in: query
         type: boolean
       - name: onlyProjectsWithExplicitMembership
+        in: query
+        type: boolean
+      - name: onlyCustomFieldValues
         in: query
         type: boolean
       - name: onlyArchivedProjects
@@ -1669,9 +2414,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projectId:
+  /projects/api/v2/projects/{projectId}:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId
+      operationId: GET_projects_api_v2_projects_{projectId}
       tags:
       - CFPort
       summary: Returns the project defaults
@@ -1684,7 +2429,14 @@ paths:
       - name: projectId
         in: query
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: showDeleted
+        in: query
+        type: boolean
+      - name: onlyCustomFieldValues
         in: query
         type: boolean
       - name: includeUpdates
@@ -1747,9 +2499,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projectId/billing/time:
+  /projects/api/v2/projects/{projectId}/billing/time:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_billing_time
+      operationId: GET_projects_api_v2_projects_{projectId}_billing_time
       tags:
       - CFPort
       summary: APICall_GET_projects_id_time_entries
@@ -1786,6 +2538,10 @@ paths:
       - name: projectId
         in: query
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         type: integer
@@ -1833,9 +2589,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projectId/emailaddress:
+  /projects/api/v2/projects/{projectId}/emailaddress:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_emailaddress
+      operationId: GET_projects_api_v2_projects_{projectId}_emailaddress
       tags:
       - CFPort
       summary: Returns the details for the account you’re currently logged in with.
@@ -1848,6 +2604,10 @@ paths:
       - name: projectId
         in: query
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: categoryId
         in: query
         type: integer
@@ -1860,9 +2620,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projectId/people:
+  /projects/api/v2/projects/{projectId}/people:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_people
+      operationId: GET_projects_api_v2_projects_{projectId}_people
       tags:
       - CFPort
       summary: Retrieves all of the people in a given project.
@@ -1903,6 +2663,13 @@ paths:
         in: query
         type: string
       - name: projectId
+        in: path
+        type: integer
+        required: true
+      - name: projectId
+        in: query
+        type: integer
+      - name: projectCompanyId
         in: query
         type: integer
       - name: pageSize
@@ -1938,10 +2705,16 @@ paths:
       - name: includeObservers
         in: query
         type: boolean
+      - name: includeContacts
+        in: query
+        type: boolean
       - name: includeCompanyDetails
         in: query
         type: boolean
       - name: includeClockIn
+        in: query
+        type: boolean
+      - name: includeClients
         in: query
         type: boolean
       - name: groupByCompany
@@ -1974,9 +2747,9 @@ paths:
           description: 200 OK
           schema:
             $ref: '#/definitions/people.response'
-  /projects/api/v2/projects/:projectId/people/:userIds:
+  /projects/api/v2/projects/{projectId}/people/{userIds}:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_people_:userIds
+      operationId: GET_projects_api_v2_projects_{projectId}_people_{userIds}
       summary: Get people project
       produces:
       - application/json
@@ -2014,7 +2787,18 @@ paths:
       - name: dataSet
         in: query
         type: string
+      - name: userIds
+        in: path
+        type: integer
+        required: true
       - name: projectId
+        in: path
+        type: integer
+        required: true
+      - name: projectId
+        in: query
+        type: integer
+      - name: projectCompanyId
         in: query
         type: integer
       - name: pageSize
@@ -2050,10 +2834,16 @@ paths:
       - name: includeObservers
         in: query
         type: boolean
+      - name: includeContacts
+        in: query
+        type: boolean
       - name: includeCompanyDetails
         in: query
         type: boolean
       - name: includeClockIn
+        in: query
+        type: boolean
+      - name: includeClients
         in: query
         type: boolean
       - name: groupByCompany
@@ -2086,19 +2876,29 @@ paths:
           description: 200 OK
           schema:
             $ref: '#/definitions/people.response'
-  /projects/api/v2/projects/:projectId/predecessors:
+  /projects/api/v2/projects/{projectId}/predecessors:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_predecessors
+      operationId: GET_projects_api_v2_projects_{projectId}_predecessors
       tags:
       - CFPort
       summary: Get Predecessor
       produces:
       - application/json
       parameters:
+      - name: include
+        in: query
+        type: string
       - name: projectId
         in: query
         type: integer
-      - name: nextPageToken
+      - name: projectId
+        in: path
+        type: integer
+        required: true
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
         in: query
         type: integer
       - name: dependentTaskId
@@ -2122,9 +2922,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projectId/summary:
+  /projects/api/v2/projects/{projectId}/summary:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_summary
+      operationId: GET_projects_api_v2_projects_{projectId}_summary
       tags:
       - CFPort
       summary: APICall_GET_summary
@@ -2137,6 +2937,10 @@ paths:
       - name: APIReturnType
         in: query
         type: string
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         type: integer
@@ -2149,9 +2953,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projectId/taskids:
+  /projects/api/v2/projects/{projectId}/taskids:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_taskids
+      operationId: GET_projects_api_v2_projects_{projectId}_taskids
       tags:
       - CFPort
       summary: Get Tasks
@@ -2224,6 +3028,10 @@ paths:
       - name: taskId
         in: query
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: parentTaskId
         in: query
         type: integer
@@ -2345,6 +3153,9 @@ paths:
         in: query
         type: boolean
       - name: getFiles
+        in: query
+        type: boolean
+      - name: excludeAssigneeNotOnProjectTeams
         in: query
         type: boolean
       - name: allowTemplateTasks
@@ -2474,9 +3285,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projectId/tasks:
+  /projects/api/v2/projects/{projectId}/tasks:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_tasks
+      operationId: GET_projects_api_v2_projects_{projectId}_tasks
       tags:
       - CFPort
       summary: Get Tasks
@@ -2549,6 +3360,10 @@ paths:
       - name: taskId
         in: query
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: parentTaskId
         in: query
         type: integer
@@ -2670,6 +3485,9 @@ paths:
         in: query
         type: boolean
       - name: getFiles
+        in: query
+        type: boolean
+      - name: excludeAssigneeNotOnProjectTeams
         in: query
         type: boolean
       - name: allowTemplateTasks
@@ -2799,9 +3617,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projectId/tasks/gantt:
+  /projects/api/v2/projects/{projectId}/tasks/gantt:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_tasks_gantt
+      operationId: GET_projects_api_v2_projects_{projectId}_tasks_gantt
       summary: Will return the total for all sub-tasks
       produces:
       - application/json
@@ -2815,16 +3633,7 @@ paths:
       - name: tagIds
         in: query
         type: string
-      - name: tag-ids
-        in: query
-        type: string
-      - name: startdate
-        in: query
-        type: string
       - name: startDate
-        in: query
-        type: string
-      - name: sort
         in: query
         type: string
       - name: sort
@@ -2833,19 +3642,10 @@ paths:
       - name: responsible-party-ids
         in: query
         type: string
-      - name: responsible-party-id
-        in: query
-        type: string
-      - name: projectStatus
-        in: query
-        type: string
       - name: projectStatus
         in: query
         type: string
       - name: include
-        in: query
-        type: string
-      - name: follower-ids
         in: query
         type: string
       - name: followedByUserIds
@@ -2854,16 +3654,7 @@ paths:
       - name: filter
         in: query
         type: string
-      - name: filter
-        in: query
-        type: string
-      - name: enddate
-        in: query
-        type: string
       - name: endDate
-        in: query
-        type: string
-      - name: dataSet
         in: query
         type: string
       - name: dataSet
@@ -2881,12 +3672,6 @@ paths:
       - name: completedBeforeDate
         in: query
         type: string
-      - name: completedBeforeDate
-        in: query
-        type: string
-      - name: completedAfterDate
-        in: query
-        type: string
       - name: completedAfterDate
         in: query
         type: string
@@ -2899,9 +3684,10 @@ paths:
       - name: taskId
         in: query
         type: integer
-      - name: projectCategoryId
-        in: query
+      - name: projectId
+        in: path
         type: integer
+        required: true
       - name: projectCategoryId
         in: query
         type: integer
@@ -2917,12 +3703,6 @@ paths:
       - name: includeTaskId
         in: query
         type: integer
-      - name: includeTaskId
-        in: query
-        type: integer
-      - name: companyId
-        in: query
-        type: integer
       - name: companyId
         in: query
         type: integer
@@ -2932,16 +3712,7 @@ paths:
       - name: useAllProjects
         in: query
         type: boolean
-      - name: useAllProjects
-        in: query
-        type: boolean
       - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: showDeleted
         in: query
         type: boolean
       - name: showDeleted
@@ -2950,16 +3721,7 @@ paths:
       - name: showCompletedLists
         in: query
         type: boolean
-      - name: showCompletedLists
-        in: query
-        type: boolean
       - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyArchivedProjects
         in: query
         type: boolean
       - name: onlyArchivedProjects
@@ -2968,22 +3730,10 @@ paths:
       - name: nestSubTasks
         in: query
         type: boolean
-      - name: nestSubTasks
-        in: query
-        type: boolean
-      - name: matchAllProjectTags
-        in: query
-        type: boolean
       - name: matchAllProjectTags
         in: query
         type: boolean
       - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeToday
         in: query
         type: boolean
       - name: includeToday
@@ -2995,16 +3745,7 @@ paths:
       - name: includeTasksFromDeletedLists
         in: query
         type: boolean
-      - name: includeTasksFromDeletedLists
-        in: query
-        type: boolean
       - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeLoggedTime
         in: query
         type: boolean
       - name: includeLoggedTime
@@ -3013,22 +3754,10 @@ paths:
       - name: includeCompletedTasks
         in: query
         type: boolean
-      - name: includeCompletedTasks
-        in: query
-        type: boolean
-      - name: includeCompletedSubtasks
-        in: query
-        type: boolean
       - name: includeCompletedSubtasks
         in: query
         type: boolean
       - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeArchivedProjects
         in: query
         type: boolean
       - name: includeArchivedProjects
@@ -3040,16 +3769,7 @@ paths:
       - name: getSubTasks
         in: query
         type: boolean
-      - name: getSubTasks
-        in: query
-        type: boolean
       - name: getFiles
-        in: query
-        type: boolean
-      - name: getFiles
-        in: query
-        type: boolean
-      - name: countOnly
         in: query
         type: boolean
       - name: countOnly
@@ -3063,22 +3783,7 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectTagIds
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectIds
         in: query
         type: array
         items:
@@ -3094,23 +3799,7 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectId
-        in: query
-        description: project *filters
-        type: array
-        items:
-          type: integer
       - name: projectHealths
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectHealths
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCompanyIds
         in: query
         type: array
         items:
@@ -3125,17 +3814,12 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectCategoryIds
-        in: query
-        type: array
-        items:
-          type: integer
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projectId/time:
+  /projects/api/v2/projects/{projectId}/time:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_time
+      operationId: GET_projects_api_v2_projects_{projectId}_time
       tags:
       - CFPort
       summary: APICall_GET_projects_id_time_entries
@@ -3172,6 +3856,10 @@ paths:
       - name: projectId
         in: query
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         type: integer
@@ -3219,9 +3907,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projectId/time_entries:
+  /projects/api/v2/projects/{projectId}/time_entries:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_time_entries
+      operationId: GET_projects_api_v2_projects_{projectId}_time_entries
       tags:
       - CFPort
       summary: APICall_GET_projects_id_time_entries
@@ -3258,6 +3946,10 @@ paths:
       - name: projectId
         in: query
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         type: integer
@@ -3305,9 +3997,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projectId/timelogs:
+  /projects/api/v2/projects/{projectId}/timelogs:
     get:
-      operationId: GET_projects_api_v2_projects_:projectId_timelogs
+      operationId: GET_projects_api_v2_projects_{projectId}_timelogs
       tags:
       - CFPort
       summary: APICall_GET_projects_id_time_entries
@@ -3344,6 +4036,10 @@ paths:
       - name: projectId
         in: query
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         type: integer
@@ -3391,15 +4087,19 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/projects/:projejctId/assing_later_roles:
+  /projects/api/v2/projects/{projejctId}/assing_later_roles:
     get:
-      operationId: GET_projects_api_v2_projects_:projejctId_assing_later_roles
+      operationId: GET_projects_api_v2_projects_{projejctId}_assing_later_roles
       tags:
       - CFPort
       summary: Get assign later roles
       produces:
       - application/json
       parameters:
+      - name: projejctId
+        in: path
+        type: integer
+        required: true
       - name: projectId
         in: query
         type: integer
@@ -3636,13 +4336,15 @@ paths:
       operationId: GET_projects_api_v2_projects_new
       tags:
       - CFPort
-      summary: Returns the project defaults
+      summary: Gets the milestone timeline for projects
       produces:
       - application/json
       parameters:
-      - name: companyId
+      - name: projectId
         in: query
-        type: integer
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK (application/json data)
@@ -3850,6 +4552,9 @@ paths:
       - name: includeArchivedProjects
         in: query
         type: boolean
+      - name: eventsInUTC
+        in: query
+        type: boolean
       - name: basicSearch
         in: query
         type: boolean
@@ -4001,9 +4706,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/tasklists/:objectId/project:
+  /projects/api/v2/tasklists/{objectId}/project:
     get:
-      operationId: GET_projects_api_v2_tasklists_:objectId_project
+      operationId: GET_projects_api_v2_tasklists_{objectId}_project
       tags:
       - CFPort
       summary: Get the project for the tasklist
@@ -4016,6 +4721,10 @@ paths:
       - name: objectId
         in: query
         type: integer
+      - name: objectId
+        in: path
+        type: integer
+        required: true
       - name: showDeleted
         in: query
         type: boolean
@@ -4052,9 +4761,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/tasklists/:tasklistId/taskids:
+  /projects/api/v2/tasklists/{tasklistId}/taskids:
     get:
-      operationId: GET_projects_api_v2_tasklists_:tasklistId_taskids
+      operationId: GET_projects_api_v2_tasklists_{tasklistId}_taskids
       tags:
       - CFPort
       summary: Get Tasks
@@ -4124,6 +4833,10 @@ paths:
       - name: callback
         in: query
         type: string
+      - name: tasklistId
+        in: path
+        type: integer
+        required: true
       - name: taskId
         in: query
         type: integer
@@ -4248,6 +4961,9 @@ paths:
         in: query
         type: boolean
       - name: getFiles
+        in: query
+        type: boolean
+      - name: excludeAssigneeNotOnProjectTeams
         in: query
         type: boolean
       - name: allowTemplateTasks
@@ -4377,9 +5093,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/tasklists/:tasklistId/tasks:
+  /projects/api/v2/tasklists/{tasklistId}/tasks:
     get:
-      operationId: GET_projects_api_v2_tasklists_:tasklistId_tasks
+      operationId: GET_projects_api_v2_tasklists_{tasklistId}_tasks
       tags:
       - CFPort
       summary: Get Tasks
@@ -4449,6 +5165,10 @@ paths:
       - name: callback
         in: query
         type: string
+      - name: tasklistId
+        in: path
+        type: integer
+        required: true
       - name: taskId
         in: query
         type: integer
@@ -4573,6 +5293,9 @@ paths:
         in: query
         type: boolean
       - name: getFiles
+        in: query
+        type: boolean
+      - name: excludeAssigneeNotOnProjectTeams
         in: query
         type: boolean
       - name: allowTemplateTasks
@@ -4900,6 +5623,9 @@ paths:
       - name: getFiles
         in: query
         type: boolean
+      - name: excludeAssigneeNotOnProjectTeams
+        in: query
+        type: boolean
       - name: allowTemplateTasks
         in: query
         type: boolean
@@ -5027,24 +5753,34 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/tasks/:dependentTaskId/predecessors:
+  /projects/api/v2/tasks/{dependentTaskId}/predecessors:
     get:
-      operationId: GET_projects_api_v2_tasks_:dependentTaskId_predecessors
+      operationId: GET_projects_api_v2_tasks_{dependentTaskId}_predecessors
       tags:
       - CFPort
       summary: Get Predecessor
       produces:
       - application/json
       parameters:
+      - name: include
+        in: query
+        type: string
       - name: projectId
         in: query
         type: integer
-      - name: nextPageToken
+      - name: pageSize
+        in: query
+        type: integer
+      - name: page
         in: query
         type: integer
       - name: dependentTaskId
         in: query
         type: integer
+      - name: dependentTaskId
+        in: path
+        type: integer
+        required: true
       - name: onlyDependencies
         in: query
         type: boolean
@@ -5063,9 +5799,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/tasks/:objectId/project:
+  /projects/api/v2/tasks/{objectId}/project:
     get:
-      operationId: GET_projects_api_v2_tasks_:objectId_project
+      operationId: GET_projects_api_v2_tasks_{objectId}_project
       tags:
       - CFPort
       summary: Get the project for the task
@@ -5078,6 +5814,10 @@ paths:
       - name: objectId
         in: query
         type: integer
+      - name: objectId
+        in: path
+        type: integer
+        required: true
       - name: showDeleted
         in: query
         type: boolean
@@ -5114,9 +5854,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/tasks/:taskId:
+  /projects/api/v2/tasks/{taskId}:
     get:
-      operationId: GET_projects_api_v2_tasks_:taskId
+      operationId: GET_projects_api_v2_tasks_{taskId}
       tags:
       - CFPort
       summary: Get Tasks
@@ -5189,6 +5929,10 @@ paths:
       - name: taskId
         in: query
         type: integer
+      - name: taskId
+        in: path
+        type: integer
+        required: true
       - name: parentTaskId
         in: query
         type: integer
@@ -5310,6 +6054,9 @@ paths:
         in: query
         type: boolean
       - name: getFiles
+        in: query
+        type: boolean
+      - name: excludeAssigneeNotOnProjectTeams
         in: query
         type: boolean
       - name: allowTemplateTasks
@@ -5439,24 +6186,28 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/tasks/:taskId/estimatedtime:
+  /projects/api/v2/tasks/{taskId}/estimatedtime:
     get:
-      operationId: GET_projects_api_v2_tasks_:taskId_estimatedtime
+      operationId: GET_projects_api_v2_tasks_{taskId}_estimatedtime
       tags:
       - CFPort
       summary: Will return the total for all sub-tasks
       produces:
       - application/json
       parameters:
+      - name: taskId
+        in: path
+        type: integer
+        required: true
       - name: taskID
         in: query
         type: integer
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/tasks/:taskId/subtasks:
+  /projects/api/v2/tasks/{taskId}/subtasks:
     get:
-      operationId: GET_projects_api_v2_tasks_:taskId_subtasks
+      operationId: GET_projects_api_v2_tasks_{taskId}_subtasks
       tags:
       - CFPort
       summary: Get Tasks
@@ -5529,6 +6280,10 @@ paths:
       - name: taskId
         in: query
         type: integer
+      - name: taskId
+        in: path
+        type: integer
+        required: true
       - name: parentTaskId
         in: query
         type: integer
@@ -5650,6 +6405,9 @@ paths:
         in: query
         type: boolean
       - name: getFiles
+        in: query
+        type: boolean
+      - name: excludeAssigneeNotOnProjectTeams
         in: query
         type: boolean
       - name: allowTemplateTasks
@@ -5779,9 +6537,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/tasks/:taskId/time:
+  /projects/api/v2/tasks/{taskId}/time:
     get:
-      operationId: GET_projects_api_v2_tasks_:taskId_time
+      operationId: GET_projects_api_v2_tasks_{taskId}_time
       tags:
       - CFPort
       summary: APICall_GET_todo_items_id_time_entries
@@ -5794,6 +6552,10 @@ paths:
       - name: taskId
         in: query
         type: integer
+      - name: taskId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         type: integer
@@ -5818,9 +6580,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/tasks/:taskId/time_entries:
+  /projects/api/v2/tasks/{taskId}/time_entries:
     get:
-      operationId: GET_projects_api_v2_tasks_:taskId_time_entries
+      operationId: GET_projects_api_v2_tasks_{taskId}_time_entries
       tags:
       - CFPort
       summary: APICall_GET_todo_items_id_time_entries
@@ -5833,6 +6595,10 @@ paths:
       - name: taskId
         in: query
         type: integer
+      - name: taskId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         type: integer
@@ -5952,11 +6718,6 @@ paths:
         type: array
         items:
           type: integer
-      - name: projects-from-companyId
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectTagIds
         in: query
         type: array
@@ -6011,9 +6772,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/time/:timeLogId:
+  /projects/api/v2/time/{timeLogId}:
     get:
-      operationId: GET_projects_api_v2_time_:timeLogId
+      operationId: GET_projects_api_v2_time_{timeLogId}
       tags:
       - CFPort
       summary: Get timelog for a timelogId
@@ -6047,6 +6808,10 @@ paths:
       - name: timeLogId
         in: query
         type: integer
+      - name: timeLogId
+        in: path
+        type: integer
+        required: true
       - name: ticketId
         in: query
         type: integer
@@ -6102,11 +6867,6 @@ paths:
         items:
           type: integer
       - name: projectsFromCompanyId
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projects-from-companyId
         in: query
         type: array
         items:
@@ -6304,11 +7064,6 @@ paths:
         type: array
         items:
           type: integer
-      - name: projects-from-companyId
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectTagIds
         in: query
         type: array
@@ -6363,9 +7118,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/time_entries/:timeLogId:
+  /projects/api/v2/time_entries/{timeLogId}:
     get:
-      operationId: GET_projects_api_v2_time_entries_:timeLogId
+      operationId: GET_projects_api_v2_time_entries_{timeLogId}
       tags:
       - CFPort
       summary: Get time entries for a timelogId
@@ -6399,6 +7154,10 @@ paths:
       - name: timeLogId
         in: query
         type: integer
+      - name: timeLogId
+        in: path
+        type: integer
+        required: true
       - name: ticketId
         in: query
         type: integer
@@ -6454,11 +7213,6 @@ paths:
         items:
           type: integer
       - name: projectsFromCompanyId
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projects-from-companyId
         in: query
         type: array
         items:
@@ -6561,9 +7315,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/todo_items/:taskId/time:
+  /projects/api/v2/todo_items/{taskId}/time:
     get:
-      operationId: GET_projects_api_v2_todo_items_:taskId_time
+      operationId: GET_projects_api_v2_todo_items_{taskId}_time
       tags:
       - CFPort
       summary: APICall_GET_todo_items_id_time_entries
@@ -6576,6 +7330,10 @@ paths:
       - name: taskId
         in: query
         type: integer
+      - name: taskId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         type: integer
@@ -6600,9 +7358,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v2/todo_items/:taskId/time_entries:
+  /projects/api/v2/todo_items/{taskId}/time_entries:
     get:
-      operationId: GET_projects_api_v2_todo_items_:taskId_time_entries
+      operationId: GET_projects_api_v2_todo_items_{taskId}_time_entries
       tags:
       - CFPort
       summary: APICall_GET_todo_items_id_time_entries
@@ -6615,6 +7373,10 @@ paths:
       - name: taskId
         in: query
         type: integer
+      - name: taskId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         type: integer
@@ -6640,7 +7402,7 @@ paths:
         200:
           description: 200 OK (application/json data)
 definitions:
-  Twdataaccount.AnnouncementResponse:
+  account.AnnouncementResponse:
     title: AnnouncementResponse
     type: object
     properties:
@@ -6750,18 +7512,6 @@ definitions:
         type: string
       id:
         type: integer
-  people.integrationEnabled:
-    title: integrationEnabled
-    type: object
-    properties:
-      enabled:
-        type: boolean
-  people.integrations:
-    title: integrations
-    type: object
-    properties:
-      microsoftConnector:
-        $ref: '#/definitions/people.integrationEnabled'
   people.localization:
     title: localization
     type: object
@@ -6796,6 +7546,8 @@ definitions:
         type: integer
       dailyReportEventsType:
         type: string
+      dailyReportIncludeStartDate:
+        type: boolean
       dailyReportSortBy:
         type: string
       notifyOnAddedAsFollower:
@@ -6860,6 +7612,8 @@ definitions:
         type: boolean
       canAccessBox:
         type: boolean
+      canAccessCalendar:
+        type: boolean
       canAccessDropbox:
         type: boolean
       canAccessGoogleDocs:
@@ -6874,9 +7628,13 @@ definitions:
         type: boolean
       canAccessTemplates:
         type: boolean
+      canAddForms:
+        type: boolean
       canAddProjects:
         type: boolean
       canBeAssignedToTasksAndMilestones:
+        type: boolean
+      canManageCustomFields:
         type: boolean
       canManagePeople:
         type: boolean
@@ -6888,7 +7646,13 @@ definitions:
         type: boolean
       canManageRates:
         type: boolean
+      canManageReports:
+        type: boolean
+      canManageSchedule:
+        type: boolean
       canReceiveEmail:
+        type: boolean
+      canViewForms:
         type: boolean
       canViewProjectBudget:
         type: boolean
@@ -6898,6 +7662,10 @@ definitions:
         type: boolean
       canViewRates:
         type: boolean
+      canViewReports:
+        type: boolean
+      canViewSchedule:
+        type: boolean
       editAllTasks:
         type: boolean
       hasAccessToNewProjects:
@@ -6905,6 +7673,8 @@ definitions:
       isArchived:
         type: boolean
       isObserving:
+        type: boolean
+      manageCustomFields:
         type: boolean
       notifyDefaults:
         $ref: '#/definitions/people.notifyDefaults'
@@ -6995,6 +7765,8 @@ definitions:
         type: string
       inOwnerCompany:
         type: boolean
+      isClientUser:
+        type: boolean
       isClockedIn:
         type: boolean
       lastActive:
@@ -7011,6 +7783,8 @@ definitions:
         $ref: '#/definitions/people.localization'
       loginCount:
         type: integer
+      mentionName:
+        type: string
       notes:
         type: string
       notifications:
@@ -7163,6 +7937,8 @@ definitions:
         $ref: '#/definitions/twdataaccount.AnnouncementResponse'
       defaultFilters:
         type: object
+        additionalProperties:
+          $ref: '#/definitions/twdatausers.FilterResponse'
       deleted:
         type: boolean
       documentEditorInstalled:
@@ -7199,8 +7975,8 @@ definitions:
         type: boolean
       initialPage:
         type: string
-      integrations:
-        $ref: '#/definitions/people.integrations'
+      isClientUser:
+        type: boolean
       isClockedIn:
         type: boolean
       lastActive:
@@ -7217,6 +7993,8 @@ definitions:
         $ref: '#/definitions/people.localization'
       loginCount:
         type: integer
+      mentionName:
+        type: string
       milestones:
         type: object
       notes:
@@ -7257,6 +8035,8 @@ definitions:
         type: object
       sharedUserFilter:
         type: object
+        additionalProperties:
+          $ref: '#/definitions/twdatausers.FilterResponse'
       siteOwner:
         type: boolean
       social:
@@ -7327,7 +8107,7 @@ definitions:
         type: number
       timezone:
         type: string
-  twcoreTags.Tag:
+  tags.Tag:
     title: Tag
     type: object
     properties:
@@ -7339,7 +8119,49 @@ definitions:
         type: string
       projectId:
         type: integer
-  Twcoreusersbase.Account:
+  users.FilterResponse:
+    title: FilterResponse
+    type: object
+    properties:
+      dateCreated:
+        type: string
+      dateDeleted:
+        type: string
+      dateUpdated:
+        type: string
+      deleted:
+        type: boolean
+      description:
+        type: string
+      displayOrder:
+        type: integer
+      fulldata:
+        type: object
+      id:
+        type: integer
+      includesSort:
+        type: boolean
+      isProjectSpecific:
+        type: boolean
+      isTemporary:
+        type: boolean
+      parameters:
+        type: object
+        additionalProperties:
+          type: string
+      projectId:
+        type: integer
+      section:
+        type: string
+      shareLink:
+        type: string
+      shared:
+        type: boolean
+      title:
+        type: string
+      userId:
+        type: integer
+  usersbase.Account:
     title: Account
     type: object
     properties:

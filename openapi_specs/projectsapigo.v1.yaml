@@ -227,9 +227,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v1/project/:projectId/completedtasks:
+  /projects/api/v1/project/{projectId}/completedtasks:
     get:
-      operationId: GET_projects_api_v1_project_:projectId_completedtasks
+      operationId: GET_projects_api_v1_project_{projectId}_completedtasks
       tags:
       - CFPort
       summary: Will return the project completed tasks
@@ -275,6 +275,10 @@ paths:
       - name: userId
         in: query
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         type: integer
@@ -396,9 +400,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v1/projectcategories/:projectCategoryId/tasks:
+  /projects/api/v1/projectcategories/{projectCategoryId}/tasks:
     get:
-      operationId: GET_projects_api_v1_projectcategories_:projectCategoryId_tasks
+      operationId: GET_projects_api_v1_projectcategories_{projectCategoryId}_tasks
       tags:
       - CFPort
       summary: Will return the tasks
@@ -414,16 +418,7 @@ paths:
       - name: tagIds
         in: query
         type: string
-      - name: tag-ids
-        in: query
-        type: string
-      - name: startdate
-        in: query
-        type: string
       - name: startDate
-        in: query
-        type: string
-      - name: sort
         in: query
         type: string
       - name: sort
@@ -432,19 +427,10 @@ paths:
       - name: responsible-party-ids
         in: query
         type: string
-      - name: responsible-party-id
-        in: query
-        type: string
-      - name: projectStatus
-        in: query
-        type: string
       - name: projectStatus
         in: query
         type: string
       - name: include
-        in: query
-        type: string
-      - name: follower-ids
         in: query
         type: string
       - name: followedByUserIds
@@ -453,16 +439,7 @@ paths:
       - name: filter
         in: query
         type: string
-      - name: filter
-        in: query
-        type: string
-      - name: enddate
-        in: query
-        type: string
       - name: endDate
-        in: query
-        type: string
-      - name: dataSet
         in: query
         type: string
       - name: dataSet
@@ -480,12 +457,6 @@ paths:
       - name: completedBeforeDate
         in: query
         type: string
-      - name: completedBeforeDate
-        in: query
-        type: string
-      - name: completedAfterDate
-        in: query
-        type: string
       - name: completedAfterDate
         in: query
         type: string
@@ -499,8 +470,9 @@ paths:
         in: query
         type: integer
       - name: projectCategoryId
-        in: query
+        in: path
         type: integer
+        required: true
       - name: projectCategoryId
         in: query
         type: integer
@@ -516,12 +488,6 @@ paths:
       - name: includeTaskId
         in: query
         type: integer
-      - name: includeTaskId
-        in: query
-        type: integer
-      - name: companyId
-        in: query
-        type: integer
       - name: companyId
         in: query
         type: integer
@@ -531,16 +497,7 @@ paths:
       - name: useAllProjects
         in: query
         type: boolean
-      - name: useAllProjects
-        in: query
-        type: boolean
       - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: showDeleted
         in: query
         type: boolean
       - name: showDeleted
@@ -549,16 +506,7 @@ paths:
       - name: showCompletedLists
         in: query
         type: boolean
-      - name: showCompletedLists
-        in: query
-        type: boolean
       - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyArchivedProjects
         in: query
         type: boolean
       - name: onlyArchivedProjects
@@ -567,22 +515,10 @@ paths:
       - name: nestSubTasks
         in: query
         type: boolean
-      - name: nestSubTasks
-        in: query
-        type: boolean
-      - name: matchAllProjectTags
-        in: query
-        type: boolean
       - name: matchAllProjectTags
         in: query
         type: boolean
       - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeToday
         in: query
         type: boolean
       - name: includeToday
@@ -594,16 +530,7 @@ paths:
       - name: includeTasksFromDeletedLists
         in: query
         type: boolean
-      - name: includeTasksFromDeletedLists
-        in: query
-        type: boolean
       - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeLoggedTime
         in: query
         type: boolean
       - name: includeLoggedTime
@@ -612,22 +539,10 @@ paths:
       - name: includeCompletedTasks
         in: query
         type: boolean
-      - name: includeCompletedTasks
-        in: query
-        type: boolean
-      - name: includeCompletedSubtasks
-        in: query
-        type: boolean
       - name: includeCompletedSubtasks
         in: query
         type: boolean
       - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeArchivedProjects
         in: query
         type: boolean
       - name: includeArchivedProjects
@@ -639,16 +554,7 @@ paths:
       - name: getSubTasks
         in: query
         type: boolean
-      - name: getSubTasks
-        in: query
-        type: boolean
       - name: getFiles
-        in: query
-        type: boolean
-      - name: getFiles
-        in: query
-        type: boolean
-      - name: countOnly
         in: query
         type: boolean
       - name: countOnly
@@ -662,22 +568,7 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectTagIds
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectIds
         in: query
         type: array
         items:
@@ -693,33 +584,12 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectId
-        in: query
-        description: project *filters
-        type: array
-        items:
-          type: integer
-      - name: projectHealths
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectHealths
         in: query
         type: array
         items:
           type: integer
       - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCategoryIds
         in: query
         type: array
         items:
@@ -922,9 +792,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v1/projects/:projectId/tasklists:
+  /projects/api/v1/projects/{projectId}/tasklists:
     get:
-      operationId: GET_projects_api_v1_projects_:projectId_tasklists
+      operationId: GET_projects_api_v1_projects_{projectId}_tasklists
       tags:
       - CFPort
       summary: Get tasklists
@@ -967,6 +837,10 @@ paths:
       - name: responsiblePartyId
         in: query
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         type: integer
@@ -998,6 +872,9 @@ paths:
         in: query
         type: boolean
       - name: includeTags
+        in: query
+        type: boolean
+      - name: includeCustomFields
         in: query
         type: boolean
       - name: includeArchivedProjects
@@ -1063,9 +940,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v1/projects/:projectId/tasks:
+  /projects/api/v1/projects/{projectId}/tasks:
     get:
-      operationId: GET_projects_api_v1_projects_:projectId_tasks
+      operationId: GET_projects_api_v1_projects_{projectId}_tasks
       tags:
       - CFPort
       summary: Will return the tasks
@@ -1081,16 +958,7 @@ paths:
       - name: tagIds
         in: query
         type: string
-      - name: tag-ids
-        in: query
-        type: string
-      - name: startdate
-        in: query
-        type: string
       - name: startDate
-        in: query
-        type: string
-      - name: sort
         in: query
         type: string
       - name: sort
@@ -1099,19 +967,10 @@ paths:
       - name: responsible-party-ids
         in: query
         type: string
-      - name: responsible-party-id
-        in: query
-        type: string
-      - name: projectStatus
-        in: query
-        type: string
       - name: projectStatus
         in: query
         type: string
       - name: include
-        in: query
-        type: string
-      - name: follower-ids
         in: query
         type: string
       - name: followedByUserIds
@@ -1120,16 +979,7 @@ paths:
       - name: filter
         in: query
         type: string
-      - name: filter
-        in: query
-        type: string
-      - name: enddate
-        in: query
-        type: string
       - name: endDate
-        in: query
-        type: string
-      - name: dataSet
         in: query
         type: string
       - name: dataSet
@@ -1147,12 +997,6 @@ paths:
       - name: completedBeforeDate
         in: query
         type: string
-      - name: completedBeforeDate
-        in: query
-        type: string
-      - name: completedAfterDate
-        in: query
-        type: string
       - name: completedAfterDate
         in: query
         type: string
@@ -1165,9 +1009,10 @@ paths:
       - name: taskId
         in: query
         type: integer
-      - name: projectCategoryId
-        in: query
+      - name: projectId
+        in: path
         type: integer
+        required: true
       - name: projectCategoryId
         in: query
         type: integer
@@ -1183,12 +1028,6 @@ paths:
       - name: includeTaskId
         in: query
         type: integer
-      - name: includeTaskId
-        in: query
-        type: integer
-      - name: companyId
-        in: query
-        type: integer
       - name: companyId
         in: query
         type: integer
@@ -1198,16 +1037,7 @@ paths:
       - name: useAllProjects
         in: query
         type: boolean
-      - name: useAllProjects
-        in: query
-        type: boolean
       - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: showDeleted
         in: query
         type: boolean
       - name: showDeleted
@@ -1216,16 +1046,7 @@ paths:
       - name: showCompletedLists
         in: query
         type: boolean
-      - name: showCompletedLists
-        in: query
-        type: boolean
       - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyArchivedProjects
         in: query
         type: boolean
       - name: onlyArchivedProjects
@@ -1234,22 +1055,10 @@ paths:
       - name: nestSubTasks
         in: query
         type: boolean
-      - name: nestSubTasks
-        in: query
-        type: boolean
-      - name: matchAllProjectTags
-        in: query
-        type: boolean
       - name: matchAllProjectTags
         in: query
         type: boolean
       - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeToday
         in: query
         type: boolean
       - name: includeToday
@@ -1261,16 +1070,7 @@ paths:
       - name: includeTasksFromDeletedLists
         in: query
         type: boolean
-      - name: includeTasksFromDeletedLists
-        in: query
-        type: boolean
       - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeLoggedTime
         in: query
         type: boolean
       - name: includeLoggedTime
@@ -1279,22 +1079,10 @@ paths:
       - name: includeCompletedTasks
         in: query
         type: boolean
-      - name: includeCompletedTasks
-        in: query
-        type: boolean
-      - name: includeCompletedSubtasks
-        in: query
-        type: boolean
       - name: includeCompletedSubtasks
         in: query
         type: boolean
       - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeArchivedProjects
         in: query
         type: boolean
       - name: includeArchivedProjects
@@ -1306,16 +1094,7 @@ paths:
       - name: getSubTasks
         in: query
         type: boolean
-      - name: getSubTasks
-        in: query
-        type: boolean
       - name: getFiles
-        in: query
-        type: boolean
-      - name: getFiles
-        in: query
-        type: boolean
-      - name: countOnly
         in: query
         type: boolean
       - name: countOnly
@@ -1329,22 +1108,7 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectTagIds
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectIds
         in: query
         type: array
         items:
@@ -1360,33 +1124,12 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectId
-        in: query
-        description: project *filters
-        type: array
-        items:
-          type: integer
-      - name: projectHealths
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectHealths
         in: query
         type: array
         items:
           type: integer
       - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCategoryIds
         in: query
         type: array
         items:
@@ -1477,6 +1220,9 @@ paths:
       - name: includeTags
         in: query
         type: boolean
+      - name: includeCustomFields
+        in: query
+        type: boolean
       - name: includeArchivedProjects
         in: query
         type: boolean
@@ -1540,9 +1286,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v1/tasklists/:tasklistId:
+  /projects/api/v1/tasklists/{tasklistId}:
     get:
-      operationId: GET_projects_api_v1_tasklists_:tasklistId
+      operationId: GET_projects_api_v1_tasklists_{tasklistId}
       tags:
       - CFPort
       summary: Get tasklists
@@ -1582,6 +1328,10 @@ paths:
       - name: tasklistId
         in: query
         type: integer
+      - name: tasklistId
+        in: path
+        type: integer
+        required: true
       - name: responsiblePartyId
         in: query
         type: integer
@@ -1616,6 +1366,9 @@ paths:
         in: query
         type: boolean
       - name: includeTags
+        in: query
+        type: boolean
+      - name: includeCustomFields
         in: query
         type: boolean
       - name: includeArchivedProjects
@@ -1681,9 +1434,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v1/tasklists/:tasklistId/tasks:
+  /projects/api/v1/tasklists/{tasklistId}/tasks:
     get:
-      operationId: GET_projects_api_v1_tasklists_:tasklistId_tasks
+      operationId: GET_projects_api_v1_tasklists_{tasklistId}_tasks
       tags:
       - CFPort
       summary: Will return the tasks
@@ -1699,16 +1452,7 @@ paths:
       - name: tagIds
         in: query
         type: string
-      - name: tag-ids
-        in: query
-        type: string
-      - name: startdate
-        in: query
-        type: string
       - name: startDate
-        in: query
-        type: string
-      - name: sort
         in: query
         type: string
       - name: sort
@@ -1717,19 +1461,10 @@ paths:
       - name: responsible-party-ids
         in: query
         type: string
-      - name: responsible-party-id
-        in: query
-        type: string
-      - name: projectStatus
-        in: query
-        type: string
       - name: projectStatus
         in: query
         type: string
       - name: include
-        in: query
-        type: string
-      - name: follower-ids
         in: query
         type: string
       - name: followedByUserIds
@@ -1738,16 +1473,7 @@ paths:
       - name: filter
         in: query
         type: string
-      - name: filter
-        in: query
-        type: string
-      - name: enddate
-        in: query
-        type: string
       - name: endDate
-        in: query
-        type: string
-      - name: dataSet
         in: query
         type: string
       - name: dataSet
@@ -1765,12 +1491,6 @@ paths:
       - name: completedBeforeDate
         in: query
         type: string
-      - name: completedBeforeDate
-        in: query
-        type: string
-      - name: completedAfterDate
-        in: query
-        type: string
       - name: completedAfterDate
         in: query
         type: string
@@ -1778,12 +1498,13 @@ paths:
         in: query
         type: string
       - name: tasklistId
+        in: path
+        type: integer
+        required: true
+      - name: tasklistId
         in: query
         type: integer
       - name: taskId
-        in: query
-        type: integer
-      - name: projectCategoryId
         in: query
         type: integer
       - name: projectCategoryId
@@ -1801,12 +1522,6 @@ paths:
       - name: includeTaskId
         in: query
         type: integer
-      - name: includeTaskId
-        in: query
-        type: integer
-      - name: companyId
-        in: query
-        type: integer
       - name: companyId
         in: query
         type: integer
@@ -1816,16 +1531,7 @@ paths:
       - name: useAllProjects
         in: query
         type: boolean
-      - name: useAllProjects
-        in: query
-        type: boolean
       - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: showDeleted
         in: query
         type: boolean
       - name: showDeleted
@@ -1834,16 +1540,7 @@ paths:
       - name: showCompletedLists
         in: query
         type: boolean
-      - name: showCompletedLists
-        in: query
-        type: boolean
       - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyArchivedProjects
         in: query
         type: boolean
       - name: onlyArchivedProjects
@@ -1852,22 +1549,10 @@ paths:
       - name: nestSubTasks
         in: query
         type: boolean
-      - name: nestSubTasks
-        in: query
-        type: boolean
-      - name: matchAllProjectTags
-        in: query
-        type: boolean
       - name: matchAllProjectTags
         in: query
         type: boolean
       - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeToday
         in: query
         type: boolean
       - name: includeToday
@@ -1879,16 +1564,7 @@ paths:
       - name: includeTasksFromDeletedLists
         in: query
         type: boolean
-      - name: includeTasksFromDeletedLists
-        in: query
-        type: boolean
       - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeLoggedTime
         in: query
         type: boolean
       - name: includeLoggedTime
@@ -1897,22 +1573,10 @@ paths:
       - name: includeCompletedTasks
         in: query
         type: boolean
-      - name: includeCompletedTasks
-        in: query
-        type: boolean
-      - name: includeCompletedSubtasks
-        in: query
-        type: boolean
       - name: includeCompletedSubtasks
         in: query
         type: boolean
       - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeArchivedProjects
         in: query
         type: boolean
       - name: includeArchivedProjects
@@ -1924,16 +1588,7 @@ paths:
       - name: getSubTasks
         in: query
         type: boolean
-      - name: getSubTasks
-        in: query
-        type: boolean
       - name: getFiles
-        in: query
-        type: boolean
-      - name: getFiles
-        in: query
-        type: boolean
-      - name: countOnly
         in: query
         type: boolean
       - name: countOnly
@@ -1947,22 +1602,7 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectTagIds
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectIds
         in: query
         type: array
         items:
@@ -1978,33 +1618,12 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectId
-        in: query
-        description: project *filters
-        type: array
-        items:
-          type: integer
-      - name: projectHealths
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectHealths
         in: query
         type: array
         items:
           type: integer
       - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCategoryIds
         in: query
         type: array
         items:
@@ -2035,16 +1654,7 @@ paths:
       - name: tagIds
         in: query
         type: string
-      - name: tag-ids
-        in: query
-        type: string
-      - name: startdate
-        in: query
-        type: string
       - name: startDate
-        in: query
-        type: string
-      - name: sort
         in: query
         type: string
       - name: sort
@@ -2053,19 +1663,10 @@ paths:
       - name: responsible-party-ids
         in: query
         type: string
-      - name: responsible-party-id
-        in: query
-        type: string
-      - name: projectStatus
-        in: query
-        type: string
       - name: projectStatus
         in: query
         type: string
       - name: include
-        in: query
-        type: string
-      - name: follower-ids
         in: query
         type: string
       - name: followedByUserIds
@@ -2074,16 +1675,7 @@ paths:
       - name: filter
         in: query
         type: string
-      - name: filter
-        in: query
-        type: string
-      - name: enddate
-        in: query
-        type: string
       - name: endDate
-        in: query
-        type: string
-      - name: dataSet
         in: query
         type: string
       - name: dataSet
@@ -2101,12 +1693,6 @@ paths:
       - name: completedBeforeDate
         in: query
         type: string
-      - name: completedBeforeDate
-        in: query
-        type: string
-      - name: completedAfterDate
-        in: query
-        type: string
       - name: completedAfterDate
         in: query
         type: string
@@ -2117,9 +1703,6 @@ paths:
         in: query
         type: integer
       - name: taskId
-        in: query
-        type: integer
-      - name: projectCategoryId
         in: query
         type: integer
       - name: projectCategoryId
@@ -2137,12 +1720,6 @@ paths:
       - name: includeTaskId
         in: query
         type: integer
-      - name: includeTaskId
-        in: query
-        type: integer
-      - name: companyId
-        in: query
-        type: integer
       - name: companyId
         in: query
         type: integer
@@ -2152,16 +1729,7 @@ paths:
       - name: useAllProjects
         in: query
         type: boolean
-      - name: useAllProjects
-        in: query
-        type: boolean
       - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: showDeleted
         in: query
         type: boolean
       - name: showDeleted
@@ -2170,16 +1738,7 @@ paths:
       - name: showCompletedLists
         in: query
         type: boolean
-      - name: showCompletedLists
-        in: query
-        type: boolean
       - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyArchivedProjects
         in: query
         type: boolean
       - name: onlyArchivedProjects
@@ -2188,22 +1747,10 @@ paths:
       - name: nestSubTasks
         in: query
         type: boolean
-      - name: nestSubTasks
-        in: query
-        type: boolean
-      - name: matchAllProjectTags
-        in: query
-        type: boolean
       - name: matchAllProjectTags
         in: query
         type: boolean
       - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeToday
         in: query
         type: boolean
       - name: includeToday
@@ -2215,16 +1762,7 @@ paths:
       - name: includeTasksFromDeletedLists
         in: query
         type: boolean
-      - name: includeTasksFromDeletedLists
-        in: query
-        type: boolean
       - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeLoggedTime
         in: query
         type: boolean
       - name: includeLoggedTime
@@ -2233,22 +1771,10 @@ paths:
       - name: includeCompletedTasks
         in: query
         type: boolean
-      - name: includeCompletedTasks
-        in: query
-        type: boolean
-      - name: includeCompletedSubtasks
-        in: query
-        type: boolean
       - name: includeCompletedSubtasks
         in: query
         type: boolean
       - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeArchivedProjects
         in: query
         type: boolean
       - name: includeArchivedProjects
@@ -2260,16 +1786,7 @@ paths:
       - name: getSubTasks
         in: query
         type: boolean
-      - name: getSubTasks
-        in: query
-        type: boolean
       - name: getFiles
-        in: query
-        type: boolean
-      - name: getFiles
-        in: query
-        type: boolean
-      - name: countOnly
         in: query
         type: boolean
       - name: countOnly
@@ -2283,22 +1800,7 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectTagIds
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectIds
         in: query
         type: array
         items:
@@ -2314,33 +1816,12 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectId
-        in: query
-        description: project *filters
-        type: array
-        items:
-          type: integer
-      - name: projectHealths
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectHealths
         in: query
         type: array
         items:
           type: integer
       - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCategoryIds
         in: query
         type: array
         items:
@@ -2353,9 +1834,9 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v1/tasks/:taskId:
+  /projects/api/v1/tasks/{taskId}:
     get:
-      operationId: GET_projects_api_v1_tasks_:taskId
+      operationId: GET_projects_api_v1_tasks_{taskId}
       tags:
       - CFPort
       summary: Will return the tasks
@@ -2371,16 +1852,7 @@ paths:
       - name: tagIds
         in: query
         type: string
-      - name: tag-ids
-        in: query
-        type: string
-      - name: startdate
-        in: query
-        type: string
       - name: startDate
-        in: query
-        type: string
-      - name: sort
         in: query
         type: string
       - name: sort
@@ -2389,19 +1861,10 @@ paths:
       - name: responsible-party-ids
         in: query
         type: string
-      - name: responsible-party-id
-        in: query
-        type: string
-      - name: projectStatus
-        in: query
-        type: string
       - name: projectStatus
         in: query
         type: string
       - name: include
-        in: query
-        type: string
-      - name: follower-ids
         in: query
         type: string
       - name: followedByUserIds
@@ -2410,16 +1873,7 @@ paths:
       - name: filter
         in: query
         type: string
-      - name: filter
-        in: query
-        type: string
-      - name: enddate
-        in: query
-        type: string
       - name: endDate
-        in: query
-        type: string
-      - name: dataSet
         in: query
         type: string
       - name: dataSet
@@ -2437,12 +1891,6 @@ paths:
       - name: completedBeforeDate
         in: query
         type: string
-      - name: completedBeforeDate
-        in: query
-        type: string
-      - name: completedAfterDate
-        in: query
-        type: string
       - name: completedAfterDate
         in: query
         type: string
@@ -2453,9 +1901,10 @@ paths:
         in: query
         type: integer
       - name: taskId
-        in: query
+        in: path
         type: integer
-      - name: projectCategoryId
+        required: true
+      - name: taskId
         in: query
         type: integer
       - name: projectCategoryId
@@ -2473,12 +1922,6 @@ paths:
       - name: includeTaskId
         in: query
         type: integer
-      - name: includeTaskId
-        in: query
-        type: integer
-      - name: companyId
-        in: query
-        type: integer
       - name: companyId
         in: query
         type: integer
@@ -2488,16 +1931,7 @@ paths:
       - name: useAllProjects
         in: query
         type: boolean
-      - name: useAllProjects
-        in: query
-        type: boolean
       - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: showDeleted
         in: query
         type: boolean
       - name: showDeleted
@@ -2506,16 +1940,7 @@ paths:
       - name: showCompletedLists
         in: query
         type: boolean
-      - name: showCompletedLists
-        in: query
-        type: boolean
       - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyArchivedProjects
         in: query
         type: boolean
       - name: onlyArchivedProjects
@@ -2524,22 +1949,10 @@ paths:
       - name: nestSubTasks
         in: query
         type: boolean
-      - name: nestSubTasks
-        in: query
-        type: boolean
-      - name: matchAllProjectTags
-        in: query
-        type: boolean
       - name: matchAllProjectTags
         in: query
         type: boolean
       - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeToday
         in: query
         type: boolean
       - name: includeToday
@@ -2551,16 +1964,7 @@ paths:
       - name: includeTasksFromDeletedLists
         in: query
         type: boolean
-      - name: includeTasksFromDeletedLists
-        in: query
-        type: boolean
       - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeLoggedTime
         in: query
         type: boolean
       - name: includeLoggedTime
@@ -2569,22 +1973,10 @@ paths:
       - name: includeCompletedTasks
         in: query
         type: boolean
-      - name: includeCompletedTasks
-        in: query
-        type: boolean
-      - name: includeCompletedSubtasks
-        in: query
-        type: boolean
       - name: includeCompletedSubtasks
         in: query
         type: boolean
       - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeArchivedProjects
         in: query
         type: boolean
       - name: includeArchivedProjects
@@ -2596,16 +1988,7 @@ paths:
       - name: getSubTasks
         in: query
         type: boolean
-      - name: getSubTasks
-        in: query
-        type: boolean
       - name: getFiles
-        in: query
-        type: boolean
-      - name: getFiles
-        in: query
-        type: boolean
-      - name: countOnly
         in: query
         type: boolean
       - name: countOnly
@@ -2619,22 +2002,7 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectTagIds
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectIds
         in: query
         type: array
         items:
@@ -2650,33 +2018,12 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectId
-        in: query
-        description: project *filters
-        type: array
-        items:
-          type: integer
-      - name: projectHealths
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectHealths
         in: query
         type: array
         items:
           type: integer
       - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCategoryIds
         in: query
         type: array
         items:
@@ -2689,9 +2036,41 @@ paths:
       responses:
         200:
           description: 200 OK (application/json data)
-  /projects/api/v1/tasks/:taskId/subtasks:
+  /projects/api/v1/tasks/{taskId}/dependents:
     get:
-      operationId: GET_projects_api_v1_tasks_:taskId_subtasks
+      operationId: GET_projects_api_v1_tasks_{taskId}_dependents
+      tags:
+      - CFPort
+      summary: Will return the tasks dependents tasks
+      produces:
+      - application/json
+      parameters:
+      - name: taskId
+        in: path
+        type: integer
+        required: true
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/tasks/{taskId}/predecessors:
+    get:
+      operationId: GET_projects_api_v1_tasks_{taskId}_predecessors
+      tags:
+      - CFPort
+      summary: Will return the tasks predecessor tasks
+      produces:
+      - application/json
+      parameters:
+      - name: taskId
+        in: path
+        type: integer
+        required: true
+      responses:
+        200:
+          description: 200 OK (application/json data)
+  /projects/api/v1/tasks/{taskId}/subtasks:
+    get:
+      operationId: GET_projects_api_v1_tasks_{taskId}_subtasks
       tags:
       - CFPort
       summary: Will return the tasks
@@ -2707,16 +2086,7 @@ paths:
       - name: tagIds
         in: query
         type: string
-      - name: tag-ids
-        in: query
-        type: string
-      - name: startdate
-        in: query
-        type: string
       - name: startDate
-        in: query
-        type: string
-      - name: sort
         in: query
         type: string
       - name: sort
@@ -2725,19 +2095,10 @@ paths:
       - name: responsible-party-ids
         in: query
         type: string
-      - name: responsible-party-id
-        in: query
-        type: string
-      - name: projectStatus
-        in: query
-        type: string
       - name: projectStatus
         in: query
         type: string
       - name: include
-        in: query
-        type: string
-      - name: follower-ids
         in: query
         type: string
       - name: followedByUserIds
@@ -2746,16 +2107,7 @@ paths:
       - name: filter
         in: query
         type: string
-      - name: filter
-        in: query
-        type: string
-      - name: enddate
-        in: query
-        type: string
       - name: endDate
-        in: query
-        type: string
-      - name: dataSet
         in: query
         type: string
       - name: dataSet
@@ -2773,12 +2125,6 @@ paths:
       - name: completedBeforeDate
         in: query
         type: string
-      - name: completedBeforeDate
-        in: query
-        type: string
-      - name: completedAfterDate
-        in: query
-        type: string
       - name: completedAfterDate
         in: query
         type: string
@@ -2789,9 +2135,10 @@ paths:
         in: query
         type: integer
       - name: taskId
-        in: query
+        in: path
         type: integer
-      - name: projectCategoryId
+        required: true
+      - name: taskId
         in: query
         type: integer
       - name: projectCategoryId
@@ -2809,12 +2156,6 @@ paths:
       - name: includeTaskId
         in: query
         type: integer
-      - name: includeTaskId
-        in: query
-        type: integer
-      - name: companyId
-        in: query
-        type: integer
       - name: companyId
         in: query
         type: integer
@@ -2824,16 +2165,7 @@ paths:
       - name: useAllProjects
         in: query
         type: boolean
-      - name: useAllProjects
-        in: query
-        type: boolean
       - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: starredProjectsOnly
-        in: query
-        type: boolean
-      - name: showDeleted
         in: query
         type: boolean
       - name: showDeleted
@@ -2842,16 +2174,7 @@ paths:
       - name: showCompletedLists
         in: query
         type: boolean
-      - name: showCompletedLists
-        in: query
-        type: boolean
       - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyStarredProjects
-        in: query
-        type: boolean
-      - name: onlyArchivedProjects
         in: query
         type: boolean
       - name: onlyArchivedProjects
@@ -2860,22 +2183,10 @@ paths:
       - name: nestSubTasks
         in: query
         type: boolean
-      - name: nestSubTasks
-        in: query
-        type: boolean
-      - name: matchAllProjectTags
-        in: query
-        type: boolean
       - name: matchAllProjectTags
         in: query
         type: boolean
       - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeUntaggedTasks
-        in: query
-        type: boolean
-      - name: includeToday
         in: query
         type: boolean
       - name: includeToday
@@ -2887,16 +2198,7 @@ paths:
       - name: includeTasksFromDeletedLists
         in: query
         type: boolean
-      - name: includeTasksFromDeletedLists
-        in: query
-        type: boolean
       - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeReminders
-        in: query
-        type: boolean
-      - name: includeLoggedTime
         in: query
         type: boolean
       - name: includeLoggedTime
@@ -2905,22 +2207,10 @@ paths:
       - name: includeCompletedTasks
         in: query
         type: boolean
-      - name: includeCompletedTasks
-        in: query
-        type: boolean
-      - name: includeCompletedSubtasks
-        in: query
-        type: boolean
       - name: includeCompletedSubtasks
         in: query
         type: boolean
       - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeCompletedPredecessors
-        in: query
-        type: boolean
-      - name: includeArchivedProjects
         in: query
         type: boolean
       - name: includeArchivedProjects
@@ -2932,16 +2222,7 @@ paths:
       - name: getSubTasks
         in: query
         type: boolean
-      - name: getSubTasks
-        in: query
-        type: boolean
       - name: getFiles
-        in: query
-        type: boolean
-      - name: getFiles
-        in: query
-        type: boolean
-      - name: countOnly
         in: query
         type: boolean
       - name: countOnly
@@ -2955,22 +2236,7 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectTagIds
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectOwnerIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectIds
         in: query
         type: array
         items:
@@ -2986,33 +2252,12 @@ paths:
         type: array
         items:
           type: integer
-      - name: projectId
-        in: query
-        description: project *filters
-        type: array
-        items:
-          type: integer
-      - name: projectHealths
-        in: query
-        type: array
-        items:
-          type: integer
       - name: projectHealths
         in: query
         type: array
         items:
           type: integer
       - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCompanyIds
-        in: query
-        type: array
-        items:
-          type: integer
-      - name: projectCategoryIds
         in: query
         type: array
         items:

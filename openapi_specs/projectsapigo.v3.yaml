@@ -35,12 +35,10 @@ tags:
 - name: People
 - name: PeopleStatus
 - name: Person
-- name: Project
 - name: ProjectUpdates
 - name: Projects
 - name: ResourceScheduling
 - name: Risks
-- name: Sample
 - name: Summary
 - name: Tags
 - name: TaskLists
@@ -322,9 +320,230 @@ paths:
       tags:
       - Allocations
       x-private: true
-  /projects/api/v3/allocations/:allocationId/time.json:
+  /projects/api/v3/allocations/{allocationId}.json:
     get:
-      operationId: GET_projects_api_v3_allocations_:allocationId_time.json
+      description: Retrieve an allocation by the identifier.
+      operationId: GET_projects_api_v3_allocations_{allocationId}.json
+      parameters:
+      - in: path
+        name: allocationId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/allocation.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Get a specific allocation.
+      tags:
+      - Allocations
+      x-private: true
+    put:
+      consumes:
+      - application/json
+      description: |-
+        Updates an existing allocation for resource scheduling. If the allocation
+        start/end date conflicts with another allocation on the same project an error
+        will be returned. You can bypass this error with the "ignoreCollisions"
+        field.
+      operationId: PUT_projects_api_v3_allocations_{allocationId}.json
+      parameters:
+      - in: path
+        name: allocationId
+        required: true
+        type: integer
+      - in: body
+        name: allocation.Request
+        required: true
+        schema:
+          $ref: '#/definitions/allocation.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/allocation.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+        "409":
+          description: 409 Conflict
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+      summary: Update an existing allocation.
+      tags:
+      - Allocations
+      x-private: true
+    patch:
+      consumes:
+      - application/json
+      description: |-
+        Updates an existing allocation for resource scheduling. If the allocation
+        start/end date conflicts with another allocation on the same project an error
+        will be returned. You can bypass this error with the "ignoreCollisions"
+        field.
+      operationId: PATCH_projects_api_v3_allocations_{allocationId}.json
+      parameters:
+      - in: path
+        name: allocationId
+        required: true
+        type: integer
+      - in: body
+        name: allocation.Request
+        required: true
+        schema:
+          $ref: '#/definitions/allocation.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/allocation.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+        "409":
+          description: 409 Conflict
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+      summary: Update an existing allocation.
+      tags:
+      - Allocations
+      x-private: true
+    delete:
+      consumes:
+      - application/json
+      description: |-
+        Removes an allocation. It's still possible to recover the allocation. To
+        remove a allocation definitely provide the "hardDelete" flag.
+      operationId: DELETE_projects_api_v3_allocations_{allocationId}.json
+      parameters:
+      - in: path
+        name: allocationId
+        required: true
+        type: integer
+      - in: body
+        name: allocation.DeleteRequest
+        required: true
+        schema:
+          $ref: '#/definitions/allocation.DeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: 204 No Content (no data)
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Delete an existing allocation.
+      tags:
+      - Allocations
+      x-private: true
+  /projects/api/v3/allocations/{allocationId}/restore.json:
+    put:
+      description: Restore an allocation by the identifier.
+      operationId: PUT_projects_api_v3_allocations_{allocationId}_restore.json
+      parameters:
+      - in: path
+        name: allocationId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/allocation.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Restore a soft deleted allocation.
+      tags:
+      - Allocations
+      x-private: true
+  /projects/api/v3/allocations/{allocationId}/split.json:
+    put:
+      consumes:
+      - application/json
+      description: Split an allocation by the identifier.
+      operationId: PUT_projects_api_v3_allocations_{allocationId}_split.json
+      parameters:
+      - in: path
+        name: allocationId
+        required: true
+        type: integer
+      - in: body
+        name: allocation.SplitRequest
+        required: true
+        schema:
+          $ref: '#/definitions/allocation.SplitRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/allocation.AllocationsResponse'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Split an allocation in two
+      tags:
+      - Allocations
+      x-private: true
+  /projects/api/v3/allocations/{allocationId}/time.json:
+    get:
+      operationId: GET_projects_api_v3_allocations_{allocationId}_time.json
       tags:
       - TimeTracking
       summary: Get time entries for a specific allocation
@@ -458,6 +677,10 @@ paths:
         description: page number
         type: integer
         default: "1"
+      - name: allocationId
+        in: path
+        type: integer
+        required: true
       - name: allocationId
         in: query
         description: filter by allocation id
@@ -654,201 +877,6 @@ paths:
           description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/allocations/:id.json:
-    get:
-      description: Retrieve an allocation by the identifier.
-      operationId: GET_projects_api_v3_allocations_:id.json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/allocation.Response'
-        "400":
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "403":
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "404":
-          description: 404 Not Found (no data)
-      summary: Get a specific allocation.
-      tags:
-      - Allocations
-      x-private: true
-    put:
-      consumes:
-      - application/json
-      description: |-
-        Updates an existing allocation for resource scheduling. If the allocation
-        start/end date conflicts with another allocation on the same project an error
-        will be returned. You can bypass this error with the "ignoreCollisions"
-        field.
-      operationId: PUT_projects_api_v3_allocations_:id.json
-      parameters:
-      - in: body
-        name: allocation.Request
-        required: true
-        schema:
-          $ref: '#/definitions/allocation.Request'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/allocation.Response'
-        "400":
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "403":
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "404":
-          description: 404 Not Found (no data)
-        "409":
-          description: 409 Conflict
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-      summary: Update an existing allocation.
-      tags:
-      - Allocations
-      x-private: true
-    patch:
-      consumes:
-      - application/json
-      description: |-
-        Updates an existing allocation for resource scheduling. If the allocation
-        start/end date conflicts with another allocation on the same project an error
-        will be returned. You can bypass this error with the "ignoreCollisions"
-        field.
-      operationId: PATCH_projects_api_v3_allocations_:id.json
-      parameters:
-      - in: body
-        name: allocation.Request
-        required: true
-        schema:
-          $ref: '#/definitions/allocation.Request'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/allocation.Response'
-        "400":
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "403":
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "404":
-          description: 404 Not Found (no data)
-        "409":
-          description: 409 Conflict
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-      summary: Update an existing allocation.
-      tags:
-      - Allocations
-      x-private: true
-    delete:
-      consumes:
-      - application/json
-      description: |-
-        Removes an allocation. It's still possible to recover the allocation. To
-        remove a allocation definitely provide the "hardDelete" flag.
-      operationId: DELETE_projects_api_v3_allocations_:id.json
-      parameters:
-      - in: body
-        name: allocation.DeleteRequest
-        required: true
-        schema:
-          $ref: '#/definitions/allocation.DeleteRequest'
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: 204 No Content (no data)
-        "400":
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "403":
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "404":
-          description: 404 Not Found (no data)
-      summary: Delete an existing allocation.
-      tags:
-      - Allocations
-      x-private: true
-  /projects/api/v3/allocations/:id/restore.json:
-    put:
-      description: Restore an allocation by the identifier.
-      operationId: PUT_projects_api_v3_allocations_:id_restore.json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/allocation.Response'
-        "400":
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "403":
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "404":
-          description: 404 Not Found (no data)
-      summary: Restore a soft deleted allocation.
-      tags:
-      - Allocations
-      x-private: true
-  /projects/api/v3/allocations/:id/split.json:
-    put:
-      consumes:
-      - application/json
-      description: Split an allocation by the identifier.
-      operationId: PUT_projects_api_v3_allocations_:id_split.json
-      parameters:
-      - in: body
-        name: allocation.SplitRequest
-        required: true
-        schema:
-          $ref: '#/definitions/allocation.SplitRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/allocation.AllocationsResponse'
-        "400":
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "403":
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "404":
-          description: 404 Not Found (no data)
-      summary: Split an allocation in two
-      tags:
-      - Allocations
-      x-private: true
   /projects/api/v3/allocations/bulk/delete.json:
     post:
       consumes:
@@ -887,6 +915,17 @@ paths:
     get:
       operationId: GET_projects_api_v3_apps.json
       parameters:
+      - default: projects
+        description: request apps for a given product
+        enum:
+        - projects
+        - spaces
+        - crm
+        - desk
+        - chat
+        in: query
+        name: product
+        type: string
       - default: "50"
         description: number of items in a page
         in: query
@@ -920,9 +959,39 @@ paths:
       tags:
       - Apps
       x-private: true
-  /projects/api/v3/apps/:appid/install.json:
+  /projects/api/v3/apps/{appId}.json:
+    get:
+      operationId: GET_projects_api_v3_apps_{appId}.json
+      parameters:
+      - in: path
+        name: appId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Get a specific app.
+      tags:
+      - Apps
+      x-private: true
+  /projects/api/v3/apps/{appId}/install.json:
     post:
-      operationId: POST_projects_api_v3_apps_:appid_install.json
+      operationId: POST_projects_api_v3_apps_{appId}_install.json
+      parameters:
+      - in: path
+        name: appId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -940,17 +1009,25 @@ paths:
       tags:
       - Apps
       x-private: true
-  /projects/api/v3/apps/:appid/settings/:settingid.json:
+  /projects/api/v3/apps/{appId}/settings/{settingId}.json:
     put:
       consumes:
       - application/json
-      operationId: PUT_projects_api_v3_apps_:appid_settings_:settingid.json
+      operationId: PUT_projects_api_v3_apps_{appId}_settings_{settingId}.json
       parameters:
       - in: body
         name: setting.Request
         required: true
         schema:
           $ref: '#/definitions/setting.Request'
+      - in: path
+        name: settingId
+        required: true
+        type: integer
+      - in: path
+        name: appId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -972,29 +1049,14 @@ paths:
       tags:
       - AppsSettings
       x-private: true
-  /projects/api/v3/apps/:id.json:
-    get:
-      operationId: GET_projects_api_v3_apps_:id.json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/app.Response'
-        "400":
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "404":
-          description: 404 Not Found (no data)
-      summary: Get a specific app.
-      tags:
-      - Apps
-      x-private: true
-  /projects/api/v3/apps/:id/uninstall.json:
+  /projects/api/v3/apps/{appId}/uninstall.json:
     post:
-      operationId: POST_projects_api_v3_apps_:id_uninstall.json
+      operationId: POST_projects_api_v3_apps_{appId}_uninstall.json
+      parameters:
+      - in: path
+        name: appId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -1010,9 +1072,9 @@ paths:
       tags:
       - Apps
       x-private: true
-  /projects/api/v3/budget/notifications/:id.json:
+  /projects/api/v3/budget/notifications/{notificationId}.json:
     patch:
-      operationId: PATCH_projects_api_v3_budget_notifications_:id.json
+      operationId: PATCH_projects_api_v3_budget_notifications_{notificationId}.json
       tags:
       - Budgets
       summary: Update an existing notification.
@@ -1026,6 +1088,10 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/notification.Request'
+      - name: notificationId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK
@@ -1046,12 +1112,17 @@ paths:
           schema:
             $ref: '#/definitions/view.ErrorResponse'
     delete:
-      operationId: DELETE_projects_api_v3_budget_notifications_:id.json
+      operationId: DELETE_projects_api_v3_budget_notifications_{notificationId}.json
       tags:
       - Budgets
       summary: Delete an existing notification.
       produces:
       - application/json
+      parameters:
+      - name: notificationId
+        in: path
+        type: integer
+        required: true
       responses:
         204:
           description: 204 No Content (no data)
@@ -1943,10 +2014,15 @@ paths:
           description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/columns/:id.json:
+  /projects/api/v3/columns/{columnId}.json:
     get:
       description: Long description explaining the endpoint.
-      operationId: GET_projects_api_v3_columns_:id.json
+      operationId: GET_projects_api_v3_columns_{columnId}.json
+      parameters:
+      - in: path
+        name: columnId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -2089,6 +2165,10 @@ paths:
       - description: match all project tags
         in: query
         name: matchAllProjectTags
+        type: boolean
+      - description: include archived projects
+        in: query
+        name: includeArchivedProjects
         type: boolean
       - description: filter by user ids
         in: query
@@ -2358,10 +2438,15 @@ paths:
       tags:
       - Comments
       x-private: true
-  /projects/api/v3/companies/:id.json:
+  /projects/api/v3/companies/{companyId}.json:
     get:
       description: Retrieves a company by id.
-      operationId: GET_projects_api_v3_companies_:id.json
+      operationId: GET_projects_api_v3_companies_{companyId}.json
+      parameters:
+      - in: path
+        name: companyId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -2383,18 +2468,47 @@ paths:
       tags:
       - Company
       x-private: true
-  /projects/api/v3/costs/users/:id.json:
+  /projects/api/v3/costs/users/{userId}.json:
+    get:
+      description: Gets a usercost for a specific user.
+      operationId: GET_projects_api_v3_costs_users_{userId}.json
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/usercost.Response'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Get a specific usercost.
+      tags:
+      - BETA
+      x-private: true
     put:
       consumes:
       - application/json
       description: sets an hourly cost for a specifc user.
-      operationId: PUT_projects_api_v3_costs_users_:id.json
+      operationId: PUT_projects_api_v3_costs_users_{userId}.json
       parameters:
       - in: body
         name: usercost.Request
         required: true
         schema:
           $ref: '#/definitions/usercost.Request'
+      - in: path
+        name: userId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -2608,10 +2722,10 @@ paths:
       tags:
       - CustomFields
       x-private: false
-  /projects/api/v3/customfields/:id.json:
+  /projects/api/v3/customfields/{customFieldId}.json:
     get:
       description: This returns all details about an individual custom field.
-      operationId: GET_projects_api_v3_customfields_:id.json
+      operationId: GET_projects_api_v3_customfields_{customFieldId}.json
       parameters:
       - description: filter by project statuses
         in: query
@@ -2669,6 +2783,10 @@ paths:
         description: page number
         in: query
         name: page
+        type: integer
+      - in: path
+        name: customFieldId
+        required: true
         type: integer
       - default: "false"
         description: include deleted items
@@ -2776,8 +2894,12 @@ paths:
       consumes:
       - application/json
       description: Updates an existing custom field.
-      operationId: PUT_projects_api_v3_customfields_:id.json
+      operationId: PUT_projects_api_v3_customfields_{customFieldId}.json
       parameters:
+      - in: path
+        name: customFieldId
+        required: true
+        type: integer
       - in: body
         name: customfield.Request
         required: true
@@ -2812,8 +2934,12 @@ paths:
       consumes:
       - application/json
       description: Updates an existing custom field.
-      operationId: PATCH_projects_api_v3_customfields_:id.json
+      operationId: PATCH_projects_api_v3_customfields_{customFieldId}.json
       parameters:
+      - in: path
+        name: customFieldId
+        required: true
+        type: integer
       - in: body
         name: customfield.Request
         required: true
@@ -2846,7 +2972,12 @@ paths:
       x-private: false
     delete:
       description: Removes a custom field.
-      operationId: DELETE_projects_api_v3_customfields_:id.json
+      operationId: DELETE_projects_api_v3_customfields_{customFieldId}.json
+      parameters:
+      - in: path
+        name: customFieldId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -3335,10 +3466,10 @@ paths:
       tags:
       - Files
       x-private: true
-  /projects/api/v3/files/:id.json:
+  /projects/api/v3/files/{fileId}.json:
     get:
       description: Get a single file by project file id.
-      operationId: GET_projects_api_v3_files_:id.json
+      operationId: GET_projects_api_v3_files_{fileId}.json
       parameters:
       - description: filter by uploaded start date
         format: date
@@ -3424,6 +3555,10 @@ paths:
       - description: filter by project file id
         in: query
         name: id
+        type: integer
+      - in: path
+        name: fileId
+        required: true
         type: integer
       - description: filter by category id
         in: query
@@ -3616,8 +3751,12 @@ paths:
       consumes:
       - application/json
       description: Updates an existing file.
-      operationId: PATCH_projects_api_v3_files_:id.json
+      operationId: PATCH_projects_api_v3_files_{fileId}.json
       parameters:
+      - in: path
+        name: fileId
+        required: true
+        type: integer
       - in: body
         name: file.Request
         required: true
@@ -3650,7 +3789,12 @@ paths:
       x-private: true
     delete:
       description: Delete an existing file including all the file versions.
-      operationId: DELETE_projects_api_v3_files_:id.json
+      operationId: DELETE_projects_api_v3_files_{fileId}.json
+      parameters:
+      - in: path
+        name: fileId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -3670,14 +3814,19 @@ paths:
       tags:
       - Files
       x-private: true
-  /projects/api/v3/files/:id/comments.json:
+  /projects/api/v3/files/{fileId}/comments.json:
     get:
-      operationId: GET_projects_api_v3_files_:id_comments.json
+      operationId: GET_projects_api_v3_files_{fileId}_comments.json
       tags:
       - FileComments
       summary: Get a list of comments for a file
       produces:
       - application/json
+      parameters:
+      - name: fileId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK
@@ -3693,13 +3842,17 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/files/:projectFileId.json:
+  /projects/api/v3/files/{projectFileId}.json:
     post:
       consumes:
       - application/json
       description: Creates a new fileversion for the project file id specified.
-      operationId: POST_projects_api_v3_files_:projectFileId.json
+      operationId: POST_projects_api_v3_files_{projectFileId}.json
       parameters:
+      - in: path
+        name: projectFileId
+        required: true
+        type: integer
       - in: body
         name: fileversion.Request
         required: true
@@ -3856,14 +4009,18 @@ paths:
       tags:
       - Files
       x-private: true
-  /projects/api/v3/fileversion/:id.json:
+  /projects/api/v3/fileversion/{id}.json:
     get:
       description: Retrieve a fileversion by id.
-      operationId: GET_projects_api_v3_fileversion_:id.json
+      operationId: GET_projects_api_v3_fileversion_{id}.json
       parameters:
       - description: filter by project file id
         in: query
         name: id
+        type: integer
+      - in: path
+        name: id
+        required: true
         type: integer
       - description: include reactions of the file version
         in: query
@@ -3954,7 +4111,7 @@ paths:
       tags:
       - Files
       x-private: true
-  /projects/api/v3/form/:id/assignees.json:
+  /projects/api/v3/form/{formId}/assignees.json:
     put:
       consumes:
       - application/json
@@ -3970,8 +4127,12 @@ paths:
 
         If every assignee is found to be invalid, or a mix of invalid
         and doesn't exist, the response will be a 400.
-      operationId: PUT_projects_api_v3_form_:id_assignees.json
+      operationId: PUT_projects_api_v3_form_{formId}_assignees.json
       parameters:
+      - in: path
+        name: formId
+        required: true
+        type: integer
       - in: body
         name: assignee.Request
         required: true
@@ -4050,9 +4211,14 @@ paths:
       tags:
       - Forms
       x-private: true
-  /projects/api/v3/forms/:id.json:
+  /projects/api/v3/forms/{formId}.json:
     get:
-      operationId: GET_projects_api_v3_forms_:id.json
+      operationId: GET_projects_api_v3_forms_{formId}.json
+      parameters:
+      - in: path
+        name: formId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -4073,8 +4239,12 @@ paths:
     patch:
       consumes:
       - application/json
-      operationId: PATCH_projects_api_v3_forms_:id.json
+      operationId: PATCH_projects_api_v3_forms_{formId}.json
       parameters:
+      - in: path
+        name: formId
+        required: true
+        type: integer
       - in: body
         name: form.Request
         required: true
@@ -4106,7 +4276,12 @@ paths:
       - Forms
       x-private: true
     delete:
-      operationId: DELETE_projects_api_v3_forms_:id.json
+      operationId: DELETE_projects_api_v3_forms_{formId}.json
+      parameters:
+      - in: path
+        name: formId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -4122,10 +4297,10 @@ paths:
       tags:
       - Forms
       x-private: true
-  /projects/api/v3/forms/:id/assignees.json:
+  /projects/api/v3/forms/{formId}/assignees.json:
     get:
       description: Get all assignees for a given form.
-      operationId: GET_projects_api_v3_forms_:id_assignees.json
+      operationId: GET_projects_api_v3_forms_{formId}_assignees.json
       parameters:
       - default: asc
         description: order mode
@@ -4148,6 +4323,10 @@ paths:
         description: page number
         in: query
         name: page
+        type: integer
+      - in: path
+        name: formId
+        required: true
         type: integer
       - description: include
         enum:
@@ -4214,9 +4393,14 @@ paths:
       tags:
       - FormsAssignees
       x-private: true
-  /projects/api/v3/forms/:id/draft.json:
+  /projects/api/v3/forms/{formId}/draft.json:
     get:
-      operationId: GET_projects_api_v3_forms_:id_draft.json
+      operationId: GET_projects_api_v3_forms_{formId}_draft.json
+      parameters:
+      - in: path
+        name: formId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -4234,18 +4418,22 @@ paths:
       tags:
       - Forms
       x-private: true
-  /projects/api/v3/forms/:id/token.json:
+  /projects/api/v3/forms/{formId}/token.json:
     patch:
       consumes:
       - application/json
       description: Update a form token
-      operationId: PATCH_projects_api_v3_forms_:id_token.json
+      operationId: PATCH_projects_api_v3_forms_{formId}_token.json
       parameters:
       - in: body
         name: token.Request
         required: true
         schema:
           $ref: '#/definitions/token.Request'
+      - in: path
+        name: formId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -4267,20 +4455,24 @@ paths:
       tags:
       - FormsToken
       x-private: true
-  /projects/api/v3/forms/:id/token/refresh.json:
+  /projects/api/v3/forms/{formId}/token/refresh.json:
     put:
       consumes:
       - application/json
       description: |-
         Used for invalidating current form URLs and generating
         a new one.
-      operationId: PUT_projects_api_v3_forms_:id_token_refresh.json
+      operationId: PUT_projects_api_v3_forms_{formId}_token_refresh.json
       parameters:
       - in: body
         name: token.Request
         required: true
         schema:
           $ref: '#/definitions/token.Request'
+      - in: path
+        name: formId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -4302,10 +4494,10 @@ paths:
       tags:
       - FormsToken
       x-private: true
-  /projects/api/v3/forms/public/:token.json:
+  /projects/api/v3/forms/public/{token}.json:
     get:
       description: This endpoint does not require authentication.
-      operationId: GET_projects_api_v3_forms_public_:token.json
+      operationId: GET_projects_api_v3_forms_public_{token}.json
       parameters:
       - default: asc
         description: order mode
@@ -4314,6 +4506,12 @@ paths:
         - desc
         in: query
         name: orderMode
+        type: string
+      - description: query by hostObject type
+        enum:
+        - projects
+        in: query
+        name: hostObject.type
         type: string
       - description: query by form state
         enum:
@@ -4328,6 +4526,10 @@ paths:
         in: query
         name: userId
         type: integer
+      - in: path
+        name: token
+        required: true
+        type: integer
       - default: "50"
         description: number of items in a page
         in: query
@@ -4337,6 +4539,10 @@ paths:
         description: page number
         in: query
         name: page
+        type: integer
+      - description: filter by host id
+        in: query
+        name: hostObject.id
         type: integer
       - description: filter by project ids
         in: query
@@ -4403,13 +4609,17 @@ paths:
       tags:
       - FormsPublic
       x-private: true
-  /projects/api/v3/forms/public/:token/submit.json:
+  /projects/api/v3/forms/public/{token}/submit.json:
     post:
       consumes:
       - application/json
       description: This endpoint does not require authentication.
-      operationId: POST_projects_api_v3_forms_public_:token_submit.json
+      operationId: POST_projects_api_v3_forms_public_{token}_submit.json
       parameters:
+      - in: path
+        name: token
+        required: true
+        type: integer
       - in: body
         name: form.SubmissionRequest
         required: true
@@ -4688,11 +4898,15 @@ paths:
           description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/lockdowns/:id.json:
+  /projects/api/v3/lockdowns/{lockdownId}.json:
     get:
       description: Retrieve a lockdown information.
-      operationId: GET_projects_api_v3_lockdowns_:id.json
+      operationId: GET_projects_api_v3_lockdowns_{lockdownId}.json
       parameters:
+      - in: path
+        name: lockdownId
+        required: true
+        type: integer
       - description: filter by lockdown ID
         in: query
         name: id
@@ -5126,9 +5340,9 @@ paths:
           description: 403 Forbidden
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/me/timers/:id.json:
+  /projects/api/v3/me/timers/{timerId}.json:
     put:
-      operationId: PUT_projects_api_v3_me_timers_:id.json
+      operationId: PUT_projects_api_v3_me_timers_{timerId}.json
       tags:
       - TimeTracking
       summary: Edits a timer
@@ -5143,6 +5357,10 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/timer.Request'
+      - name: timerId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK
@@ -5159,7 +5377,7 @@ paths:
         404:
           description: 404 Not Found (no data)
     delete:
-      operationId: DELETE_projects_api_v3_me_timers_:id.json
+      operationId: DELETE_projects_api_v3_me_timers_{timerId}.json
       tags:
       - TimeTracking
       summary: Delete a timer by ID
@@ -5174,6 +5392,10 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/timer.DeleteRequest'
+      - name: timerId
+        in: path
+        type: integer
+        required: true
       responses:
         204:
           description: 204 No Content (no data)
@@ -5187,9 +5409,9 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/me/timers/:id/complete.json:
+  /projects/api/v3/me/timers/{timerId}/complete.json:
     put:
-      operationId: PUT_projects_api_v3_me_timers_:id_complete.json
+      operationId: PUT_projects_api_v3_me_timers_{timerId}_complete.json
       tags:
       - TimeTracking
       summary: Complete a timer by ID
@@ -5198,6 +5420,11 @@ paths:
         the timelog entry. When the timelog is created, the timer is deleted.
       produces:
       - application/json
+      parameters:
+      - name: timerId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK
@@ -5217,15 +5444,20 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/me/timers/:id/pause.json:
+  /projects/api/v3/me/timers/{timerId}/pause.json:
     put:
-      operationId: PUT_projects_api_v3_me_timers_:id_pause.json
+      operationId: PUT_projects_api_v3_me_timers_{timerId}_pause.json
       tags:
       - TimeTracking
       summary: Pause a timer by ID
       description: Pause an existing timer.
       produces:
       - application/json
+      parameters:
+      - name: timerId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK
@@ -5241,15 +5473,20 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/me/timers/:id/resume.json:
+  /projects/api/v3/me/timers/{timerId}/resume.json:
     put:
-      operationId: PUT_projects_api_v3_me_timers_:id_resume.json
+      operationId: PUT_projects_api_v3_me_timers_{timerId}_resume.json
       tags:
       - TimeTracking
       summary: Resume a timer by ID
       description: Resume an existing timer. If other timers are currently running, those timers are paused before resuming.
       produces:
       - application/json
+      parameters:
+      - name: timerId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK
@@ -5269,15 +5506,20 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/me/timers/:id/undelete.json:
+  /projects/api/v3/me/timers/{timerId}/undelete.json:
     put:
-      operationId: PUT_projects_api_v3_me_timers_:id_undelete.json
+      operationId: PUT_projects_api_v3_me_timers_{timerId}_undelete.json
       tags:
       - TimeTracking
       summary: Undelete a timer by ID
       description: Undelete an existing timer.
       produces:
       - application/json
+      parameters:
+      - name: timerId
+        in: path
+        type: integer
+        required: true
       responses:
         204:
           description: 204 No Content (no data)
@@ -5291,20 +5533,24 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/messages/:id.json:
+  /projects/api/v3/messages/{messageId}.json:
     patch:
       consumes:
       - application/json
       description: |-
         Update specific fields on a message. If the property `read` is sent with the
         value `true` all posts from this message will be marked as read.
-      operationId: PATCH_projects_api_v3_messages_:id.json
+      operationId: PATCH_projects_api_v3_messages_{messageId}.json
       parameters:
       - in: body
         name: message.Request
         required: true
         schema:
           $ref: '#/definitions/message.Request'
+      - in: path
+        name: messageId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -7431,9 +7677,9 @@ paths:
           description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/milestones/:id.json:
+  /projects/api/v3/milestones/{milestonId}.json:
     get:
-      operationId: GET_projects_api_v3_milestones_:id.json
+      operationId: GET_projects_api_v3_milestones_{milestonId}.json
       tags:
       - Milestones
       summary: Get a milestone by id.
@@ -7545,6 +7791,10 @@ paths:
         description: page number
         type: integer
         default: "1"
+      - name: milestonId
+        in: path
+        type: integer
+        required: true
       - name: showPrivate
         in: query
         description: show private milestones
@@ -7851,14 +8101,19 @@ paths:
           description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/milestones/:id/comments.json:
+  /projects/api/v3/milestones/{milestoneId}/comments.json:
     get:
-      operationId: GET_projects_api_v3_milestones_:id_comments.json
+      operationId: GET_projects_api_v3_milestones_{milestoneId}_comments.json
       tags:
       - MilestoneComments
       summary: Get a list of comments for a milestone
       produces:
       - application/json
+      parameters:
+      - name: milestoneId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK
@@ -8109,6 +8364,42 @@ paths:
         enum:
         - id
         - name
+      - name: fields[notebooks]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - description
+        - contents
+        - type
+        - isPrivate
+        - locked
+        - lockdownId
+        - secureContent
+        - projectId
+        - createdByUserID
+        - updatedByUserID
+        - deletedByUserID
+        - dateUpdated
+        - dateCreated
+        - dateDeleted
+        - deleted
+        - categoryId
+        - notebookVersionID
+        - notebookVersionCreatedDateTime
+        - notebookVersionUpdatedDateTime
+        - latestVersionNo
+        - commentsCount
+        - readCommentsCount
+        - contentHTML
+        - privacy
+        - commentFollowers
+        - changeFollowers
+        - projectNotifyCommentIncludeCreator
+        - tagIds
       - name: fields[notebookCategories]
         in: query
         type: array
@@ -8147,9 +8438,9 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/notebooks/:id.json:
+  /projects/api/v3/notebooks/{notebookId}.json:
     get:
-      operationId: GET_projects_api_v3_notebooks_:id.json
+      operationId: GET_projects_api_v3_notebooks_{notebookId}.json
       tags:
       - Notebooks
       summary: Get a specific notebook.
@@ -8166,6 +8457,10 @@ paths:
         description: filter by updated after date
         type: string
         format: date-time
+      - name: notebookId
+        in: path
+        type: integer
+        required: true
       - name: showDeleted
         in: query
         description: show deleted notebooks
@@ -8229,6 +8524,42 @@ paths:
         enum:
         - id
         - name
+      - name: fields[notebooks]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - description
+        - contents
+        - type
+        - isPrivate
+        - locked
+        - lockdownId
+        - secureContent
+        - projectId
+        - createdByUserID
+        - updatedByUserID
+        - deletedByUserID
+        - dateUpdated
+        - dateCreated
+        - dateDeleted
+        - deleted
+        - categoryId
+        - notebookVersionID
+        - notebookVersionCreatedDateTime
+        - notebookVersionUpdatedDateTime
+        - latestVersionNo
+        - commentsCount
+        - readCommentsCount
+        - contentHTML
+        - privacy
+        - commentFollowers
+        - changeFollowers
+        - projectNotifyCommentIncludeCreator
+        - tagIds
       - name: fields[notebookCategories]
         in: query
         type: array
@@ -8256,7 +8587,7 @@ paths:
         404:
           description: 404 Not Found (no data)
     patch:
-      operationId: PATCH_projects_api_v3_notebooks_:id.json
+      operationId: PATCH_projects_api_v3_notebooks_{notebookId}.json
       tags:
       - Notebooks
       summary: Edits a notebook
@@ -8271,6 +8602,10 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/notebook.Request'
+      - name: notebookId
+        in: path
+        type: integer
+        required: true
       - name: getEmoji
         in: query
         description: parse Emoji's
@@ -8330,6 +8665,42 @@ paths:
         enum:
         - id
         - name
+      - name: fields[notebooks]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - description
+        - contents
+        - type
+        - isPrivate
+        - locked
+        - lockdownId
+        - secureContent
+        - projectId
+        - createdByUserID
+        - updatedByUserID
+        - deletedByUserID
+        - dateUpdated
+        - dateCreated
+        - dateDeleted
+        - deleted
+        - categoryId
+        - notebookVersionID
+        - notebookVersionCreatedDateTime
+        - notebookVersionUpdatedDateTime
+        - latestVersionNo
+        - commentsCount
+        - readCommentsCount
+        - contentHTML
+        - privacy
+        - commentFollowers
+        - changeFollowers
+        - projectNotifyCommentIncludeCreator
+        - tagIds
       - name: fields[notebookCategories]
         in: query
         type: array
@@ -8361,12 +8732,17 @@ paths:
         404:
           description: 404 Not Found (no data)
     delete:
-      operationId: DELETE_projects_api_v3_notebooks_:id.json
+      operationId: DELETE_projects_api_v3_notebooks_{notebookId}.json
       tags:
       - Notebooks
       summary: Delete an existing notebook.
       produces:
       - application/json
+      parameters:
+      - name: notebookId
+        in: path
+        type: integer
+        required: true
       responses:
         204:
           description: 204 No Content (no data)
@@ -8380,14 +8756,19 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/notebooks/:id/comments.json:
+  /projects/api/v3/notebooks/{notebookId}/comments.json:
     get:
-      operationId: GET_projects_api_v3_notebooks_:id_comments.json
+      operationId: GET_projects_api_v3_notebooks_{notebookId}_comments.json
       tags:
       - NotebookComments
       summary: Get a list of comments for a notebook
       produces:
       - application/json
+      parameters:
+      - name: notebookId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK
@@ -8403,9 +8784,9 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/notebooks/:id/compare.json:
+  /projects/api/v3/notebooks/{notebookId}/compare.json:
     get:
-      operationId: GET_projects_api_v3_notebooks_:id_compare.json
+      operationId: GET_projects_api_v3_notebooks_{notebookId}_compare.json
       tags:
       - Notebooks
       summary: Compare 2 notebook versions
@@ -8413,6 +8794,10 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: notebookId
+        in: path
+        type: integer
+        required: true
       - name: include
         in: query
         description: include
@@ -8445,15 +8830,20 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/notebooks/:id/lock.json:
+  /projects/api/v3/notebooks/{notebookId}/lock.json:
     put:
-      operationId: PUT_projects_api_v3_notebooks_:id_lock.json
+      operationId: PUT_projects_api_v3_notebooks_{notebookId}_lock.json
       tags:
       - Notebooks
       summary: Lock a notebook
       description: Locks a specific notebook.
       produces:
       - application/json
+      parameters:
+      - name: notebookId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK (no data)
@@ -8467,15 +8857,20 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/notebooks/:id/unlock.json:
+  /projects/api/v3/notebooks/{notebookId}/unlock.json:
     put:
-      operationId: PUT_projects_api_v3_notebooks_:id_unlock.json
+      operationId: PUT_projects_api_v3_notebooks_{notebookId}_unlock.json
       tags:
       - Notebooks
       summary: Unlock a notebook
       description: Unlocks a specific notebook.
       produces:
       - application/json
+      parameters:
+      - name: notebookId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK (no data)
@@ -8489,9 +8884,9 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/notebooks/:id/versions.json:
+  /projects/api/v3/notebooks/{notebookId}/versions.json:
     get:
-      operationId: GET_projects_api_v3_notebooks_:id_versions.json
+      operationId: GET_projects_api_v3_notebooks_{notebookId}_versions.json
       tags:
       - Notebooks
       summary: Get notebook versions
@@ -8499,6 +8894,10 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: notebookId
+        in: path
+        type: integer
+        required: true
       - name: include
         in: query
         description: include
@@ -8532,13 +8931,18 @@ paths:
         404:
           description: 404 Not Found (no data)
     delete:
-      operationId: DELETE_projects_api_v3_notebooks_:id_versions.json
+      operationId: DELETE_projects_api_v3_notebooks_{notebookId}_versions.json
       tags:
       - Notebooks
       summary: Delete notebook versions.
       description: Deletes some existing versions of a notebook by version ID
       produces:
       - application/json
+      parameters:
+      - name: notebookId
+        in: path
+        type: integer
+        required: true
       responses:
         204:
           description: 204 No Content (no data)
@@ -8552,9 +8956,9 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/notebooks/:nId/versions/:vId.json:
+  /projects/api/v3/notebooks/{notebookId}/versions/{versionId}.json:
     get:
-      operationId: GET_projects_api_v3_notebooks_:nId_versions_:vId.json
+      operationId: GET_projects_api_v3_notebooks_{notebookId}_versions_{versionId}.json
       tags:
       - Notebooks
       summary: Get a notebook version
@@ -8562,6 +8966,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: versionId
+        in: path
+        type: integer
+        required: true
+      - name: notebookId
+        in: path
+        type: integer
+        required: true
       - name: include
         in: query
         description: include
@@ -8668,9 +9080,9 @@ paths:
           description: 403 Forbidden
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/people/:id.json:
+  /projects/api/v3/people/{personId}.json:
     get:
-      operationId: GET_projects_api_v3_people_:id.json
+      operationId: GET_projects_api_v3_people_{personId}.json
       tags:
       - Person
       summary: Returns a person
@@ -8695,6 +9107,10 @@ paths:
         - namecaseinsensitive
         - company
         default: name
+      - name: personId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         description: number of items in a page (not used when generating reports)
@@ -8742,12 +9158,12 @@ paths:
           description: 403 Forbidden
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/people/:userId/availability.json:
+  /projects/api/v3/people/{userId}/availability.json:
     get:
       description: |-
         Verify the user working hours and events marked as unavailable to calculate
         the availability in the provided range.
-      operationId: GET_projects_api_v3_people_:userId_availability.json
+      operationId: GET_projects_api_v3_people_{userId}_availability.json
       parameters:
       - description: filter by start date
         format: date
@@ -8762,6 +9178,10 @@ paths:
       - description: filter by user
         in: query
         name: userId
+        type: integer
+      - in: path
+        name: userId
+        required: true
         type: integer
       - description: include
         enum:
@@ -8920,9 +9340,31 @@ paths:
           page number
           default: 1
         type: integer
+      - name: includeCollaborators
+        in: query
+        description: include collaborators
+        type: boolean
+        default: "true"
+      - name: includeClients
+        in: query
+        description: include client users
+        type: boolean
+        default: "true"
       - name: userIds
         in: query
         description: filter by userIds
+        type: array
+        items:
+          type: integer
+      - name: teamIds
+        in: query
+        description: filter by team ids
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        description: filter by project ids
         type: array
         items:
           type: integer
@@ -8959,6 +9401,12 @@ paths:
         - companyId
         - isAdmin
         - type
+      - name: companyIds
+        in: query
+        description: filter by company ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK
@@ -11050,11 +11498,11 @@ paths:
           description: 403 Forbidden
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:id.json:
+  /projects/api/v3/projects/{projectId}.json:
     get:
-      operationId: GET_projects_api_v3_projects_:id.json
+      operationId: GET_projects_api_v3_projects_{projectId}.json
       tags:
-      - Project
+      - Projects
       summary: Returns a project
       description: |-
         On this endpoint you can filter by project custom fields. The syntax for the
@@ -11163,6 +11611,10 @@ paths:
         in: query
         description: filter by user id
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: projectHealths
         in: query
         description: |-
@@ -11464,93 +11916,10 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/projects/:id/featuresorder.json:
-    get:
-      operationId: GET_projects_api_v3_projects_:id_featuresorder.json
-      tags:
-      - Project
-      summary: Returns a project features order to display in tab
-      produces:
-      - application/json
-      responses:
-        200:
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/project.FeatureOrderResponse'
-        400:
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-    put:
-      operationId: PUT_projects_api_v3_projects_:id_featuresorder.json
-      tags:
-      - Project
-      summary: Sets the the features order to display in tab
-      produces:
-      - application/json
-      responses:
-        200:
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/project.FeatureOrderResponse'
-        400:
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        403:
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:id/files/usage.json:
-    get:
-      description: Retrieves all file space used on account for a specific project.
-      operationId: GET_projects_api_v3_projects_:id_files_usage.json
-      parameters:
-      - description: filter by a specific project
-        in: query
-        name: projectId
-        type: integer
-      - description: include
-        enum:
-        - projects
-        in: query
-        items:
-          type: string
-        name: include
-        type: array
-      - enum:
-        - id
-        - name
-        in: query
-        items:
-          type: string
-        name: fields[projects]
-        type: array
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/file.UsageResponse'
-        "400":
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "403":
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        "404":
-          description: 404 Not Found (no data)
-      summary: Retrieve file usage on a project
-      tags:
-      - Files
-      x-private: true
-  /projects/api/v3/projects/:projectId/customfields.json:
+  /projects/api/v3/projects/{projectId}/customfields.json:
     get:
       description: Return all custom field values from a specific project.
-      operationId: GET_projects_api_v3_projects_:projectId_customfields.json
+      operationId: GET_projects_api_v3_projects_{projectId}_customfields.json
       parameters:
       - description: updated after
         format: date-time
@@ -11630,6 +11999,10 @@ paths:
       - description: filter by user id
         in: query
         name: userId
+        type: integer
+      - in: path
+        name: projectId
+        required: true
         type: integer
       - description: |-
           filter by project healths
@@ -11936,13 +12309,17 @@ paths:
       consumes:
       - application/json
       description: Add a project custom field value.
-      operationId: POST_projects_api_v3_projects_:projectId_customfields.json
+      operationId: POST_projects_api_v3_projects_{projectId}_customfields.json
       parameters:
       - in: body
         name: project.Request
         required: true
         schema:
           $ref: '#/definitions/project.Request'
+      - in: path
+        name: projectId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -11962,10 +12339,19 @@ paths:
       tags:
       - CustomFields
       x-private: true
-  /projects/api/v3/projects/:projectId/customfields/:id.json:
+  /projects/api/v3/projects/{projectId}/customfields/{customFieldId}.json:
     get:
       description: Return a specific custom field value from a project.
-      operationId: GET_projects_api_v3_projects_:projectId_customfields_:id.json
+      operationId: GET_projects_api_v3_projects_{projectId}_customfields_{customFieldId}.json
+      parameters:
+      - in: path
+        name: projectId
+        required: true
+        type: integer
+      - in: path
+        name: customFieldId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -11987,13 +12373,21 @@ paths:
       consumes:
       - application/json
       description: Edit a project custom field value.
-      operationId: PATCH_projects_api_v3_projects_:projectId_customfields_:id.json
+      operationId: PATCH_projects_api_v3_projects_{projectId}_customfields_{customFieldId}.json
       parameters:
       - in: body
         name: project.Request
         required: true
         schema:
           $ref: '#/definitions/project.Request'
+      - in: path
+        name: projectId
+        required: true
+        type: integer
+      - in: path
+        name: customFieldId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -12021,7 +12415,16 @@ paths:
       x-private: true
     delete:
       description: Removes a project custom field value.
-      operationId: DELETE_projects_api_v3_projects_:projectId_customfields_:id.json
+      operationId: DELETE_projects_api_v3_projects_{projectId}_customfields_{customFieldId}.json
+      parameters:
+      - in: path
+        name: projectId
+        required: true
+        type: integer
+      - in: path
+        name: customFieldId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -12041,18 +12444,22 @@ paths:
       tags:
       - CustomFields
       x-private: true
-  /projects/api/v3/projects/:projectId/customfields/bulk/delete.json:
+  /projects/api/v3/projects/{projectId}/customfields/bulk/delete.json:
     post:
       consumes:
       - application/json
       description: Remove many entries of project custom field values at once.
-      operationId: POST_projects_api_v3_projects_:projectId_customfields_bulk_delete.json
+      operationId: POST_projects_api_v3_projects_{projectId}_customfields_bulk_delete.json
       parameters:
       - in: body
         name: project.BulkDeleteRequest
         required: true
         schema:
           $ref: '#/definitions/project.BulkDeleteRequest'
+      - in: path
+        name: projectId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -12072,18 +12479,22 @@ paths:
       tags:
       - CustomFields
       x-private: true
-  /projects/api/v3/projects/:projectId/customfields/bulk/update.json:
+  /projects/api/v3/projects/{projectId}/customfields/bulk/update.json:
     post:
       consumes:
       - application/json
       description: Edit many entries of project custom field values at once.
-      operationId: POST_projects_api_v3_projects_:projectId_customfields_bulk_update.json
+      operationId: POST_projects_api_v3_projects_{projectId}_customfields_bulk_update.json
       parameters:
       - in: body
         name: project.BulkUpdateRequest
         required: true
         schema:
           $ref: '#/definitions/project.BulkUpdateRequest'
+      - in: path
+        name: projectId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -12109,9 +12520,106 @@ paths:
       tags:
       - CustomFields
       x-private: true
-  /projects/api/v3/projects/:projectId/latestactivity:
+  /projects/api/v3/projects/{projectId}/featuresorder.json:
     get:
-      operationId: GET_projects_api_v3_projects_:projectId_latestactivity
+      operationId: GET_projects_api_v3_projects_{projectId}_featuresorder.json
+      tags:
+      - Projects
+      summary: Returns a project features order to display in tab
+      produces:
+      - application/json
+      parameters:
+      - name: projectId
+        in: path
+        type: integer
+        required: true
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/project.FeatureOrderResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+    put:
+      operationId: PUT_projects_api_v3_projects_{projectId}_featuresorder.json
+      tags:
+      - Projects
+      summary: Sets the the features order to display in tab
+      produces:
+      - application/json
+      parameters:
+      - name: projectId
+        in: path
+        type: integer
+        required: true
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/project.FeatureOrderResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        403:
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/{projectId}/files/usage.json:
+    get:
+      description: Retrieves all file space used on account for a specific project.
+      operationId: GET_projects_api_v3_projects_{projectId}_files_usage.json
+      parameters:
+      - description: filter by a specific project
+        in: query
+        name: projectId
+        type: integer
+      - in: path
+        name: projectId
+        required: true
+        type: integer
+      - description: include
+        enum:
+        - projects
+        in: query
+        items:
+          type: string
+        name: include
+        type: array
+      - enum:
+        - id
+        - name
+        in: query
+        items:
+          type: string
+        name: fields[projects]
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/file.UsageResponse'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Retrieve file usage on a project
+      tags:
+      - Files
+      x-private: true
+  /projects/api/v3/projects/{projectId}/latestactivity:
+    get:
+      operationId: GET_projects_api_v3_projects_{projectId}_latestactivity
       tags:
       - Activity
       summary: List latest activity for a specific project.
@@ -12182,6 +12690,10 @@ paths:
         in: query
         description: filter by project id
         type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: projectHealths
         in: query
         description: list of project health
@@ -12335,9 +12847,9 @@ paths:
           description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:projectId/milestones.json:
+  /projects/api/v3/projects/{projectId}/milestones.json:
     get:
-      operationId: GET_projects_api_v3_projects_:projectId_milestones.json
+      operationId: GET_projects_api_v3_projects_{projectId}_milestones.json
       tags:
       - Milestones
       summary: Get milestones in a project
@@ -12433,6 +12945,10 @@ paths:
         description: filter by due after date
         type: string
         format: date
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: projectHealths
         in: query
         description: filter by list of project health
@@ -12763,9 +13279,9 @@ paths:
           description: 403 Forbidden
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:projectId/notebooks.json:
+  /projects/api/v3/projects/{projectId}/notebooks.json:
     post:
-      operationId: POST_projects_api_v3_projects_:projectId_notebooks.json
+      operationId: POST_projects_api_v3_projects_{projectId}_notebooks.json
       tags:
       - Notebooks
       summary: Create a new notebook.
@@ -12779,6 +13295,10 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/notebook.Request'
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: getEmoji
         in: query
         description: parse Emoji's
@@ -12838,6 +13358,42 @@ paths:
         enum:
         - id
         - name
+      - name: fields[notebooks]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - description
+        - contents
+        - type
+        - isPrivate
+        - locked
+        - lockdownId
+        - secureContent
+        - projectId
+        - createdByUserID
+        - updatedByUserID
+        - deletedByUserID
+        - dateUpdated
+        - dateCreated
+        - dateDeleted
+        - deleted
+        - categoryId
+        - notebookVersionID
+        - notebookVersionCreatedDateTime
+        - notebookVersionUpdatedDateTime
+        - latestVersionNo
+        - commentsCount
+        - readCommentsCount
+        - contentHTML
+        - privacy
+        - commentFollowers
+        - changeFollowers
+        - projectNotifyCommentIncludeCreator
+        - tagIds
       - name: fields[notebookCategories]
         in: query
         type: array
@@ -12866,9 +13422,9 @@ paths:
           description: 403 Forbidden
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:projectId/risks:
+  /projects/api/v3/projects/{projectId}/risks:
     get:
-      operationId: GET_projects_api_v3_projects_:projectId_risks
+      operationId: GET_projects_api_v3_projects_{projectId}_risks
       tags:
       - Risks
       summary: Get risks for a specific project
@@ -12948,6 +13504,10 @@ paths:
         - impact
         - result
         - project
+      - name: projectId
+        in: path
+        type: integer
+        required: true
       - name: projectHealths
         in: query
         description: list of project health
@@ -13127,1518 +13687,6 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         403:
           description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:projectId/tasklists.csv:
-    get:
-      operationId: GET_projects_api_v3_projects_:projectId_tasklists.csv
-      tags:
-      - TaskLists
-      summary: Generate tasklist report in CSV format
-      description: |-
-        Generates a task list report in CSV format containing all tasks for the
-        provided filters. Only the tasks that the logged-in user can access will be
-        returned.
-      produces:
-      - application/json
-      - text/csv
-      parameters:
-      - name: taskDate
-        in: query
-        description: filter by task date
-        type: string
-        enum:
-        - all
-        - anytime
-        - completed
-        - created
-        - overdue
-        - today
-        - yesterday
-        - started
-        - tomorrow
-        - thisweek
-        - within7
-        - within14
-        - within30
-        - within365
-        - nodate
-        - noduedate
-        - nostartdate
-        - newTaskDefaults
-        - hasDate
-        default: anytime
-      - name: startDate
-        in: query
-        description: filter by start datetime
-        type: string
-        format: date-time
-      - name: reportFormat
-        in: query
-        description: define the format of the report
-        type: string
-      - name: orderMode
-        in: query
-        description: order mode
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-      - name: orderBy
-        in: query
-        description: order by
-        type: string
-        enum:
-        - startdate
-        - dateadded
-        - priority
-        - project
-        - flattenedtasklist
-        - company
-        - manual
-        - active
-        - completedDatedesc
-        - datecompleted
-        - duestartdate
-        - duestartdatedesc
-        - alldates
-        - alldatesdesc
-        - duedateDESC
-        - tasklistname
-        - tasklistdisplayorder
-        - tasklistid
-        - duedate
-        - dateupdated
-        - taskname
-        default: manual
-      - name: endDate
-        in: query
-        description: filter by end datetime
-        type: string
-        format: date-time
-      - name: commentsOrderMode
-        in: query
-        description: order mode of the comments
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-      - name: tasklistId
-        in: query
-        description: filter by task list
-        type: integer
-      - name: projectId
-        in: query
-        description: filter by project
-        type: integer
-      - name: onlyCompletedTasks
-        in: query
-        description: only completed tasks
-        type: boolean
-        default: "false"
-      - name: isReportDownload
-        in: query
-        description: generate a report document
-        type: boolean
-      - name: includeTime
-        in: query
-        description: include time
-        type: boolean
-      - name: includeTags
-        in: query
-        description: include tags
-        type: boolean
-        default: "true"
-      - name: includePrivateItems
-        in: query
-        description: include private items
-        type: boolean
-        default: "true"
-      - name: includeLateTasks
-        in: query
-        description: include late tasks
-        type: boolean
-      - name: includeEstimatedTime
-        in: query
-        description: include estimated time
-        type: boolean
-        default: "true"
-      - name: includeCustomFields
-        in: query
-        description: include custom fields
-        type: boolean
-        default: "false"
-      - name: includeCompletedTasks
-        in: query
-        description: include completed tasks
-        type: boolean
-        default: "true"
-      - name: includeComments
-        in: query
-        description: include comments
-        type: boolean
-        default: "false"
-      - name: includeCommentAvatars
-        in: query
-        description: include comment avatars
-        type: boolean
-      - name: includeColumns
-        in: query
-        description: include columns
-        type: boolean
-        default: "true"
-      - name: includeAnytimeTasks
-        in: query
-        description: include anytime tasks
-        type: boolean
-      - name: includeAllComments
-        in: query
-        description: include all comments
-        type: boolean
-        default: "false"
-      - name: ignoreStartDates
-        in: query
-        description: ignore task start dates
-        type: boolean
-      - name: groupByTasklists
-        in: query
-        description: group by task lists
-        type: boolean
-      - name: tags
-        in: query
-        description: filter by tag names
-        type: array
-        items:
-          type: string
-      - name: tagIds
-        in: query
-        description: filter by tag ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToUserIds
-        in: query
-        description: filter by assigned user ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToTeamIds
-        in: query
-        description: filter by assigned team ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToCompanyIds
-        in: query
-        description: filter by assigned company ids
-        type: array
-        items:
-          type: integer
-      responses:
-        200:
-          description: 200 OK (no data)
-        400:
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        403:
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:projectId/tasklists.html:
-    get:
-      operationId: GET_projects_api_v3_projects_:projectId_tasklists.html
-      tags:
-      - TaskLists
-      summary: Generate tasklist report in HTML format
-      description: |-
-        Generates a task list report in HTML format containing all tasks for the
-        provided filters. Only the tasks that the logged-in user can access will be
-        returned.
-      produces:
-      - application/json
-      - text/html
-      parameters:
-      - name: taskDate
-        in: query
-        description: filter by task date
-        type: string
-        enum:
-        - all
-        - anytime
-        - completed
-        - created
-        - overdue
-        - today
-        - yesterday
-        - started
-        - tomorrow
-        - thisweek
-        - within7
-        - within14
-        - within30
-        - within365
-        - nodate
-        - noduedate
-        - nostartdate
-        - newTaskDefaults
-        - hasDate
-        default: anytime
-      - name: startDate
-        in: query
-        description: filter by start datetime
-        type: string
-        format: date-time
-      - name: reportFormat
-        in: query
-        description: define the format of the report
-        type: string
-      - name: orderMode
-        in: query
-        description: order mode
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-      - name: orderBy
-        in: query
-        description: order by
-        type: string
-        enum:
-        - startdate
-        - dateadded
-        - priority
-        - project
-        - flattenedtasklist
-        - company
-        - manual
-        - active
-        - completedDatedesc
-        - datecompleted
-        - duestartdate
-        - duestartdatedesc
-        - alldates
-        - alldatesdesc
-        - duedateDESC
-        - tasklistname
-        - tasklistdisplayorder
-        - tasklistid
-        - duedate
-        - dateupdated
-        - taskname
-        default: manual
-      - name: endDate
-        in: query
-        description: filter by end datetime
-        type: string
-        format: date-time
-      - name: commentsOrderMode
-        in: query
-        description: order mode of the comments
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-      - name: tasklistId
-        in: query
-        description: filter by task list
-        type: integer
-      - name: projectId
-        in: query
-        description: filter by project
-        type: integer
-      - name: onlyCompletedTasks
-        in: query
-        description: only completed tasks
-        type: boolean
-        default: "false"
-      - name: isReportDownload
-        in: query
-        description: generate a report document
-        type: boolean
-      - name: includeTime
-        in: query
-        description: include time
-        type: boolean
-      - name: includeTags
-        in: query
-        description: include tags
-        type: boolean
-        default: "true"
-      - name: includePrivateItems
-        in: query
-        description: include private items
-        type: boolean
-        default: "true"
-      - name: includeLateTasks
-        in: query
-        description: include late tasks
-        type: boolean
-      - name: includeEstimatedTime
-        in: query
-        description: include estimated time
-        type: boolean
-        default: "true"
-      - name: includeCustomFields
-        in: query
-        description: include custom fields
-        type: boolean
-        default: "false"
-      - name: includeCompletedTasks
-        in: query
-        description: include completed tasks
-        type: boolean
-        default: "true"
-      - name: includeComments
-        in: query
-        description: include comments
-        type: boolean
-        default: "false"
-      - name: includeCommentAvatars
-        in: query
-        description: include comment avatars
-        type: boolean
-      - name: includeColumns
-        in: query
-        description: include columns
-        type: boolean
-        default: "true"
-      - name: includeAnytimeTasks
-        in: query
-        description: include anytime tasks
-        type: boolean
-      - name: includeAllComments
-        in: query
-        description: include all comments
-        type: boolean
-        default: "false"
-      - name: ignoreStartDates
-        in: query
-        description: ignore task start dates
-        type: boolean
-      - name: groupByTasklists
-        in: query
-        description: group by task lists
-        type: boolean
-      - name: tags
-        in: query
-        description: filter by tag names
-        type: array
-        items:
-          type: string
-      - name: tagIds
-        in: query
-        description: filter by tag ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToUserIds
-        in: query
-        description: filter by assigned user ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToTeamIds
-        in: query
-        description: filter by assigned team ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToCompanyIds
-        in: query
-        description: filter by assigned company ids
-        type: array
-        items:
-          type: integer
-      responses:
-        200:
-          description: 200 OK (no data)
-        400:
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        403:
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:projectId/tasklists.pdf:
-    get:
-      operationId: GET_projects_api_v3_projects_:projectId_tasklists.pdf
-      tags:
-      - TaskLists
-      summary: Generate tasklist report in PDF format
-      description: |-
-        Generates a task list report in PDF format containing all tasks for the
-        provided filters. Only the tasks that the logged-in user can access will be
-        returned.
-      produces:
-      - application/json
-      - application/pdf
-      parameters:
-      - name: taskDate
-        in: query
-        description: filter by task date
-        type: string
-        enum:
-        - all
-        - anytime
-        - completed
-        - created
-        - overdue
-        - today
-        - yesterday
-        - started
-        - tomorrow
-        - thisweek
-        - within7
-        - within14
-        - within30
-        - within365
-        - nodate
-        - noduedate
-        - nostartdate
-        - newTaskDefaults
-        - hasDate
-        default: anytime
-      - name: startDate
-        in: query
-        description: filter by start datetime
-        type: string
-        format: date-time
-      - name: reportFormat
-        in: query
-        description: define the format of the report
-        type: string
-      - name: orderMode
-        in: query
-        description: order mode
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-      - name: orderBy
-        in: query
-        description: order by
-        type: string
-        enum:
-        - startdate
-        - dateadded
-        - priority
-        - project
-        - flattenedtasklist
-        - company
-        - manual
-        - active
-        - completedDatedesc
-        - datecompleted
-        - duestartdate
-        - duestartdatedesc
-        - alldates
-        - alldatesdesc
-        - duedateDESC
-        - tasklistname
-        - tasklistdisplayorder
-        - tasklistid
-        - duedate
-        - dateupdated
-        - taskname
-        default: manual
-      - name: endDate
-        in: query
-        description: filter by end datetime
-        type: string
-        format: date-time
-      - name: commentsOrderMode
-        in: query
-        description: order mode of the comments
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-      - name: tasklistId
-        in: query
-        description: filter by task list
-        type: integer
-      - name: projectId
-        in: query
-        description: filter by project
-        type: integer
-      - name: onlyCompletedTasks
-        in: query
-        description: only completed tasks
-        type: boolean
-        default: "false"
-      - name: isReportDownload
-        in: query
-        description: generate a report document
-        type: boolean
-      - name: includeTime
-        in: query
-        description: include time
-        type: boolean
-      - name: includeTags
-        in: query
-        description: include tags
-        type: boolean
-        default: "true"
-      - name: includePrivateItems
-        in: query
-        description: include private items
-        type: boolean
-        default: "true"
-      - name: includeLateTasks
-        in: query
-        description: include late tasks
-        type: boolean
-      - name: includeEstimatedTime
-        in: query
-        description: include estimated time
-        type: boolean
-        default: "true"
-      - name: includeCustomFields
-        in: query
-        description: include custom fields
-        type: boolean
-        default: "false"
-      - name: includeCompletedTasks
-        in: query
-        description: include completed tasks
-        type: boolean
-        default: "true"
-      - name: includeComments
-        in: query
-        description: include comments
-        type: boolean
-        default: "false"
-      - name: includeCommentAvatars
-        in: query
-        description: include comment avatars
-        type: boolean
-      - name: includeColumns
-        in: query
-        description: include columns
-        type: boolean
-        default: "true"
-      - name: includeAnytimeTasks
-        in: query
-        description: include anytime tasks
-        type: boolean
-      - name: includeAllComments
-        in: query
-        description: include all comments
-        type: boolean
-        default: "false"
-      - name: ignoreStartDates
-        in: query
-        description: ignore task start dates
-        type: boolean
-      - name: groupByTasklists
-        in: query
-        description: group by task lists
-        type: boolean
-      - name: tags
-        in: query
-        description: filter by tag names
-        type: array
-        items:
-          type: string
-      - name: tagIds
-        in: query
-        description: filter by tag ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToUserIds
-        in: query
-        description: filter by assigned user ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToTeamIds
-        in: query
-        description: filter by assigned team ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToCompanyIds
-        in: query
-        description: filter by assigned company ids
-        type: array
-        items:
-          type: integer
-      responses:
-        200:
-          description: 200 OK (no data)
-        400:
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        403:
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:projectId/tasklists.xlsx:
-    get:
-      operationId: GET_projects_api_v3_projects_:projectId_tasklists.xlsx
-      tags:
-      - TaskLists
-      summary: Generate tasklist report in XLSX format
-      description: |-
-        Generates a task list report in XLSX format containing all tasks for the
-        provided filters. Only the tasks that the logged-in user can access will be
-        returned.
-      produces:
-      - application/json
-      - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
-      parameters:
-      - name: taskDate
-        in: query
-        description: filter by task date
-        type: string
-        enum:
-        - all
-        - anytime
-        - completed
-        - created
-        - overdue
-        - today
-        - yesterday
-        - started
-        - tomorrow
-        - thisweek
-        - within7
-        - within14
-        - within30
-        - within365
-        - nodate
-        - noduedate
-        - nostartdate
-        - newTaskDefaults
-        - hasDate
-        default: anytime
-      - name: startDate
-        in: query
-        description: filter by start datetime
-        type: string
-        format: date-time
-      - name: reportFormat
-        in: query
-        description: define the format of the report
-        type: string
-      - name: orderMode
-        in: query
-        description: order mode
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-      - name: orderBy
-        in: query
-        description: order by
-        type: string
-        enum:
-        - startdate
-        - dateadded
-        - priority
-        - project
-        - flattenedtasklist
-        - company
-        - manual
-        - active
-        - completedDatedesc
-        - datecompleted
-        - duestartdate
-        - duestartdatedesc
-        - alldates
-        - alldatesdesc
-        - duedateDESC
-        - tasklistname
-        - tasklistdisplayorder
-        - tasklistid
-        - duedate
-        - dateupdated
-        - taskname
-        default: manual
-      - name: endDate
-        in: query
-        description: filter by end datetime
-        type: string
-        format: date-time
-      - name: commentsOrderMode
-        in: query
-        description: order mode of the comments
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-      - name: tasklistId
-        in: query
-        description: filter by task list
-        type: integer
-      - name: projectId
-        in: query
-        description: filter by project
-        type: integer
-      - name: onlyCompletedTasks
-        in: query
-        description: only completed tasks
-        type: boolean
-        default: "false"
-      - name: isReportDownload
-        in: query
-        description: generate a report document
-        type: boolean
-      - name: includeTime
-        in: query
-        description: include time
-        type: boolean
-      - name: includeTags
-        in: query
-        description: include tags
-        type: boolean
-        default: "true"
-      - name: includePrivateItems
-        in: query
-        description: include private items
-        type: boolean
-        default: "true"
-      - name: includeLateTasks
-        in: query
-        description: include late tasks
-        type: boolean
-      - name: includeEstimatedTime
-        in: query
-        description: include estimated time
-        type: boolean
-        default: "true"
-      - name: includeCustomFields
-        in: query
-        description: include custom fields
-        type: boolean
-        default: "false"
-      - name: includeCompletedTasks
-        in: query
-        description: include completed tasks
-        type: boolean
-        default: "true"
-      - name: includeComments
-        in: query
-        description: include comments
-        type: boolean
-        default: "false"
-      - name: includeCommentAvatars
-        in: query
-        description: include comment avatars
-        type: boolean
-      - name: includeColumns
-        in: query
-        description: include columns
-        type: boolean
-        default: "true"
-      - name: includeAnytimeTasks
-        in: query
-        description: include anytime tasks
-        type: boolean
-      - name: includeAllComments
-        in: query
-        description: include all comments
-        type: boolean
-        default: "false"
-      - name: ignoreStartDates
-        in: query
-        description: ignore task start dates
-        type: boolean
-      - name: groupByTasklists
-        in: query
-        description: group by task lists
-        type: boolean
-      - name: tags
-        in: query
-        description: filter by tag names
-        type: array
-        items:
-          type: string
-      - name: tagIds
-        in: query
-        description: filter by tag ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToUserIds
-        in: query
-        description: filter by assigned user ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToTeamIds
-        in: query
-        description: filter by assigned team ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToCompanyIds
-        in: query
-        description: filter by assigned company ids
-        type: array
-        items:
-          type: integer
-      responses:
-        200:
-          description: 200 OK (no data)
-        400:
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        403:
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:projectId/time.json:
-    get:
-      operationId: GET_projects_api_v3_projects_:projectId_time.json
-      tags:
-      - TimeTracking
-      summary: Get time entries for a specific project
-      description: |-
-        Return logged time entries for a specific project. Only the time entries that
-        the logged-in user can access will be returned.
-      produces:
-      - application/json
-      parameters:
-      - name: updatedAfter
-        in: query
-        description: filter by updated after date
-        type: string
-        format: date-time
-      - name: startDate
-        in: query
-        description: filter by a starting date
-        type: string
-        format: date
-      - name: selectedColumns
-        in: query
-        description: customise the report by selecting columns
-        type: string
-        items: {}
-      - name: reportFormat
-        in: query
-        description: define the format of the report
-        type: string
-      - name: projectStatuses
-        in: query
-        description: filter by project statuses
-        type: string
-        items: {}
-        enum:
-        - active
-        - current
-        - late
-        - upcoming
-        - completed
-        - deleted
-      - name: projectStatus
-        in: query
-        description: filter by project status
-        type: string
-        enum:
-        - active
-        - current
-        - late
-        - upcoming
-        - completed
-        - deleted
-      - name: orderMode
-        in: query
-        description: order mode
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-      - name: orderBy
-        in: query
-        description: sort order
-        type: string
-        enum:
-        - company
-        - date
-        - dateupdated
-        - project
-        - task
-        - tasklist
-        - user
-        default: date
-      - name: invoicedType
-        in: query
-        description: filter by invoiced type
-        type: string
-        enum:
-        - all
-        - invoiced
-        - not-invoiced
-        default: all
-      - name: endDate
-        in: query
-        description: filter by an ending date
-        type: string
-        format: date
-      - name: billableType
-        in: query
-        description: filter by billable type
-        type: string
-        enum:
-        - all
-        - billable
-        - non-billable
-        default: all
-      - name: ticketId
-        in: query
-        description: filter by ticket id
-        type: integer
-      - name: tasklistId
-        in: query
-        description: filter by tasklist id
-        type: integer
-      - name: projectId
-        in: query
-        description: filter by project id
-        type: integer
-      - name: projectHealths
-        in: query
-        description: |-
-          filter by project healths
-
-          0: not set
-          1: bad
-          2: ok
-          3: good
-        type: integer
-        items: {}
-        enum:
-        - "0"
-        - "1"
-        - "2"
-        - "3"
-      - name: pageSize
-        in: query
-        description: number of items in a page
-        type: integer
-        default: "50"
-      - name: page
-        in: query
-        description: page number
-        type: integer
-        default: "1"
-      - name: allocationId
-        in: query
-        description: filter by allocation id
-        type: integer
-      - name: showDeleted
-        in: query
-        description: include deleted items
-        type: boolean
-        default: "false"
-      - name: onlyStarredProjects
-        in: query
-        description: filter by starred projects only
-        type: boolean
-      - name: matchAllTags
-        in: query
-        description: match all tags
-        type: boolean
-      - name: isReportDownload
-        in: query
-        description: generate a report document
-        type: boolean
-      - name: includeArchivedProjects
-        in: query
-        description: include archived projects
-        type: boolean
-        default: "false"
-      - name: taskTagIds
-        in: query
-        description: filter by task tag ids
-        type: array
-        items:
-          type: integer
-      - name: tagIds
-        in: query
-        description: filter by tag ids
-        type: array
-        items:
-          type: integer
-      - name: projectsFromCompanyId
-        in: query
-        description: filter by project company ids
-        type: array
-        items:
-          type: integer
-      - name: projectTagIds
-        in: query
-        description: filter by project tag ids
-        type: array
-        items:
-          type: integer
-      - name: projectOwnerIds
-        in: query
-        description: filter by project owner ids
-        type: array
-        items:
-          type: integer
-      - name: projectIds
-        in: query
-        description: filter by project ids
-        type: array
-        items:
-          type: integer
-      - name: projectCategoryIds
-        in: query
-        description: filter by project category ids
-        type: array
-        items:
-          type: integer
-      - name: include
-        in: query
-        description: include
-        type: array
-        items:
-          type: string
-        enum:
-        - projects
-        - tags
-        - tasks
-        - tasks.parentTasks
-        - tasks.tasklists
-        - users
-      - name: fields[users]
-        in: query
-        type: array
-        items:
-          type: string
-        enum:
-        - id
-        - firstName
-        - lastName
-        - email
-        - companyId
-        - isAdmin
-        - type
-      - name: fields[timelogs]
-        in: query
-        type: array
-        items:
-          type: string
-        enum:
-        - id
-        - dateCreated
-        - minutes
-        - description
-        - timeLogged
-        - billable
-        - deleted
-        - dateDeleted
-        - hasStartTime
-        - dateEdited
-        - deskTicketId
-        - invoiceNumber
-        - userId
-        - taskId
-        - projectId
-        - loggedByUserId
-        - deletedByUserId
-        - editedByUserId
-        - taskIdPreMove
-        - projectBillingInvoiceId
-      - name: fields[tasks]
-        in: query
-        type: array
-        items:
-          type: string
-        enum:
-        - id
-        - name
-        - dateUpdated
-        - parentTaskId
-        - isPrivate
-        - status
-        - tasklistId
-        - startDate
-        - dueDate
-      - name: fields[tasklists]
-        in: query
-        type: array
-        items:
-          type: string
-        enum:
-        - id
-        - name
-        - projectId
-        - milestoneId
-      - name: fields[tags]
-        in: query
-        type: array
-        items:
-          type: string
-        enum:
-        - id
-        - name
-        - color
-        - count
-      - name: fields[projects]
-        in: query
-        type: array
-        items:
-          type: string
-        enum:
-        - id
-        - name
-      - name: companyIds
-        in: query
-        description: filter by company ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToUserIds
-        in: query
-        description: filter by assigned user ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToTeamIds
-        in: query
-        description: filter by assigned team ids
-        type: array
-        items:
-          type: integer
-      - name: assignedToCompanyIds
-        in: query
-        description: filter by assigned company ids
-        type: array
-        items:
-          type: integer
-      responses:
-        200:
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/timelog.TimelogsResponse'
-        400:
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:projectId/time/total.json:
-    get:
-      operationId: GET_projects_api_v3_projects_:projectId_time_total.json
-      tags:
-      - TimeTracking
-      summary: Get timelog totals.
-      produces:
-      - application/json
-      parameters:
-      - name: projectStatuses
-        in: query
-        description: filter by project statuses
-        type: string
-        items: {}
-        enum:
-        - active
-        - current
-        - late
-        - upcoming
-        - completed
-        - deleted
-      - name: projectStatus
-        in: query
-        description: filter by project status
-        type: string
-        enum:
-        - active
-        - current
-        - late
-        - upcoming
-        - completed
-        - deleted
-      - name: userId
-        in: query
-        description: filter by user id
-        type: integer
-      - name: tasklistId
-        in: query
-        description: filter by tasklist id
-        type: integer
-      - name: taskId
-        in: query
-        description: filter by task id
-        type: integer
-      - name: projectId
-        in: query
-        description: filter by project id
-        type: integer
-      - name: projectHealths
-        in: query
-        description: |-
-          filter by project healths
-
-          0: not set
-          1: bad
-          2: ok
-          3: good
-        type: integer
-        items: {}
-        enum:
-        - "0"
-        - "1"
-        - "2"
-        - "3"
-      - name: deskTicketId
-        in: query
-        description: filter by desk ticket id
-        type: integer
-      - name: onlyStarredProjects
-        in: query
-        description: filter by starred projects only
-        type: boolean
-      - name: matchAllTags
-        in: query
-        description: match all tags
-        type: boolean
-      - name: userIds
-        in: query
-        description: filter by user ids
-        type: array
-        items:
-          type: integer
-      - name: projectTagIds
-        in: query
-        description: filter by project tag ids
-        type: array
-        items:
-          type: integer
-      - name: projectOwnerIds
-        in: query
-        description: filter by project owner ids
-        type: array
-        items:
-          type: integer
-      - name: projectIds
-        in: query
-        description: filter by project ids
-        type: array
-        items:
-          type: integer
-      - name: projectCompanyIds
-        in: query
-        description: filter by project company ids
-        type: array
-        items:
-          type: integer
-      - name: projectCategoryIds
-        in: query
-        description: filter by project category ids
-        type: array
-        items:
-          type: integer
-      - name: companyIds
-        in: query
-        description: filter by company ids
-        type: array
-        items:
-          type: integer
-      responses:
-        200:
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/timelog.TotalsResponse'
-        400:
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/:projectIds/updates.json:
-    get:
-      operationId: GET_projects_api_v3_projects_:projectIds_updates.json
-      tags:
-      - ProjectUpdates
-      summary: Get all updates from a specific project
-      description: Return the updates from a specific project.
-      produces:
-      - application/json
-      parameters:
-      - name: projectStatuses
-        in: query
-        description: list of project status
-        type: string
-        items: {}
-      - name: projectStatus
-        in: query
-        description: filter by project status
-        type: string
-      - name: orderMode
-        in: query
-        description: order mode
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-      - name: orderBy
-        in: query
-        description: order by
-        type: string
-        enum:
-        - date
-        - color
-        - health
-        - project
-        - user
-        default: date
-      - name: createdAfter
-        in: query
-        description: filter by creation date
-        type: string
-        format: date-time
-      - name: projectId
-        in: query
-        description: filter by project id
-        type: integer
-      - name: projectHealths
-        in: query
-        description: filter by project health
-        type: integer
-        items: {}
-      - name: projectHealth
-        in: query
-        description: filter by project health (deprecated, use projectHealths)
-        type: integer
-        items: {}
-      - name: pageSize
-        in: query
-        description: number of items in a page
-        type: integer
-        default: "50"
-      - name: page
-        in: query
-        description: page number
-        type: integer
-        default: "1"
-      - name: showDeleted
-        in: query
-        description: include deleted items
-        type: boolean
-        default: "false"
-      - name: reactions
-        in: query
-        description: add reactions to the response
-        type: boolean
-        default: "false"
-      - name: onlyStarredProjects
-        in: query
-        description: filter by starred projects only
-        type: boolean
-      - name: matchAllProjectTags
-        in: query
-        description: match all project tags
-        type: boolean
-      - name: includeArchivedProjects
-        in: query
-        description: include archived projects
-        type: boolean
-      - name: emoji
-        in: query
-        description: parse emojis to unicode
-        type: boolean
-        default: "true"
-      - name: activeOnly
-        in: query
-        description: filter by active
-        type: boolean
-        default: "true"
-      - name: projectTagIds
-        in: query
-        description: filter by project tag ids
-        type: array
-        items:
-          type: integer
-      - name: projectOwnerIds
-        in: query
-        description: filter by project owner ids
-        type: array
-        items:
-          type: integer
-      - name: projectCompanyIds
-        in: query
-        description: filter by company ids
-        type: array
-        items:
-          type: integer
-      - name: projectCategoryIds
-        in: query
-        description: filter by project category ids
-        type: array
-        items:
-          type: integer
-      - name: include
-        in: query
-        description: include
-        type: array
-        items:
-          type: string
-        enum:
-        - projects
-        - createdBy
-        - deletedBy
-        - likes.users
-      - name: fields[users]
-        in: query
-        type: array
-        items:
-          type: string
-        enum:
-        - id
-        - firstName
-        - lastName
-        - email
-        - companyId
-        - isAdmin
-        - type
-      - name: fields[projects]
-        in: query
-        type: array
-        items:
-          type: string
-        enum:
-        - id
-        - name
-      - name: fields[projectUpdates]
-        in: query
-        type: array
-        items:
-          type: string
-        enum:
-        - id
-        - projectId
-        - text
-        - isActive
-        - health
-        - color
-        - dateCreated
-        - deleted
-        - deletedDate
-        - numLikes
-        - reactions
-      responses:
-        200:
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/update.ProjectUpdatesResponse'
-        400:
-          description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
   /projects/api/v3/projects/{projectId}/summary.json:
@@ -15019,6 +14067,1546 @@ paths:
           description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/{projectId}/tasklists.csv:
+    get:
+      operationId: GET_projects_api_v3_projects_{projectId}_tasklists.csv
+      tags:
+      - TaskLists
+      summary: Generate tasklist report in CSV format
+      description: |-
+        Generates a task list report in CSV format containing all tasks for the
+        provided filters. Only the tasks that the logged-in user can access will be
+        returned.
+      produces:
+      - application/json
+      - text/csv
+      parameters:
+      - name: taskDate
+        in: query
+        description: filter by task date
+        type: string
+        enum:
+        - all
+        - anytime
+        - completed
+        - created
+        - overdue
+        - today
+        - yesterday
+        - started
+        - tomorrow
+        - thisweek
+        - within7
+        - within14
+        - within30
+        - within365
+        - nodate
+        - noduedate
+        - nostartdate
+        - newTaskDefaults
+        - hasDate
+        default: anytime
+      - name: startDate
+        in: query
+        description: filter by start datetime
+        type: string
+        format: date-time
+      - name: reportFormat
+        in: query
+        description: define the format of the report
+        type: string
+      - name: orderMode
+        in: query
+        description: order mode
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: orderBy
+        in: query
+        description: order by
+        type: string
+        enum:
+        - startdate
+        - dateadded
+        - priority
+        - project
+        - flattenedtasklist
+        - company
+        - manual
+        - active
+        - completedDatedesc
+        - datecompleted
+        - duestartdate
+        - duestartdatedesc
+        - alldates
+        - alldatesdesc
+        - duedateDESC
+        - tasklistname
+        - tasklistdisplayorder
+        - tasklistid
+        - duedate
+        - dateupdated
+        - taskname
+        default: manual
+      - name: endDate
+        in: query
+        description: filter by end datetime
+        type: string
+        format: date-time
+      - name: commentsOrderMode
+        in: query
+        description: order mode of the comments
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: tasklistId
+        in: query
+        description: filter by task list
+        type: integer
+      - name: projectId
+        in: query
+        description: filter by project
+        type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
+      - name: onlyCompletedTasks
+        in: query
+        description: only completed tasks
+        type: boolean
+        default: "false"
+      - name: isReportDownload
+        in: query
+        description: generate a report document
+        type: boolean
+      - name: includeTime
+        in: query
+        description: include time
+        type: boolean
+      - name: includeTags
+        in: query
+        description: include tags
+        type: boolean
+        default: "true"
+      - name: includePrivateItems
+        in: query
+        description: include private items
+        type: boolean
+        default: "true"
+      - name: includeLateTasks
+        in: query
+        description: include late tasks
+        type: boolean
+      - name: includeEstimatedTime
+        in: query
+        description: include estimated time
+        type: boolean
+        default: "true"
+      - name: includeCustomFields
+        in: query
+        description: include custom fields
+        type: boolean
+        default: "false"
+      - name: includeCompletedTasks
+        in: query
+        description: include completed tasks
+        type: boolean
+        default: "true"
+      - name: includeComments
+        in: query
+        description: include comments
+        type: boolean
+        default: "false"
+      - name: includeCommentAvatars
+        in: query
+        description: include comment avatars
+        type: boolean
+      - name: includeColumns
+        in: query
+        description: include columns
+        type: boolean
+        default: "true"
+      - name: includeAnytimeTasks
+        in: query
+        description: include anytime tasks
+        type: boolean
+      - name: includeAllComments
+        in: query
+        description: include all comments
+        type: boolean
+        default: "false"
+      - name: ignoreStartDates
+        in: query
+        description: ignore task start dates
+        type: boolean
+      - name: groupByTasklists
+        in: query
+        description: group by task lists
+        type: boolean
+      - name: tags
+        in: query
+        description: filter by tag names
+        type: array
+        items:
+          type: string
+      - name: tagIds
+        in: query
+        description: filter by tag ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToUserIds
+        in: query
+        description: filter by assigned user ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToTeamIds
+        in: query
+        description: filter by assigned team ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToCompanyIds
+        in: query
+        description: filter by assigned company ids
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (no data)
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        403:
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/{projectId}/tasklists.html:
+    get:
+      operationId: GET_projects_api_v3_projects_{projectId}_tasklists.html
+      tags:
+      - TaskLists
+      summary: Generate tasklist report in HTML format
+      description: |-
+        Generates a task list report in HTML format containing all tasks for the
+        provided filters. Only the tasks that the logged-in user can access will be
+        returned.
+      produces:
+      - application/json
+      - text/html
+      parameters:
+      - name: taskDate
+        in: query
+        description: filter by task date
+        type: string
+        enum:
+        - all
+        - anytime
+        - completed
+        - created
+        - overdue
+        - today
+        - yesterday
+        - started
+        - tomorrow
+        - thisweek
+        - within7
+        - within14
+        - within30
+        - within365
+        - nodate
+        - noduedate
+        - nostartdate
+        - newTaskDefaults
+        - hasDate
+        default: anytime
+      - name: startDate
+        in: query
+        description: filter by start datetime
+        type: string
+        format: date-time
+      - name: reportFormat
+        in: query
+        description: define the format of the report
+        type: string
+      - name: orderMode
+        in: query
+        description: order mode
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: orderBy
+        in: query
+        description: order by
+        type: string
+        enum:
+        - startdate
+        - dateadded
+        - priority
+        - project
+        - flattenedtasklist
+        - company
+        - manual
+        - active
+        - completedDatedesc
+        - datecompleted
+        - duestartdate
+        - duestartdatedesc
+        - alldates
+        - alldatesdesc
+        - duedateDESC
+        - tasklistname
+        - tasklistdisplayorder
+        - tasklistid
+        - duedate
+        - dateupdated
+        - taskname
+        default: manual
+      - name: endDate
+        in: query
+        description: filter by end datetime
+        type: string
+        format: date-time
+      - name: commentsOrderMode
+        in: query
+        description: order mode of the comments
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: tasklistId
+        in: query
+        description: filter by task list
+        type: integer
+      - name: projectId
+        in: query
+        description: filter by project
+        type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
+      - name: onlyCompletedTasks
+        in: query
+        description: only completed tasks
+        type: boolean
+        default: "false"
+      - name: isReportDownload
+        in: query
+        description: generate a report document
+        type: boolean
+      - name: includeTime
+        in: query
+        description: include time
+        type: boolean
+      - name: includeTags
+        in: query
+        description: include tags
+        type: boolean
+        default: "true"
+      - name: includePrivateItems
+        in: query
+        description: include private items
+        type: boolean
+        default: "true"
+      - name: includeLateTasks
+        in: query
+        description: include late tasks
+        type: boolean
+      - name: includeEstimatedTime
+        in: query
+        description: include estimated time
+        type: boolean
+        default: "true"
+      - name: includeCustomFields
+        in: query
+        description: include custom fields
+        type: boolean
+        default: "false"
+      - name: includeCompletedTasks
+        in: query
+        description: include completed tasks
+        type: boolean
+        default: "true"
+      - name: includeComments
+        in: query
+        description: include comments
+        type: boolean
+        default: "false"
+      - name: includeCommentAvatars
+        in: query
+        description: include comment avatars
+        type: boolean
+      - name: includeColumns
+        in: query
+        description: include columns
+        type: boolean
+        default: "true"
+      - name: includeAnytimeTasks
+        in: query
+        description: include anytime tasks
+        type: boolean
+      - name: includeAllComments
+        in: query
+        description: include all comments
+        type: boolean
+        default: "false"
+      - name: ignoreStartDates
+        in: query
+        description: ignore task start dates
+        type: boolean
+      - name: groupByTasklists
+        in: query
+        description: group by task lists
+        type: boolean
+      - name: tags
+        in: query
+        description: filter by tag names
+        type: array
+        items:
+          type: string
+      - name: tagIds
+        in: query
+        description: filter by tag ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToUserIds
+        in: query
+        description: filter by assigned user ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToTeamIds
+        in: query
+        description: filter by assigned team ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToCompanyIds
+        in: query
+        description: filter by assigned company ids
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (no data)
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        403:
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/{projectId}/tasklists.pdf:
+    get:
+      operationId: GET_projects_api_v3_projects_{projectId}_tasklists.pdf
+      tags:
+      - TaskLists
+      summary: Generate tasklist report in PDF format
+      description: |-
+        Generates a task list report in PDF format containing all tasks for the
+        provided filters. Only the tasks that the logged-in user can access will be
+        returned.
+      produces:
+      - application/json
+      - application/pdf
+      parameters:
+      - name: taskDate
+        in: query
+        description: filter by task date
+        type: string
+        enum:
+        - all
+        - anytime
+        - completed
+        - created
+        - overdue
+        - today
+        - yesterday
+        - started
+        - tomorrow
+        - thisweek
+        - within7
+        - within14
+        - within30
+        - within365
+        - nodate
+        - noduedate
+        - nostartdate
+        - newTaskDefaults
+        - hasDate
+        default: anytime
+      - name: startDate
+        in: query
+        description: filter by start datetime
+        type: string
+        format: date-time
+      - name: reportFormat
+        in: query
+        description: define the format of the report
+        type: string
+      - name: orderMode
+        in: query
+        description: order mode
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: orderBy
+        in: query
+        description: order by
+        type: string
+        enum:
+        - startdate
+        - dateadded
+        - priority
+        - project
+        - flattenedtasklist
+        - company
+        - manual
+        - active
+        - completedDatedesc
+        - datecompleted
+        - duestartdate
+        - duestartdatedesc
+        - alldates
+        - alldatesdesc
+        - duedateDESC
+        - tasklistname
+        - tasklistdisplayorder
+        - tasklistid
+        - duedate
+        - dateupdated
+        - taskname
+        default: manual
+      - name: endDate
+        in: query
+        description: filter by end datetime
+        type: string
+        format: date-time
+      - name: commentsOrderMode
+        in: query
+        description: order mode of the comments
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: tasklistId
+        in: query
+        description: filter by task list
+        type: integer
+      - name: projectId
+        in: query
+        description: filter by project
+        type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
+      - name: onlyCompletedTasks
+        in: query
+        description: only completed tasks
+        type: boolean
+        default: "false"
+      - name: isReportDownload
+        in: query
+        description: generate a report document
+        type: boolean
+      - name: includeTime
+        in: query
+        description: include time
+        type: boolean
+      - name: includeTags
+        in: query
+        description: include tags
+        type: boolean
+        default: "true"
+      - name: includePrivateItems
+        in: query
+        description: include private items
+        type: boolean
+        default: "true"
+      - name: includeLateTasks
+        in: query
+        description: include late tasks
+        type: boolean
+      - name: includeEstimatedTime
+        in: query
+        description: include estimated time
+        type: boolean
+        default: "true"
+      - name: includeCustomFields
+        in: query
+        description: include custom fields
+        type: boolean
+        default: "false"
+      - name: includeCompletedTasks
+        in: query
+        description: include completed tasks
+        type: boolean
+        default: "true"
+      - name: includeComments
+        in: query
+        description: include comments
+        type: boolean
+        default: "false"
+      - name: includeCommentAvatars
+        in: query
+        description: include comment avatars
+        type: boolean
+      - name: includeColumns
+        in: query
+        description: include columns
+        type: boolean
+        default: "true"
+      - name: includeAnytimeTasks
+        in: query
+        description: include anytime tasks
+        type: boolean
+      - name: includeAllComments
+        in: query
+        description: include all comments
+        type: boolean
+        default: "false"
+      - name: ignoreStartDates
+        in: query
+        description: ignore task start dates
+        type: boolean
+      - name: groupByTasklists
+        in: query
+        description: group by task lists
+        type: boolean
+      - name: tags
+        in: query
+        description: filter by tag names
+        type: array
+        items:
+          type: string
+      - name: tagIds
+        in: query
+        description: filter by tag ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToUserIds
+        in: query
+        description: filter by assigned user ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToTeamIds
+        in: query
+        description: filter by assigned team ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToCompanyIds
+        in: query
+        description: filter by assigned company ids
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (no data)
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        403:
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/{projectId}/tasklists.xlsx:
+    get:
+      operationId: GET_projects_api_v3_projects_{projectId}_tasklists.xlsx
+      tags:
+      - TaskLists
+      summary: Generate tasklist report in XLSX format
+      description: |-
+        Generates a task list report in XLSX format containing all tasks for the
+        provided filters. Only the tasks that the logged-in user can access will be
+        returned.
+      produces:
+      - application/json
+      - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      parameters:
+      - name: taskDate
+        in: query
+        description: filter by task date
+        type: string
+        enum:
+        - all
+        - anytime
+        - completed
+        - created
+        - overdue
+        - today
+        - yesterday
+        - started
+        - tomorrow
+        - thisweek
+        - within7
+        - within14
+        - within30
+        - within365
+        - nodate
+        - noduedate
+        - nostartdate
+        - newTaskDefaults
+        - hasDate
+        default: anytime
+      - name: startDate
+        in: query
+        description: filter by start datetime
+        type: string
+        format: date-time
+      - name: reportFormat
+        in: query
+        description: define the format of the report
+        type: string
+      - name: orderMode
+        in: query
+        description: order mode
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: orderBy
+        in: query
+        description: order by
+        type: string
+        enum:
+        - startdate
+        - dateadded
+        - priority
+        - project
+        - flattenedtasklist
+        - company
+        - manual
+        - active
+        - completedDatedesc
+        - datecompleted
+        - duestartdate
+        - duestartdatedesc
+        - alldates
+        - alldatesdesc
+        - duedateDESC
+        - tasklistname
+        - tasklistdisplayorder
+        - tasklistid
+        - duedate
+        - dateupdated
+        - taskname
+        default: manual
+      - name: endDate
+        in: query
+        description: filter by end datetime
+        type: string
+        format: date-time
+      - name: commentsOrderMode
+        in: query
+        description: order mode of the comments
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: tasklistId
+        in: query
+        description: filter by task list
+        type: integer
+      - name: projectId
+        in: query
+        description: filter by project
+        type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
+      - name: onlyCompletedTasks
+        in: query
+        description: only completed tasks
+        type: boolean
+        default: "false"
+      - name: isReportDownload
+        in: query
+        description: generate a report document
+        type: boolean
+      - name: includeTime
+        in: query
+        description: include time
+        type: boolean
+      - name: includeTags
+        in: query
+        description: include tags
+        type: boolean
+        default: "true"
+      - name: includePrivateItems
+        in: query
+        description: include private items
+        type: boolean
+        default: "true"
+      - name: includeLateTasks
+        in: query
+        description: include late tasks
+        type: boolean
+      - name: includeEstimatedTime
+        in: query
+        description: include estimated time
+        type: boolean
+        default: "true"
+      - name: includeCustomFields
+        in: query
+        description: include custom fields
+        type: boolean
+        default: "false"
+      - name: includeCompletedTasks
+        in: query
+        description: include completed tasks
+        type: boolean
+        default: "true"
+      - name: includeComments
+        in: query
+        description: include comments
+        type: boolean
+        default: "false"
+      - name: includeCommentAvatars
+        in: query
+        description: include comment avatars
+        type: boolean
+      - name: includeColumns
+        in: query
+        description: include columns
+        type: boolean
+        default: "true"
+      - name: includeAnytimeTasks
+        in: query
+        description: include anytime tasks
+        type: boolean
+      - name: includeAllComments
+        in: query
+        description: include all comments
+        type: boolean
+        default: "false"
+      - name: ignoreStartDates
+        in: query
+        description: ignore task start dates
+        type: boolean
+      - name: groupByTasklists
+        in: query
+        description: group by task lists
+        type: boolean
+      - name: tags
+        in: query
+        description: filter by tag names
+        type: array
+        items:
+          type: string
+      - name: tagIds
+        in: query
+        description: filter by tag ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToUserIds
+        in: query
+        description: filter by assigned user ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToTeamIds
+        in: query
+        description: filter by assigned team ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToCompanyIds
+        in: query
+        description: filter by assigned company ids
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK (no data)
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        403:
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/{projectId}/time.json:
+    get:
+      operationId: GET_projects_api_v3_projects_{projectId}_time.json
+      tags:
+      - TimeTracking
+      summary: Get time entries for a specific project
+      description: |-
+        Return logged time entries for a specific project. Only the time entries that
+        the logged-in user can access will be returned.
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfter
+        in: query
+        description: filter by updated after date
+        type: string
+        format: date-time
+      - name: startDate
+        in: query
+        description: filter by a starting date
+        type: string
+        format: date
+      - name: selectedColumns
+        in: query
+        description: customise the report by selecting columns
+        type: string
+        items: {}
+      - name: reportFormat
+        in: query
+        description: define the format of the report
+        type: string
+      - name: projectStatuses
+        in: query
+        description: filter by project statuses
+        type: string
+        items: {}
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
+      - name: projectStatus
+        in: query
+        description: filter by project status
+        type: string
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
+      - name: orderMode
+        in: query
+        description: order mode
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: orderBy
+        in: query
+        description: sort order
+        type: string
+        enum:
+        - company
+        - date
+        - dateupdated
+        - project
+        - task
+        - tasklist
+        - user
+        default: date
+      - name: invoicedType
+        in: query
+        description: filter by invoiced type
+        type: string
+        enum:
+        - all
+        - invoiced
+        - not-invoiced
+        default: all
+      - name: endDate
+        in: query
+        description: filter by an ending date
+        type: string
+        format: date
+      - name: billableType
+        in: query
+        description: filter by billable type
+        type: string
+        enum:
+        - all
+        - billable
+        - non-billable
+        default: all
+      - name: ticketId
+        in: query
+        description: filter by ticket id
+        type: integer
+      - name: tasklistId
+        in: query
+        description: filter by tasklist id
+        type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
+      - name: projectId
+        in: query
+        description: filter by project id
+        type: integer
+      - name: projectHealths
+        in: query
+        description: |-
+          filter by project healths
+
+          0: not set
+          1: bad
+          2: ok
+          3: good
+        type: integer
+        items: {}
+        enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
+      - name: pageSize
+        in: query
+        description: number of items in a page
+        type: integer
+        default: "50"
+      - name: page
+        in: query
+        description: page number
+        type: integer
+        default: "1"
+      - name: allocationId
+        in: query
+        description: filter by allocation id
+        type: integer
+      - name: showDeleted
+        in: query
+        description: include deleted items
+        type: boolean
+        default: "false"
+      - name: onlyStarredProjects
+        in: query
+        description: filter by starred projects only
+        type: boolean
+      - name: matchAllTags
+        in: query
+        description: match all tags
+        type: boolean
+      - name: isReportDownload
+        in: query
+        description: generate a report document
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        description: include archived projects
+        type: boolean
+        default: "false"
+      - name: taskTagIds
+        in: query
+        description: filter by task tag ids
+        type: array
+        items:
+          type: integer
+      - name: tagIds
+        in: query
+        description: filter by tag ids
+        type: array
+        items:
+          type: integer
+      - name: projectsFromCompanyId
+        in: query
+        description: filter by project company ids
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        description: filter by project tag ids
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        description: filter by project owner ids
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        description: filter by project ids
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        description: filter by project category ids
+        type: array
+        items:
+          type: integer
+      - name: include
+        in: query
+        description: include
+        type: array
+        items:
+          type: string
+        enum:
+        - projects
+        - tags
+        - tasks
+        - tasks.parentTasks
+        - tasks.tasklists
+        - users
+      - name: fields[users]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - firstName
+        - lastName
+        - email
+        - companyId
+        - isAdmin
+        - type
+      - name: fields[timelogs]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - dateCreated
+        - minutes
+        - description
+        - timeLogged
+        - billable
+        - deleted
+        - dateDeleted
+        - hasStartTime
+        - dateEdited
+        - deskTicketId
+        - invoiceNumber
+        - userId
+        - taskId
+        - projectId
+        - loggedByUserId
+        - deletedByUserId
+        - editedByUserId
+        - taskIdPreMove
+        - projectBillingInvoiceId
+      - name: fields[tasks]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - dateUpdated
+        - parentTaskId
+        - isPrivate
+        - status
+        - tasklistId
+        - startDate
+        - dueDate
+      - name: fields[tasklists]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - projectId
+        - milestoneId
+      - name: fields[tags]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - color
+        - count
+      - name: fields[projects]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+      - name: companyIds
+        in: query
+        description: filter by company ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToUserIds
+        in: query
+        description: filter by assigned user ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToTeamIds
+        in: query
+        description: filter by assigned team ids
+        type: array
+        items:
+          type: integer
+      - name: assignedToCompanyIds
+        in: query
+        description: filter by assigned company ids
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/timelog.TimelogsResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/{projectId}/time/total.json:
+    get:
+      operationId: GET_projects_api_v3_projects_{projectId}_time_total.json
+      tags:
+      - TimeTracking
+      summary: Get timelog totals.
+      produces:
+      - application/json
+      parameters:
+      - name: projectStatuses
+        in: query
+        description: filter by project statuses
+        type: string
+        items: {}
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
+      - name: projectStatus
+        in: query
+        description: filter by project status
+        type: string
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
+      - name: userId
+        in: query
+        description: filter by user id
+        type: integer
+      - name: tasklistId
+        in: query
+        description: filter by tasklist id
+        type: integer
+      - name: taskId
+        in: query
+        description: filter by task id
+        type: integer
+      - name: projectId
+        in: query
+        description: filter by project id
+        type: integer
+      - name: projectId
+        in: path
+        type: integer
+        required: true
+      - name: projectHealths
+        in: query
+        description: |-
+          filter by project healths
+
+          0: not set
+          1: bad
+          2: ok
+          3: good
+        type: integer
+        items: {}
+        enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
+      - name: deskTicketId
+        in: query
+        description: filter by desk ticket id
+        type: integer
+      - name: onlyStarredProjects
+        in: query
+        description: filter by starred projects only
+        type: boolean
+      - name: matchAllTags
+        in: query
+        description: match all tags
+        type: boolean
+      - name: userIds
+        in: query
+        description: filter by user ids
+        type: array
+        items:
+          type: integer
+      - name: projectTagIds
+        in: query
+        description: filter by project tag ids
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        description: filter by project owner ids
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        description: filter by project ids
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        description: filter by project company ids
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        description: filter by project category ids
+        type: array
+        items:
+          type: integer
+      - name: companyIds
+        in: query
+        description: filter by company ids
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/timelog.TotalsResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/{projectIds}/updates.json:
+    get:
+      operationId: GET_projects_api_v3_projects_{projectIds}_updates.json
+      tags:
+      - ProjectUpdates
+      summary: Get all updates from a specific project
+      description: Return the updates from a specific project.
+      produces:
+      - application/json
+      parameters:
+      - name: projectStatuses
+        in: query
+        description: list of project status
+        type: string
+        items: {}
+      - name: projectStatus
+        in: query
+        description: filter by project status
+        type: string
+      - name: orderMode
+        in: query
+        description: order mode
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: orderBy
+        in: query
+        description: order by
+        type: string
+        enum:
+        - date
+        - color
+        - health
+        - project
+        - user
+        default: date
+      - name: createdAfter
+        in: query
+        description: filter by creation date
+        type: string
+        format: date-time
+      - name: projectIds
+        in: path
+        type: integer
+        required: true
+      - name: projectId
+        in: query
+        description: filter by project id
+        type: integer
+      - name: projectHealths
+        in: query
+        description: filter by project health
+        type: integer
+        items: {}
+      - name: projectHealth
+        in: query
+        description: filter by project health (deprecated, use projectHealths)
+        type: integer
+        items: {}
+      - name: pageSize
+        in: query
+        description: number of items in a page
+        type: integer
+        default: "50"
+      - name: page
+        in: query
+        description: page number
+        type: integer
+        default: "1"
+      - name: showDeleted
+        in: query
+        description: include deleted items
+        type: boolean
+        default: "false"
+      - name: reactions
+        in: query
+        description: add reactions to the response
+        type: boolean
+        default: "false"
+      - name: onlyStarredProjects
+        in: query
+        description: filter by starred projects only
+        type: boolean
+      - name: matchAllProjectTags
+        in: query
+        description: match all project tags
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        description: include archived projects
+        type: boolean
+      - name: emoji
+        in: query
+        description: parse emojis to unicode
+        type: boolean
+        default: "true"
+      - name: activeOnly
+        in: query
+        description: filter by active
+        type: boolean
+        default: "true"
+      - name: projectTagIds
+        in: query
+        description: filter by project tag ids
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        description: filter by project owner ids
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        description: filter by company ids
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        description: filter by project category ids
+        type: array
+        items:
+          type: integer
+      - name: include
+        in: query
+        description: include
+        type: array
+        items:
+          type: string
+        enum:
+        - projects
+        - createdBy
+        - deletedBy
+        - likes.users
+      - name: fields[users]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - firstName
+        - lastName
+        - email
+        - companyId
+        - isAdmin
+        - type
+      - name: fields[projects]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+      - name: fields[projectUpdates]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - projectId
+        - text
+        - isActive
+        - health
+        - color
+        - dateCreated
+        - deleted
+        - deletedDate
+        - numLikes
+        - reactions
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/update.ProjectUpdatesResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
   /projects/api/v3/projects/budgets/usages.json:
     get:
       operationId: GET_projects_api_v3_projects_budgets_usages.json
@@ -15045,7 +15633,7 @@ paths:
     put:
       operationId: PUT_projects_api_v3_projects_featuresorder.json
       tags:
-      - Project
+      - Projects
       summary: Sets the default features order to display in tab
       produces:
       - application/json
@@ -16266,10 +16854,15 @@ paths:
       tags:
       - BETA
       x-private: true
-  /projects/api/v3/rates/projects/:projectId.json:
+  /projects/api/v3/rates/projects/{projectId}.json:
     get:
       description: Gets the default rate for specifc project
-      operationId: GET_projects_api_v3_rates_projects_:projectId.json
+      operationId: GET_projects_api_v3_rates_projects_{projectId}.json
+      parameters:
+      - in: path
+        name: projectId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -16291,13 +16884,17 @@ paths:
       consumes:
       - application/json
       description: sets a rate to be the project default rate
-      operationId: PUT_projects_api_v3_rates_projects_:projectId.json
+      operationId: PUT_projects_api_v3_rates_projects_{projectId}.json
       parameters:
       - in: body
         name: rates.Request
         required: true
         schema:
           $ref: '#/definitions/rates.Request'
+      - in: path
+        name: projectId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -16317,10 +16914,15 @@ paths:
       tags:
       - BETA
       x-private: true
-  /projects/api/v3/rates/user/:userId.json:
+  /projects/api/v3/rates/user/{userId}.json:
     get:
       description: Gets the default rate for a specific user
-      operationId: GET_projects_api_v3_rates_user_:userId.json
+      operationId: GET_projects_api_v3_rates_user_{userId}.json
+      parameters:
+      - in: path
+        name: userId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -16338,18 +16940,22 @@ paths:
       tags:
       - BETA
       x-private: true
-  /projects/api/v3/rates/users/:userId.json:
+  /projects/api/v3/rates/users/{userId}.json:
     put:
       consumes:
       - application/json
       description: sets a rate to be the the users default rate
-      operationId: PUT_projects_api_v3_rates_users_:userId.json
+      operationId: PUT_projects_api_v3_rates_users_{userId}.json
       parameters:
       - in: body
         name: rates.Request
         required: true
         schema:
           $ref: '#/definitions/rates.Request'
+      - in: path
+        name: userId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -18030,15 +18636,20 @@ paths:
           description: 409 Conflict
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/tags/:id.json:
+  /projects/api/v3/tags/{tagId}.json:
     get:
-      operationId: GET_projects_api_v3_tags_:id.json
+      operationId: GET_projects_api_v3_tags_{tagId}.json
       tags:
       - Tags
       summary: Get details of an individual tag
       description: Return a specific tag.
       produces:
       - application/json
+      parameters:
+      - name: tagId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK
@@ -18051,7 +18662,7 @@ paths:
         404:
           description: 404 Not Found (no data)
     patch:
-      operationId: PATCH_projects_api_v3_tags_:id.json
+      operationId: PATCH_projects_api_v3_tags_{tagId}.json
       tags:
       - Tags
       summary: Update a single tag
@@ -18068,6 +18679,10 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/tag.Request'
+      - name: tagId
+        in: path
+        type: integer
+        required: true
       responses:
         200:
           description: 200 OK
@@ -18088,7 +18703,7 @@ paths:
           schema:
             $ref: '#/definitions/view.ErrorResponse'
     delete:
-      operationId: DELETE_projects_api_v3_tags_:id.json
+      operationId: DELETE_projects_api_v3_tags_{tagId}.json
       tags:
       - Tags
       summary: Deletes a tag
@@ -18097,6 +18712,11 @@ paths:
         (CONFLICT) will be returned.
       produces:
       - application/json
+      parameters:
+      - name: tagId
+        in: path
+        type: integer
+        required: true
       responses:
         204:
           description: 204 No Content (no data)
@@ -18140,18 +18760,22 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/tasklists/:tasklistId/tasks.json:
+  /projects/api/v3/tasklists/{tasklistId}/tasks.json:
     post:
       consumes:
       - application/json
       description: Create a new task in the provided task list.
-      operationId: POST_projects_api_v3_tasklists_:tasklistId_tasks.json
+      operationId: POST_projects_api_v3_tasklists_{tasklistId}_tasks.json
       parameters:
       - in: body
         name: task.Request
         required: true
         schema:
           $ref: '#/definitions/task.Request'
+      - in: path
+        name: tasklistId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -18821,10 +19445,15 @@ paths:
       tags:
       - Tasks
       x-private: true
-  /projects/api/v3/tasks/:id.json:
+  /projects/api/v3/tasks/{taskId}.json:
     get:
       description: Returns the information about a specific task.
-      operationId: GET_projects_api_v3_tasks_:id.json
+      operationId: GET_projects_api_v3_tasks_{taskId}.json
+      parameters:
+      - in: path
+        name: taskId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -18842,14 +19471,45 @@ paths:
       tags:
       - Tasks
       x-private: true
-  /projects/api/v3/tasks/:taskId/customfields.json:
+    delete:
+      description: Delete a task and its subtasks.
+      operationId: DELETE_projects_api_v3_tasks_{taskId}.json
+      parameters:
+      - in: path
+        name: taskId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: 204 No Content (no data)
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Delete an existing task.
+      tags:
+      - Tasks
+      x-private: true
+  /projects/api/v3/tasks/{taskId}/customfields.json:
     get:
       description: Return all custom field values from a specific task.
-      operationId: GET_projects_api_v3_tasks_:taskId_customfields.json
+      operationId: GET_projects_api_v3_tasks_{taskId}_customfields.json
       parameters:
       - description: filter by task id
         in: query
         name: taskId
+        type: integer
+      - in: path
+        name: taskId
+        required: true
         type: integer
       - default: "50"
         description: number of items in a page
@@ -18944,13 +19604,17 @@ paths:
       consumes:
       - application/json
       description: Add a task custom field value.
-      operationId: POST_projects_api_v3_tasks_:taskId_customfields.json
+      operationId: POST_projects_api_v3_tasks_{taskId}_customfields.json
       parameters:
       - in: body
         name: task.Request
         required: true
         schema:
           $ref: '#/definitions/task.Request'
+      - in: path
+        name: taskId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -18970,10 +19634,19 @@ paths:
       tags:
       - CustomFields
       x-private: true
-  /projects/api/v3/tasks/:taskId/customfields/:id.json:
+  /projects/api/v3/tasks/{taskId}/customfields/{customFieldId}.json:
     get:
       description: Return a specific custom field value from a task.
-      operationId: GET_projects_api_v3_tasks_:taskId_customfields_:id.json
+      operationId: GET_projects_api_v3_tasks_{taskId}_customfields_{customFieldId}.json
+      parameters:
+      - in: path
+        name: taskId
+        required: true
+        type: integer
+      - in: path
+        name: customFieldId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -18995,13 +19668,21 @@ paths:
       consumes:
       - application/json
       description: Edit a task custom field value.
-      operationId: PATCH_projects_api_v3_tasks_:taskId_customfields_:id.json
+      operationId: PATCH_projects_api_v3_tasks_{taskId}_customfields_{customFieldId}.json
       parameters:
       - in: body
         name: task.Request
         required: true
         schema:
           $ref: '#/definitions/task.Request'
+      - in: path
+        name: taskId
+        required: true
+        type: integer
+      - in: path
+        name: customFieldId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -19029,7 +19710,16 @@ paths:
       x-private: true
     delete:
       description: Removes a task custom field value.
-      operationId: DELETE_projects_api_v3_tasks_:taskId_customfields_:id.json
+      operationId: DELETE_projects_api_v3_tasks_{taskId}_customfields_{customFieldId}.json
+      parameters:
+      - in: path
+        name: taskId
+        required: true
+        type: integer
+      - in: path
+        name: customFieldId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -19049,18 +19739,22 @@ paths:
       tags:
       - CustomFields
       x-private: true
-  /projects/api/v3/tasks/:taskId/customfields/bulk/delete.json:
+  /projects/api/v3/tasks/{taskId}/customfields/bulk/delete.json:
     post:
       consumes:
       - application/json
       description: Remove many entries of task custom field values at once.
-      operationId: POST_projects_api_v3_tasks_:taskId_customfields_bulk_delete.json
+      operationId: POST_projects_api_v3_tasks_{taskId}_customfields_bulk_delete.json
       parameters:
       - in: body
         name: task.BulkDeleteRequest
         required: true
         schema:
           $ref: '#/definitions/task.BulkDeleteRequest'
+      - in: path
+        name: taskId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -19080,18 +19774,22 @@ paths:
       tags:
       - CustomFields
       x-private: true
-  /projects/api/v3/tasks/:taskId/customfields/bulk/update.json:
+  /projects/api/v3/tasks/{taskId}/customfields/bulk/update.json:
     post:
       consumes:
       - application/json
       description: Edit many entries of task custom field values at once.
-      operationId: POST_projects_api_v3_tasks_:taskId_customfields_bulk_update.json
+      operationId: POST_projects_api_v3_tasks_{taskId}_customfields_bulk_update.json
       parameters:
       - in: body
         name: task.BulkUpdateRequest
         required: true
         schema:
           $ref: '#/definitions/task.BulkUpdateRequest'
+      - in: path
+        name: taskId
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -19116,6 +19814,37 @@ paths:
       summary: Update many task custom field values at once.
       tags:
       - CustomFields
+      x-private: true
+  /projects/api/v3/tasks/bulk/delete.json:
+    post:
+      consumes:
+      - application/json
+      description: Delete several tasks and their subtasks.
+      operationId: POST_projects_api_v3_tasks_bulk_delete.json
+      parameters:
+      - in: body
+        name: task.DeleteRequest
+        required: true
+        schema:
+          $ref: '#/definitions/task.DeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: 204 No Content (no data)
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "404":
+          description: 404 Not Found (no data)
+      summary: Delete many tasks at once.
+      tags:
+      - Tasks
       x-private: true
   /projects/api/v3/tasks/metrics/complete.json:
     get:
@@ -19157,9 +19886,9 @@ paths:
           description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/teams/:teamId/statuses/timeline.json:
+  /projects/api/v3/teams/{teamId}/statuses/timeline.json:
     get:
-      operationId: GET_projects_api_v3_teams_:teamId_statuses_timeline.json
+      operationId: GET_projects_api_v3_teams_{teamId}_statuses_timeline.json
       tags:
       - PeopleStatus
       summary: Get statuses timeline for a specific team
@@ -19177,6 +19906,10 @@ paths:
         in: query
         description: filter by team
         type: integer
+      - name: teamId
+        in: path
+        type: integer
+        required: true
       - name: pageSize
         in: query
         description: number of items in a page
@@ -19832,9 +20565,9 @@ paths:
           description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/timers/:id.json:
+  /projects/api/v3/timers/{timerId}.json:
     get:
-      operationId: GET_projects_api_v3_timers_:id.json
+      operationId: GET_projects_api_v3_timers_{timerId}.json
       tags:
       - TimeTracking
       summary: Get a specific timer
@@ -19846,6 +20579,10 @@ paths:
         in: query
         description: filter by user id
         type: integer
+      - name: timerId
+        in: path
+        type: integer
+        required: true
       - name: showDeleted
         in: query
         description: filter by task id
@@ -21299,6 +22036,25 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/apierrors.BulkError'
+      included:
+        type: object
+        properties:
+          companies:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Company'
+          projects:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Project'
+          teams:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.Team'
+          users:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.User'
   availability.Response:
     title: Response
     description: Response contains information about a specific availability.
@@ -21851,7 +22607,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/deadline.MilestoneMetricDeadline'
-  apierrors.BulkError:
+  errors.BulkError:
     title: BulkError
     description: |-
       BulkError stores details related to an error on an api request that
@@ -23735,6 +24491,17 @@ definitions:
               $ref: '#/definitions/view.Task'
       meta:
         $ref: '#/definitions/view.Meta'
+  task.DeleteRequest:
+    title: DeleteRequest
+    description: DeleteRequest contains the ids of the tasks that should be removed.
+    type: object
+    properties:
+      taskIds:
+        type: array
+        items:
+          type: integer
+      taskOptions:
+        $ref: '#/definitions/task.CommonOptions'
   task.EditCustomFieldTask:
     title: EditCustomFieldTask
     description: |-
@@ -23756,6 +24523,33 @@ definitions:
         type: integer
       id:
         type: integer
+  task.Options:
+    title: Options
+    description: |-
+      Options contains any options which can be set
+      for the task request
+    type: object
+    properties:
+      everyoneMustDo:
+        type: boolean
+      fireWebhook:
+        type: boolean
+      isTemplate:
+        type: boolean
+      logActivity:
+        type: boolean
+      notify:
+        type: boolean
+      parseInlineTags:
+        type: boolean
+      positionAfterTaskId:
+        type: integer
+      shiftProjectDates:
+        type: boolean
+      useDefaults:
+        type: boolean
+      useNotifyViaTWIM:
+        type: boolean
   task.PendingFile:
     title: PendingFile
     description: PendingFile stores information about a file uploaded on-the-fly.
@@ -23844,24 +24638,7 @@ definitions:
       task:
         $ref: '#/definitions/task.Task'
       taskOptions:
-        type: object
-        properties:
-          everyoneMustDo:
-            type: boolean
-          isTemplate:
-            type: boolean
-          notify:
-            type: boolean
-          parseInlineTags:
-            type: boolean
-          positionAfterTaskId:
-            type: integer
-          shiftProjectDates:
-            type: boolean
-          useDefaults:
-            type: boolean
-          useNotifyViaTWIM:
-            type: boolean
+        $ref: '#/definitions/task.Options'
   task.Response:
     title: Response
     description: Response contains information about a specific task.
@@ -23942,7 +24719,7 @@ definitions:
       customFields:
         type: array
         items:
-          $ref: '#/definitions/task.CustomFieldTask'
+          $ref: '#/definitions/customfieldtask.CustomFieldTask'
       description:
         type: string
       dueAt:
