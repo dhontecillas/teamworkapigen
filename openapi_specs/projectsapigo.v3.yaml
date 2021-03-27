@@ -12547,9 +12547,20 @@ paths:
       tags:
       - Projects
       summary: Sets the the features order to display in tab
+      description: |-
+        Each field must have an index, from 0 to numFeatures -1
+        without repeated numbers to provide the order
+        to display the features
+      consumes:
+      - application/json
       produces:
       - application/json
       parameters:
+      - name: project.FeatureOrder
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/project.FeatureOrder'
       - name: projectId
         in: path
         type: integer
@@ -15635,8 +15646,20 @@ paths:
       tags:
       - Projects
       summary: Sets the default features order to display in tab
+      description: |-
+        Each field must have an index, from 0 to numFeatures -1
+        without repeated numbers to provide the order
+        to display the features
+      consumes:
+      - application/json
       produces:
       - application/json
+      parameters:
+      - name: project.FeatureOrderDefaults
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/project.FeatureOrderDefaults'
       responses:
         200:
           description: 200 OK
@@ -21973,6 +21996,17 @@ definitions:
             type: object
             additionalProperties:
               $ref: '#/definitions/view.AppSetting'
+  arg.CustomField:
+    title: CustomField
+    description: CustomField stores the id, value and operator of the custom field.
+    type: object
+    properties:
+      ID:
+        type: integer
+      Operator:
+        type: string
+      Value:
+        type: string
   assignee.FormAssignee:
     title: FormAssignee
     description: FormAssignee contains all the information returned from a assignee.
@@ -22035,7 +22069,7 @@ definitions:
       errors:
         type: array
         items:
-          $ref: '#/definitions/apierrors.BulkError'
+          $ref: '#/definitions/errors.BulkError'
       included:
         type: object
         properties:
@@ -22607,7 +22641,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/deadline.MilestoneMetricDeadline'
-  apierrors.BulkError:
+  errors.BulkError:
     title: BulkError
     description: |-
       BulkError stores details related to an error on an api request that
@@ -23690,8 +23724,9 @@ definitions:
   project.FeatureOrder:
     title: FeatureOrder
     description: |-
-      FeatureOrder contains the information of the feature
-      order to display in the UI for a project.
+      FeatureOrder is the payload used to set
+      the project features order as we want to appear
+      in the UI tabs selection
     type: object
     properties:
       billing:
@@ -23705,10 +23740,6 @@ definitions:
       files:
         type: integer
       gantt:
-        type: integer
-      id:
-        type: integer
-      installationId:
         type: integer
       links:
         type: integer
@@ -23724,7 +23755,48 @@ definitions:
         type: integer
       people:
         type: integer
-      projectId:
+      risks:
+        type: integer
+      settings:
+        type: integer
+      table:
+        type: integer
+      time:
+        type: integer
+  project.FeatureOrderDefaults:
+    title: FeatureOrderDefaults
+    description: |-
+      FeatureOrderDefaults is the payload used to set
+      the defaults for all projects feature order, and
+      allows to also update the projects that have
+      an explicitly set defaults
+    type: object
+    properties:
+      billing:
+        type: integer
+      board:
+        type: integer
+      comments:
+        type: integer
+      dashboard:
+        type: integer
+      files:
+        type: integer
+      gantt:
+        type: integer
+      links:
+        type: integer
+      list:
+        type: integer
+      messages:
+        type: integer
+      milestones:
+        type: integer
+      notebooks:
+        type: integer
+      numVisibleTabs:
+        type: integer
+      people:
         type: integer
       risks:
         type: integer
@@ -24459,6 +24531,17 @@ definitions:
     properties:
       columnId:
         type: integer
+  task.CommonOptions:
+    title: CommonOptions
+    description: CommonOptions contains any options common to most task endpoints
+    type: object
+    properties:
+      fireWebhook:
+        type: boolean
+      logActivity:
+        type: boolean
+      useNotifyViaTWIM:
+        type: boolean
   task.CustomFieldTask:
     title: CustomFieldTask
     description: CustomFieldTask contains all the information returned from a customfield.
@@ -24477,7 +24560,7 @@ definitions:
       customfieldTasks:
         type: array
         items:
-          $ref: '#/definitions/task.CustomFieldTask'
+          $ref: '#/definitions/view.CustomFieldTask'
       included:
         type: object
         properties:
@@ -24523,18 +24606,6 @@ definitions:
         type: integer
       id:
         type: integer
-  task.CommonOptions:
-    title: CommonOptions
-    description: |-
-      CommonOptions contains common options
-    type: object
-    properties:
-      fireWebhook:
-        type: boolean
-      logActivity:
-        type: boolean
-      useNotifyViaTWIM:
-        type: boolean
   task.Options:
     title: Options
     description: |-
@@ -24731,7 +24802,7 @@ definitions:
       customFields:
         type: array
         items:
-          $ref: '#/definitions/customfieldtask.CustomFieldTask'
+          $ref: '#/definitions/task.CustomFieldTask'
       description:
         type: string
       dueAt:
@@ -25592,7 +25663,7 @@ definitions:
       projectId:
         type: integer
       value: {}
-  customfieldtask.CustomFieldTask:
+  view.CustomFieldTask:
     title: CustomFieldTask
     description: |-
       CustomFieldTask contains all the information returned from a task customfield
