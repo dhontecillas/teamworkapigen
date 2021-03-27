@@ -12520,9 +12520,9 @@ paths:
       tags:
       - CustomFields
       x-private: true
-  /projects/api/v3/projects/{projectId}/featuresorder.json:
+  /projects/api/v3/projects/{projectId}/featureorder.json:
     get:
-      operationId: GET_projects_api_v3_projects_{projectId}_featuresorder.json
+      operationId: GET_projects_api_v3_projects_{projectId}_featureorder.json
       tags:
       - Projects
       summary: Returns a project features order to display in tab
@@ -12543,7 +12543,7 @@ paths:
           schema:
             $ref: '#/definitions/view.ErrorResponse'
     put:
-      operationId: PUT_projects_api_v3_projects_{projectId}_featuresorder.json
+      operationId: PUT_projects_api_v3_projects_{projectId}_featureorder.json
       tags:
       - Projects
       summary: Sets the the features order to display in tab
@@ -15640,9 +15640,9 @@ paths:
             $ref: '#/definitions/view.ErrorResponse'
         404:
           description: 404 Not Found (no data)
-  /projects/api/v3/projects/featuresorder.json:
+  /projects/api/v3/projects/featureorder.json:
     put:
-      operationId: PUT_projects_api_v3_projects_featuresorder.json
+      operationId: PUT_projects_api_v3_projects_featureorder.json
       tags:
       - Projects
       summary: Sets the default features order to display in tab
