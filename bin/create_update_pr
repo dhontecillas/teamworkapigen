@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# export TMPDIR="TMP_PR_${HOME}/$(date +%Y%m%d_%H%m%S)"
+export CURDATE=$(date +%Y%m%d_%H%m%S)
+export CURDIR=$(pwd)
+export TMPDIR="/data/TMP_PR_${HOME}/$CURDATE"
+
+mkdir -p $TMPDIR
+
+git config --global user.email $GITHUB_USER_EMAIL
+git config --global user.name $GITHUB_USER_NAME
+
+if [ -z "$GITHUB_ID_RSA" ]
+then
+    echo "NO ID RSA $GITHUB_ID_RSA"
+    exit
+else
+    mkdir -p $HOME/.ssh
+    echo "$GITHUB_ID_RSA" > $HOME/.ssh/id_rsa
+    chmod 600 $HOME/.ssh/id_rsa
+    # echo "Host *" > $HOME/.ssh/config
+    echo "StrictHostKeyChecking no" >> $HOME/.ssh/config
+    echo "Config ;"
+    cat $HOME/.ssh/config
+fi
+
+if [ -z "$GITHUB_NEW_BRANCH" ]
+then
+    export GITHUB_NEW_BRANCH="update/swagger_$CURDATE"
+fi
+
+# echo $GITHUB_TOKEN | gh login --with-token
+cd $TMPDIR
+git clone git@github.com:Teamwork/projectsapigo.git $TMPDIR
+git checkout -b $GITHUB_NEW_BRANCH
+
+if [ -v "$V3SWAGGER" ]
+then
+    echo "NO V3 update"
+else
+    cp $V3SWAGGER ./openapi_specs/projectsapigo.v3.yaml
+    git add ./openapi_specs/projectsapigo.v3.yaml
+    git commit -m 'add updated v3 openapi spec'
+    git push -u origin $GITHUB_NEW_BRANCH
+fi
+
+gh pr create --base main --head $GITHUB_NEW_BRANCH \
+    --title "Update OpenAPI Spec" \
+    --body "Update OpenAPI Spec"
+
+cd $CURDIR
+rm -rf $TMPDIR
