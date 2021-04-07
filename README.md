@@ -34,11 +34,6 @@ What you will need:
 - Your **github user email and name** to setup git to use those
     when creating the branch for PR.
 
-- A **private key** (from a public / private key) for your user that has
-    permissions to clone, and create a branch with updated files and
-    push that branch into the repo. (TODO: Another option could
-    be fork the project, and create a PR from a separate repository)
-
 - A **personal github token**, to access the github token, that will
     allow to create a Pull Request.
 
@@ -48,7 +43,6 @@ Variables to be set:
 export GITHUB_TOKEN="[HERE_YOUR_GENERATED_TOKEN]"
 export GITHUB_USER_EMAIL="dhontecillas@gmail.com" \
 export GITHUB_USER_NAME="David Hontecillas" \
-export GITHUB_ID_RSA=$(cat ~/.ssh/id_rsa)
 export V1SWAGGER="/data/swagger.v1.yaml"
 export V2SWAGGER="/data/swagger.v2.yaml"
 export V3SWAGGER="/data/swagger.v3.yaml"

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # check that there all actual changes to apply
-if [ -z "$V1SWAGGER" && --z "$V2SWAGGER" && "$V3SWAGGER" && "$PMSWAGGER"]
+if [[ -z "$V1SWAGGER" && -z "$V2SWAGGER" && -z "$V3SWAGGER" && -z "$PMSWAGGER" ]]
 then
     echo "No openapi spec to update"
     exit 0
@@ -17,20 +17,6 @@ mkdir -p $TMPDIR
 git config --global user.email $GITHUB_USER_EMAIL
 git config --global user.name $GITHUB_USER_NAME
 
-if [ -z "$GITHUB_ID_RSA" ]
-then
-    echo "NO ID RSA $GITHUB_ID_RSA"
-    exit
-else
-    mkdir -p $HOME/.ssh
-    echo "$GITHUB_ID_RSA" > $HOME/.ssh/id_rsa
-    chmod 600 $HOME/.ssh/id_rsa
-    # echo "Host *" > $HOME/.ssh/config
-    echo "StrictHostKeyChecking no" >> $HOME/.ssh/config
-    echo "Config:"
-    cat $HOME/.ssh/config
-fi
-
 if [ -z "$GITHUB_NEW_BRANCH" ]
 then
     export GITHUB_NEW_BRANCH="update/swagger_$CURDATE"
@@ -38,7 +24,7 @@ fi
 
 # echo $GITHUB_TOKEN | gh login --with-token
 cd $TMPDIR
-git clone git@github.com:dhontecillas/teamworkapigen.git $TMPDIR
+git clone https://${GITHUB_TOKEN}@github.com/dhontecillas/teamworkapigen.git $TMPDIR
 git checkout -b $GITHUB_NEW_BRANCH
 
 if [ -z "$V3SWAGGER" ]
@@ -94,4 +80,4 @@ gh pr create --base main --head $GITHUB_NEW_BRANCH \
     --body "Update OpenAPI Spec"
 
 cd $CURDIR
-# rm -rf $TMPDIR
+rm -rf $TMPDIR
