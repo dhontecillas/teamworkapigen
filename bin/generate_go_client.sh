@@ -11,10 +11,10 @@ set -e
 
 GENLANG=go
 export CURDATE=$(date +%Y%m%d_%H%m%S)
-export THISDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+export PROJDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && cd .. && pwd )"
 
 echo "************************"
-echo "This dir: $THISDIR"
+echo "This dir: $PROJDIR"
 echo "PWS: $PWD"
 echo "************************"
 
@@ -26,11 +26,11 @@ fi
 docker pull openapitools/openapi-generator-cli:v5.1.0
 
 # delete any existing files from any previous generation process
-rm -rf $THISDIR/sdks/$GENLANG
+rm -rf $PROJDIR/sdks/$GENLANG
 
 for spec in "project-manager" "projectsapigo.v1" "projectsapigo.v2" "projectsapigo.v3"
 do
-mkdir -p $THISDIR/sdks/$GENLANG/$spec
+mkdir -p $PROJDIR/sdks/$GENLANG/$spec
 docker run --rm -u 1000:1000 \
     -v $PWD:/local \
     openapitools/openapi-generator-cli:v5.1.0 generate \
@@ -41,20 +41,20 @@ docker run --rm -u 1000:1000 \
 done
 
 # remove the module files created by the generator
-find $THISDIR/sdks/go -name 'go.mod' | xargs rm
-find $THISDIR/sdks/go -name 'go.sum' | xargs rm
+find $PROJDIR/sdks/go -name 'go.mod' | xargs rm
+find $PROJDIR/sdks/go -name 'go.sum' | xargs rm
 
 
 git clone https://${GITHUB_TOKEN}@github.com/dhontecillas/teamworkapigoclient.git $TMPDIR
 cd $TMPDIR
 
 rm -rf pmv1
-mv $THISDIR/sdks/go/project-manager ./pmv1
+mv $PROJDIR/sdks/go/project-manager ./pmv1
 rm -rf projv1
-mv $THISDIR/sdks/go/projectsapigo.v1 ./projv1
+mv $PROJDIR/sdks/go/projectsapigo.v1 ./projv1
 rm -rf projv2
-mv $THISDIR/sdks/go/projectsapigo.v2 ./projv2
+mv $PROJDIR/sdks/go/projectsapigo.v2 ./projv2
 rm -rf projv3
-mv $THISDIR/sdks/go/projectsapigo.v3 ./projv3
+mv $PROJDIR/sdks/go/projectsapigo.v3 ./projv3
 
 go build ./examples/createtimelog
