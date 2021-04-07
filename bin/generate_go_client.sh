@@ -27,7 +27,7 @@ for spec in "project-manager" "projectsapigo.v1" "projectsapigo.v2" "projectsapi
 do
 mkdir -p $THISDIR/sdks/$GENLANG/$spec
 docker run --rm -u 1000:1000 \
-    -v ${PWD}:/local \
+    -v go/src/github.com/teamwork/teamworkapigen:/local \
     openapitools/openapi-generator-cli:v5.1.0 generate \
     -i /local/openapi_specs/$spec.yaml \
     -g $GENLANG \

@@ -16,12 +16,12 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./go/src/github.com/teamwork/projectsapigo
+        working-directory: ./go/src/github.com/teamwork/teamworkapigen
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0 # we need the repo history to see what packages changed
-          path: go/src/github.com/teamwork/projectsapigo
+          path: go/src/github.com/teamwork/teamworkapigen
 
       - uses: actions/setup-go@v2
         with:
