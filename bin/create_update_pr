@@ -10,7 +10,7 @@ fi
 # export TMPDIR="TMP_PR_${HOME}/$(date +%Y%m%d_%H%m%S)"
 export CURDATE=$(date +%Y%m%d_%H%m%S)
 export CURDIR=$(pwd)
-export TMPDIR="/data/TMP_PR_$CURDATE"
+export TMPDIR="$HOME/data/TMP_PR_$CURDATE"
 
 mkdir -p $TMPDIR
 
