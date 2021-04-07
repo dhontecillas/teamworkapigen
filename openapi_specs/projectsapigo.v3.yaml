@@ -4918,6 +4918,7 @@ paths:
       - description: include
         enum:
         - users
+        - users.companies
         - companies
         - companies.users
         - teams
@@ -8263,6 +8264,15 @@ paths:
         description: filter by showing only locked notebooks
         type: boolean
         default: "false"
+      - name: includeContents
+        in: query
+        description: include contents.
+        type: boolean
+        default: "true"
+      - name: includeArchivedProjects
+        in: query
+        description: include archived projects
+        type: boolean
       - name: getEmoji
         in: query
         description: parse Emoji's
@@ -9581,6 +9591,10 @@ paths:
         in: query
         description: match all project tags
         type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
+        type: boolean
       - name: isReportDownload
         in: query
         description: generate a report document
@@ -9823,6 +9837,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK (no data)
@@ -9997,6 +10017,10 @@ paths:
         in: query
         description: match all project tags
         type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
+        type: boolean
       - name: isReportDownload
         in: query
         description: generate a report document
@@ -10239,6 +10263,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK (no data)
@@ -10411,6 +10441,10 @@ paths:
         in: query
         description: match all project tags
         type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
+        type: boolean
       - name: isReportDownload
         in: query
         description: generate a report document
@@ -10653,6 +10687,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK
@@ -10829,6 +10869,10 @@ paths:
         in: query
         description: match all project tags
         type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
+        type: boolean
       - name: isReportDownload
         in: query
         description: generate a report document
@@ -11071,6 +11115,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK (no data)
@@ -11245,6 +11295,10 @@ paths:
         in: query
         description: match all project tags
         type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
+        type: boolean
       - name: isReportDownload
         in: query
         description: generate a report document
@@ -11487,6 +11541,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK (no data)
@@ -11659,6 +11719,10 @@ paths:
         in: query
         description: match all project tags
         type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
+        type: boolean
       - name: isReportDownload
         in: query
         description: generate a report document
@@ -11901,6 +11965,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK
@@ -12047,6 +12117,10 @@ paths:
       - description: match all project tags
         in: query
         name: matchAllProjectTags
+        type: boolean
+      - description: match all excluded project tags
+        in: query
+        name: matchAllExcludedTags
         type: boolean
       - default: "false"
         description: generate a report document
@@ -12289,6 +12363,12 @@ paths:
         items:
           type: string
         name: fields[companies]
+        type: array
+      - description: exclude by project tag ids
+        in: query
+        items:
+          type: integer
+        name: excludeTagIds
         type: array
       produces:
       - application/json
@@ -16358,6 +16438,10 @@ paths:
         in: query
         description: match all project tags
         type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
+        type: boolean
       - name: isReportDownload
         in: query
         description: generate a report document
@@ -16600,6 +16684,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK
@@ -26111,6 +26201,7 @@ definitions:
       contentHTML:
         type: string
       contents:
+        description: can be optionally hidden on lists
         type: string
       createdAt:
         type: string
