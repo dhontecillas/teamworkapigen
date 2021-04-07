@@ -13,8 +13,10 @@ GENLANG=go
 export CURDATE=$(date +%Y%m%d_%H%m%S)
 export THISDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+echo "************************"
 echo "This dir: $THISDIR"
 echo "PWS: $PWD"
+echo "************************"
 
 if [[ -z "$TMPDIR" ]]
 then
