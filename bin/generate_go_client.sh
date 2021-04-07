@@ -13,6 +13,9 @@ GENLANG=go
 export CURDATE=$(date +%Y%m%d_%H%m%S)
 export THISDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+echo "This dir: $THISDIR"
+echo "PWS: $PWD"
+
 if [[ -z "$TMPDIR" ]]
 then
     export TMPDIR="$HOME/TMP_$CURDATE"
@@ -27,7 +30,7 @@ for spec in "project-manager" "projectsapigo.v1" "projectsapigo.v2" "projectsapi
 do
 mkdir -p $THISDIR/sdks/$GENLANG/$spec
 docker run --rm -u 1000:1000 \
-    -v go/src/github.com/teamwork/teamworkapigen:/local \
+    -v ${PWD}/go/src/github.com/teamwork/teamworkapigen:/local \
     openapitools/openapi-generator-cli:v5.1.0 generate \
     -i /local/openapi_specs/$spec.yaml \
     -g $GENLANG \
