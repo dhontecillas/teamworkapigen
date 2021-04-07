@@ -13,12 +13,5 @@ COPY bin/gh /usr/bin
 
 RUN install_packages ca-certificates curl git openssh-client
 
-# RUN apt-get update
-# RUN apt-get install -y gnupg
-# RUN apt-get install -y software-properties-common
-# RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
-# RUN apt-add-repository https://cli.github.com/packages
-# RUN apt-get update
-# RUN apt-get install -y gh
 
 CMD ["bash", "/create_update_pr"]

@@ -12,7 +12,9 @@ THISDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 for spec in "project-manager" "projectsapigo.v1" "projectsapigo.v2" "projectsapigo.v3"
 do
 mkdir -p $THISDIR/sdks/$GENLANG/$spec
-docker run --rm -u 1000:1000 -v ${PWD}:/local openapitools/openapi-generator-cli generate \
+docker run --rm -u 1000:1000 \
+    -v ${PWD}:/local \
+    openapitools/openapi-generator-cli generate \
     -i /local/openapi_specs/$spec.yaml \
     -g $GENLANG \
     -c /local/configs/$GENLANG/$spec.json \
