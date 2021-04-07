@@ -28,7 +28,7 @@ do
 mkdir -p $THISDIR/sdks/$GENLANG/$spec
 docker run --rm -u 1000:1000 \
     -v ${PWD}:/local \
-    openapitools/openapi-generator-cli generate \
+    openapitools/openapi-generator-cli:v5.1.0 generate \
     -i /local/openapi_specs/$spec.yaml \
     -g $GENLANG \
     -c /local/configs/$GENLANG/$spec.json \
