@@ -1,5 +1,4 @@
-
-
+# G
 Go Config options:
 
 
@@ -26,3 +25,37 @@ Python Config options:
 - **generateSourceCodeOnly**: Specifies that only a library source code is to be generated. (Default: false)
 - **useNose**: use the nose test framework (Default: false)
 - **library**: library template (sub-template) to use: asyncio, tornado, urllib3 (Default: urllib3)
+
+
+# Creating Update PRs automatically
+
+What you will need:
+
+- Your **github user email and name** to setup git to use those
+    when creating the branch for PR.
+
+- A **personal github token**, to access the github token, that will
+    allow to create a Pull Request.
+
+Variables to be set:
+
+```
+export GITHUB_TOKEN="[HERE_YOUR_GENERATED_TOKEN]"
+export GITHUB_USER_EMAIL="dhontecillas@gmail.com" \
+export GITHUB_USER_NAME="David Hontecillas" \
+export V1SWAGGER="/data/swagger.v1.yaml"
+export V2SWAGGER="/data/swagger.v2.yaml"
+export V3SWAGGER="/data/swagger.v3.yaml"
+export PMSWAGGER="/data/swagger.pm.yaml"
+```
+
+Pull the docker image with: `docker pull dhontecillas/teamworkapigenpr:v0.1`
+
+**Or** build the docker image from local source with: `make builddockerupdater`
+
+
+Use the docker image to update once you have your env vars set:
+
+```
+make runupdater
+```

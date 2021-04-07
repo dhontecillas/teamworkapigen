@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# check that there all actual changes to apply
+if [[ -z "$V1SWAGGER" && -z "$V2SWAGGER" && -z "$V3SWAGGER" && -z "$PMSWAGGER" ]]
+then
+    echo "No openapi spec to update"
+    exit 0
+fi
+
+# export TMPDIR="TMP_PR_${HOME}/$(date +%Y%m%d_%H%m%S)"
+export CURDATE=$(date +%Y%m%d_%H%m%S)
+export CURDIR=$(pwd)
+export TMPDIR="/data/TMP_PR_$CURDATE"
+
+mkdir -p $TMPDIR
+
+git config --global user.email $GITHUB_USER_EMAIL
+git config --global user.name $GITHUB_USER_NAME
+
+if [ -z "$GITHUB_NEW_BRANCH" ]
+then
+    export GITHUB_NEW_BRANCH="update/swagger_$CURDATE"
+fi
+
+# echo $GITHUB_TOKEN | gh login --with-token
+cd $TMPDIR
+git clone https://${GITHUB_TOKEN}@github.com/dhontecillas/teamworkapigen.git $TMPDIR
+git checkout -b $GITHUB_NEW_BRANCH
+
+if [ -z "$V3SWAGGER" ]
+then
+    echo "NO V3 update"
+else
+    echo "from dir: $(pwd)"
+    echo "cp $V3SWAGGER ./openapi_specs/projectsapigo.v3.yaml"
+    cp $V3SWAGGER ./openapi_specs/projectsapigo.v3.yaml
+    git add ./openapi_specs/projectsapigo.v3.yaml
+    git commit -m 'add updated v3 openapi spec'
+    git push -u origin $GITHUB_NEW_BRANCH
+fi
+
+if [ -z "$V2SWAGGER" ]
+then
+    echo "NO V2 update"
+else
+    echo "from dir: $(pwd)"
+    echo "cp $V2SWAGGER ./openapi_specs/projectsapigo.v2.yaml"
+    cp $V2SWAGGER ./openapi_specs/projectsapigo.v2.yaml
+    git add ./openapi_specs/projectsapigo.v2.yaml
+    git commit -m 'add updated v3 openapi spec'
+    git push -u origin $GITHUB_NEW_BRANCH
+fi
+
+if [ -z "$V1SWAGGER" ]
+then
+    echo "NO V1 update"
+else
+    echo "from dir: $(pwd)"
+    echo "cp $V1SWAGGER ./openapi_specs/projectsapigo.v1.yaml"
+    cp $V1SWAGGER ./openapi_specs/projectsapigo.v1.yaml
+    git add ./openapi_specs/projectsapigo.v1.yaml
+    git commit -m 'add updated v2 openapi spec'
+    git push -u origin $GITHUB_NEW_BRANCH
+fi
+
+if [ -z "$PMSWAGGER" ]
+then
+    echo "NO PM update"
+else
+    echo "from dir: $(pwd)"
+    echo "cp $PMSWAGGER ./openapi_specs/projectsapigo.pm.yaml"
+    cp $PMSWAGGER ./openapi_specs/projectsapigo.pm.yaml
+    git add ./openapi_specs/projectsapigo.pm.yaml
+    git commit -m 'add updated pm openapi spec'
+    git push -u origin $GITHUB_NEW_BRANCH
+fi
+
+gh pr create --base main --head $GITHUB_NEW_BRANCH \
+    --title "Update OpenAPI Spec" \
+    --body "Update OpenAPI Spec"
+
+cd $CURDIR
+rm -rf $TMPDIR
