@@ -30,7 +30,7 @@ then
 fi
 
 docker pull $OPENAPIGEN
-docker pull golang-1.16-buster
+docker pull golang:1.16-buster
 
 # delete any existing files from any previous generation process
 rm -rf $PROJDIR/sdks/$GENLANG
@@ -67,6 +67,6 @@ mv $PROJDIR/sdks/go/projectsapigo.v3 ./projv3
 docker run --rm \
     -v $TMPDIR:/apps \
     -w /apps \
-    golang-1.16-buster \
+    golang:1.16-buster \
     go build -v ./examples/createtimelog \
     -o createtimelog
