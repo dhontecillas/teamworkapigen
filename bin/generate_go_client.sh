@@ -67,5 +67,12 @@ docker run --rm \
     -v $TMPDIR:/apps \
     -w /apps \
     golang:1.16-buster \
-    go build -v ./examples/createtimelog \
+    go mod download \
+    -o createtimelog
+
+docker run --rm \
+    -v $TMPDIR:/apps \
+    -w /apps \
+    golang:1.16-buster \
+    go build ./examples/createtimelog \
     -o createtimelog
