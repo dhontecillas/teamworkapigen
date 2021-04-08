@@ -33,7 +33,7 @@ rm -rf $PROJDIR/sdks/$GENLANG
 for spec in "project-manager" "projectsapigo.v1" "projectsapigo.v2" "projectsapigo.v3"
 do
 mkdir -p $PROJDIR/sdks/$GENLANG/$spec
-docker run --rm -u 1000:1000 \
+docker run --rm \
     -v $PWD:/local \
     openapitools/openapi-generator-cli:v5.1.0 generate \
     -i /local/openapi_specs/$spec.yaml \
