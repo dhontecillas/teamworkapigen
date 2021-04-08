@@ -20,12 +20,15 @@ echo "CURDIR: $CURDIR"
 echo "PWD: $PWD"
 echo "************************"
 
+# export OPENAPIGEN="openapitools/openapi-generator-cli:v5.1.0"
+export OPENAPIGEN="dhontecillas/openapi-generator-cli:v0.1"
+
 if [[ -z "$TMPDIR" ]]
 then
     export TMPDIR="$HOME/TMP_$CURDATE"
 fi
 
-docker pull openapitools/openapi-generator-cli:v5.1.0
+docker pull $OPENAPIGEN
 
 # delete any existing files from any previous generation process
 rm -rf $PROJDIR/sdks/$GENLANG
@@ -35,7 +38,7 @@ do
 mkdir -p $PROJDIR/sdks/$GENLANG/$spec
 docker run --rm \
     -v $PWD:/local \
-    openapitools/openapi-generator-cli:v5.1.0 generate \
+    $OPENAPIGEN generate \
     -i /local/openapi_specs/$spec.yaml \
     -g $GENLANG \
     -c /local/configs/$GENLANG/$spec.json \
