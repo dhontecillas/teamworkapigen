@@ -11,11 +11,13 @@ set -e
 
 GENLANG=go
 export CURDATE=$(date +%Y%m%d_%H%m%S)
+export CURDIR=$PWD
 export PROJDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && cd .. && pwd )"
 
 echo "************************"
-echo "This dir: $PROJDIR"
-echo "PWS: $PWD"
+echo "PROJDIR: $PROJDIR"
+echo "CURDIR: $CURDIR"
+echo "PWD: $PWD"
 echo "************************"
 
 if [[ -z "$TMPDIR" ]]
