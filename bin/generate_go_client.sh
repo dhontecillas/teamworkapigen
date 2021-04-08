@@ -25,7 +25,7 @@ export OPENAPIGEN="dhontecillas/openapi-generator-cli:v0.1"
 
 if [[ -z "$TMPDIR" ]]
 then
-    export TMPDIR="$HOME/TMP_$CURDATE"
+    export TMPDIR="$HOME/GoBuild/$CURDATE"
 fi
 
 docker pull $OPENAPIGEN
