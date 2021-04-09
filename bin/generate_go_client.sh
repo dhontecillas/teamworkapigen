@@ -79,4 +79,23 @@ docker run --rm \
     -v $TMPDIR:/apps \
     -w /apps \
     golang:1.16-buster \
-    go build -o createtimelog ./examples/createtimelog 
+    go build -o createtimelog ./examples/createtimelog
+
+CREATE_PR="true"
+if ! [[ -z "CREATE_PR" ]]
+then
+    echo "Commiting to a new branch"
+    export GO_CLIENT_BRANCH="update/at_$DATE"
+    export GO_CLIENT_MSG="Update API at $DATE"
+    git checkout -b GO_CLIENT_BRANCH
+    git add ./pmv1
+    git add ./projv1
+    git add ./projv2
+    git add ./projv3
+    git commit -am "GO_CLIENT_MSG"
+    git push -u origin $GO_CLIENT_BRANCH
+    gh pr create --base main \
+        --head $GO_CLIENT_BRANCH \
+        --title "$GO_CLIENT_MSG" \
+        --body "$GO_CLIENT_MSG"
+fi
