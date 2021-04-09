@@ -18,6 +18,7 @@ echo "************************"
 echo "PROJDIR: $PROJDIR"
 echo "CURDIR: $CURDIR"
 echo "PWD: $PWD"
+echo "GH: $GITHUB_TOKEN"
 echo "************************"
 
 # export OPENAPIGEN="openapitools/openapi-generator-cli:v5.1.0"
