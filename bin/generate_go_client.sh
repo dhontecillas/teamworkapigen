@@ -51,6 +51,12 @@ find $PROJDIR/sdks/go -name 'go.mod' | xargs rm
 find $PROJDIR/sdks/go -name 'go.sum' | xargs rm
 
 
+echo "***********************"
+echo "-----------------------"
+echo "git clone https://${GITHUB_TOKEN}@github.com/dhontecillas/teamworkapigoclient.git $TMPDIR"
+echo "-----------------------"
+echo "***********************"
+
 git clone https://${GITHUB_TOKEN}@github.com/dhontecillas/teamworkapigoclient.git $TMPDIR
 cd $TMPDIR
 
@@ -87,6 +93,8 @@ then
     echo "Commiting to a new branch"
     export GO_CLIENT_BRANCH="update/at_$DATE"
     export GO_CLIENT_MSG="Update API at $DATE"
+    git config --global user.email $GITHUB_USER_EMAIL
+    git config --global user.name $GITHUB_USER_NAME
     git checkout -b GO_CLIENT_BRANCH
     git add ./pmv1
     git add ./projv1

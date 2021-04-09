@@ -27,8 +27,7 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
-      - name: Install Dependencies
+      - name: Generate Go Client
         run: bash ./bin/generate_go_client.sh
         env:
           GITHUB_TOKEN: ${{ github.token }}
-
