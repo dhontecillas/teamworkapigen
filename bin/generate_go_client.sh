@@ -93,8 +93,8 @@ then
     echo "Commiting to a new branch"
     export GO_CLIENT_BRANCH="update/at_$DATE"
     export GO_CLIENT_MSG="Update API at $DATE"
-    git config --global user.email $GITHUB_USER_EMAIL
-    git config --global user.name $GITHUB_USER_NAME
+    git config --global user.email $GH_USER_EMAIL
+    git config --global user.name $GH_USER_NAME
     git checkout -b GO_CLIENT_BRANCH
     git add ./pmv1
     git add ./projv1

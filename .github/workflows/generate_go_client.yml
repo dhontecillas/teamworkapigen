@@ -31,3 +31,5 @@ jobs:
         run: bash ./bin/generate_go_client.sh
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          GH_USER_NAME: David Hontecillas
+          GH_USER_EMAIL: dhontecillas@gmail.com
