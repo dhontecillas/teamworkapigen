@@ -110,6 +110,8 @@ then
     echo "going to commit: $GO_CLIENT_MSG"
     git commit -am "$GO_CLIENT_MSG"
     git push -u origin $GO_CLIENT_BRANCH
+    # gh login --with-token
+    export GH_TOKEN="$GITHUB_TOKEN"
     gh pr create --base main \
         --head $GO_CLIENT_BRANCH \
         --title "$GO_CLIENT_MSG" \
