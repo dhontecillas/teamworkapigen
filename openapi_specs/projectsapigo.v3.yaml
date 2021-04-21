@@ -623,7 +623,7 @@ paths:
         enum:
         - all
         - invoiced
-        - not-invoiced
+        - noninvoiced
         default: all
       - name: endDate
         in: query
@@ -2555,6 +2555,10 @@ paths:
         in: query
         name: orderBy
         type: string
+      - description: filter by name
+        in: query
+        name: name
+        type: string
       - description: filter by entities
         in: query
         items: {}
@@ -2748,6 +2752,10 @@ paths:
         - dateUpdated
         in: query
         name: orderBy
+        type: string
+      - description: filter by name
+        in: query
+        name: name
         type: string
       - description: filter by entities
         in: query
@@ -4918,6 +4926,7 @@ paths:
       - description: include
         enum:
         - users
+        - users.companies
         - companies
         - companies.users
         - teams
@@ -5604,10 +5613,24 @@ paths:
         - late
         - today
         - upcoming
+      - name: selectedColumns
+        in: query
+        description: customise the report by selecting columns to be displayed.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by milestone name and description
         type: string
+      - name: reportType
+        in: query
+        description: define the type of the report
+        type: string
+        enum:
+        - plannedvsactual
+        - calendar
+        - agenda
+        default: agenda
       - name: reportFormat
         in: query
         description: define the format of the report
@@ -6026,10 +6049,24 @@ paths:
         - late
         - today
         - upcoming
+      - name: selectedColumns
+        in: query
+        description: customise the report by selecting columns to be displayed.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by milestone name and description
         type: string
+      - name: reportType
+        in: query
+        description: define the type of the report
+        type: string
+        enum:
+        - plannedvsactual
+        - calendar
+        - agenda
+        default: agenda
       - name: reportFormat
         in: query
         description: define the format of the report
@@ -6449,10 +6486,24 @@ paths:
         - late
         - today
         - upcoming
+      - name: selectedColumns
+        in: query
+        description: customise the report by selecting columns to be displayed.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by milestone name and description
         type: string
+      - name: reportType
+        in: query
+        description: define the type of the report
+        type: string
+        enum:
+        - plannedvsactual
+        - calendar
+        - agenda
+        default: agenda
       - name: reportFormat
         in: query
         description: define the format of the report
@@ -6873,10 +6924,24 @@ paths:
         - late
         - today
         - upcoming
+      - name: selectedColumns
+        in: query
+        description: customise the report by selecting columns to be displayed.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by milestone name and description
         type: string
+      - name: reportType
+        in: query
+        description: define the type of the report
+        type: string
+        enum:
+        - plannedvsactual
+        - calendar
+        - agenda
+        default: agenda
       - name: reportFormat
         in: query
         description: define the format of the report
@@ -7295,10 +7360,24 @@ paths:
         - late
         - today
         - upcoming
+      - name: selectedColumns
+        in: query
+        description: customise the report by selecting columns to be displayed.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by milestone name and description
         type: string
+      - name: reportType
+        in: query
+        description: define the type of the report
+        type: string
+        enum:
+        - plannedvsactual
+        - calendar
+        - agenda
+        default: agenda
       - name: reportFormat
         in: query
         description: define the format of the report
@@ -7713,10 +7792,24 @@ paths:
         - late
         - today
         - upcoming
+      - name: selectedColumns
+        in: query
+        description: customise the report by selecting columns to be displayed.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by milestone name and description
         type: string
+      - name: reportType
+        in: query
+        description: define the type of the report
+        type: string
+        enum:
+        - plannedvsactual
+        - calendar
+        - agenda
+        default: agenda
       - name: reportFormat
         in: query
         description: define the format of the report
@@ -8263,6 +8356,15 @@ paths:
         description: filter by showing only locked notebooks
         type: boolean
         default: "false"
+      - name: includeContents
+        in: query
+        description: include contents.
+        type: boolean
+        default: "true"
+      - name: includeArchivedProjects
+        in: query
+        description: include archived projects
+        type: boolean
       - name: getEmoji
         in: query
         description: parse Emoji's
@@ -9016,6 +9118,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: userType
+        in: query
+        description: user type
+        type: string
+        enum:
+        - account
+        - collaborator
+        - contact
+      - name: updatedAfter
+        in: query
+        description: date time
+        type: string
+        format: date-time
       - name: orderMode
         in: query
         description: order mode
@@ -9043,6 +9158,11 @@ paths:
         description: page number (not used when generating reports)
         type: integer
         default: "1"
+      - name: includeServiceAccounts
+        in: query
+        description: include service accounts
+        type: boolean
+        default: "false"
       - name: include
         in: query
         description: include (not used when generating reports)
@@ -9067,6 +9187,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: companyIds
+        in: query
+        description: company ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK
@@ -9090,6 +9216,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: userType
+        in: query
+        description: user type
+        type: string
+        enum:
+        - account
+        - collaborator
+        - contact
+      - name: updatedAfter
+        in: query
+        description: date time
+        type: string
+        format: date-time
       - name: orderMode
         in: query
         description: order mode
@@ -9121,6 +9260,11 @@ paths:
         description: page number (not used when generating reports)
         type: integer
         default: "1"
+      - name: includeServiceAccounts
+        in: query
+        description: include service accounts
+        type: boolean
+        default: "false"
       - name: include
         in: query
         description: include (not used when generating reports)
@@ -9145,6 +9289,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: companyIds
+        in: query
+        description: company ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK
@@ -9285,6 +9435,16 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: zoom
+        in: query
+        description: determine the type of zoom filter used to display on the report
+        type: string
+        enum:
+        - week
+        - month
+        - last3months
+        - quarterbyweek
+        - quarterbymonth
       - name: startDate
         in: query
         description: filter by start date
@@ -9312,10 +9472,22 @@ paths:
         - billableminutes
         - unbillableminutes
         default: name
+      - name: selectedColumns
+        in: query
+        description: customise the report by selecting columns to be displayed.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by user first or last name
         type: string
+      - name: reportFormat
+        in: query
+        description: define the format of the report
+        type: string
+        enum:
+        - pdf
+        default: pdf
       - name: groupBy
         in: query
         description: group by
@@ -9340,6 +9512,11 @@ paths:
           page number
           default: 1
         type: integer
+      - name: isReportDownload
+        in: query
+        description: generate a report document
+        type: boolean
+        default: "false"
       - name: includeCollaborators
         in: query
         description: include collaborators
@@ -9463,6 +9640,11 @@ paths:
         description: updated after
         type: string
         format: date-time
+      - name: selectedColumns
+        in: query
+        description: select the columns to use in exports.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by project name
@@ -9580,6 +9762,10 @@ paths:
       - name: matchAllProjectTags
         in: query
         description: match all project tags
+        type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
         type: boolean
       - name: isReportDownload
         in: query
@@ -9823,6 +10009,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK (no data)
@@ -9879,6 +10071,11 @@ paths:
         description: updated after
         type: string
         format: date-time
+      - name: selectedColumns
+        in: query
+        description: select the columns to use in exports.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by project name
@@ -9996,6 +10193,10 @@ paths:
       - name: matchAllProjectTags
         in: query
         description: match all project tags
+        type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
         type: boolean
       - name: isReportDownload
         in: query
@@ -10239,6 +10440,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK (no data)
@@ -10293,6 +10500,11 @@ paths:
         description: updated after
         type: string
         format: date-time
+      - name: selectedColumns
+        in: query
+        description: select the columns to use in exports.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by project name
@@ -10410,6 +10622,10 @@ paths:
       - name: matchAllProjectTags
         in: query
         description: match all project tags
+        type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
         type: boolean
       - name: isReportDownload
         in: query
@@ -10653,6 +10869,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK
@@ -10711,6 +10933,11 @@ paths:
         description: updated after
         type: string
         format: date-time
+      - name: selectedColumns
+        in: query
+        description: select the columns to use in exports.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by project name
@@ -10828,6 +11055,10 @@ paths:
       - name: matchAllProjectTags
         in: query
         description: match all project tags
+        type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
         type: boolean
       - name: isReportDownload
         in: query
@@ -11071,6 +11302,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK (no data)
@@ -11127,6 +11364,11 @@ paths:
         description: updated after
         type: string
         format: date-time
+      - name: selectedColumns
+        in: query
+        description: select the columns to use in exports.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by project name
@@ -11244,6 +11486,10 @@ paths:
       - name: matchAllProjectTags
         in: query
         description: match all project tags
+        type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
         type: boolean
       - name: isReportDownload
         in: query
@@ -11487,6 +11733,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK (no data)
@@ -11537,6 +11789,11 @@ paths:
         description: updated after
         type: string
         format: date-time
+      - name: selectedColumns
+        in: query
+        description: select the columns to use in exports.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by project name
@@ -11659,6 +11916,10 @@ paths:
         in: query
         description: match all project tags
         type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
+        type: boolean
       - name: isReportDownload
         in: query
         description: generate a report document
@@ -11901,6 +12162,12 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK
@@ -11925,6 +12192,11 @@ paths:
         format: date-time
         in: query
         name: updatedAfter
+        type: string
+      - description: select the columns to use in exports.
+        in: query
+        items: {}
+        name: selectedColumns
         type: string
       - description: filter by project name
         in: query
@@ -12047,6 +12319,10 @@ paths:
       - description: match all project tags
         in: query
         name: matchAllProjectTags
+        type: boolean
+      - description: match all excluded project tags
+        in: query
+        name: matchAllExcludedTags
         type: boolean
       - default: "false"
         description: generate a report document
@@ -12289,6 +12565,12 @@ paths:
         items:
           type: string
         name: fields[companies]
+        type: array
+      - description: exclude by project tag ids
+        in: query
+        items:
+          type: integer
+        name: excludeTagIds
         type: array
       produces:
       - application/json
@@ -12898,10 +13180,24 @@ paths:
         - late
         - today
         - upcoming
+      - name: selectedColumns
+        in: query
+        description: customise the report by selecting columns to be displayed.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by milestone name and description
         type: string
+      - name: reportType
+        in: query
+        description: define the type of the report
+        type: string
+        enum:
+        - plannedvsactual
+        - calendar
+        - agenda
+        default: agenda
       - name: reportFormat
         in: query
         description: define the format of the report
@@ -13433,6 +13729,222 @@ paths:
           description: 403 Forbidden
           schema:
             $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/{projectId}/people.json:
+    get:
+      operationId: GET_projects_api_v3_projects_{projectId}_people.json
+      tags:
+      - People
+      summary: Returns a list of people
+      description: Retrieve all people on the project.
+      produces:
+      - application/json
+      parameters:
+      - name: userType
+        in: query
+        description: user type
+        type: string
+        enum:
+        - account
+        - collaborator
+        - contact
+      - name: updatedAfter
+        in: query
+        description: date time
+        type: string
+        format: date-time
+      - name: orderMode
+        in: query
+        description: order mode
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: orderBy
+        in: query
+        description: order by
+        type: string
+        enum:
+        - name
+        - namecaseinsensitive
+        - company
+        default: name
+      - name: projectId
+        in: path
+        type: integer
+        required: true
+      - name: pageSize
+        in: query
+        description: number of items in a page (not used when generating reports)
+        type: integer
+        default: "50"
+      - name: page
+        in: query
+        description: page number (not used when generating reports)
+        type: integer
+        default: "1"
+      - name: includeServiceAccounts
+        in: query
+        description: include service accounts
+        type: boolean
+        default: "false"
+      - name: include
+        in: query
+        description: include (not used when generating reports)
+        type: array
+        items:
+          type: string
+        enum:
+        - companies
+        - permissions
+      - name: ids
+        in: query
+        description: filter by user ids
+        type: array
+        items:
+          type: integer
+      - name: fields[companies]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - logoUploadedToServer
+        - logoImage
+      - name: fields[Permissions]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - viewMessagesAndFiles
+        - viewTasksAndMilestones
+        - viewTime
+        - viewNotebooks
+        - viewRiskRegister
+        - viewEstimatedTime
+        - viewInvoices
+        - addTasks
+        - addRisks
+        - manageCustomFields
+        - addExpenses
+        - editAllTasks
+        - addMilestones
+        - addTaskLists
+        - addMessages
+        - addFiles
+        - addTime
+        - addNotebooks
+        - viewLinks
+        - addLinks
+        - canViewForms
+        - addForms
+        - viewAllTimeLogs
+        - setPrivacy
+        - projectAdministrator
+        - viewProjectUpdate
+        - addProjectUpdate
+        - canViewProjectMembers
+        - canViewProjectBudget
+        - canManageProjectBudget
+        - canViewRates
+        - canManageRates
+        - canViewSchedule
+        - canManageSchedule
+        - receiveEmailNotifications
+        - isObserving
+        - isArchived
+        - active
+        - canAccess
+        - inOwnerCompany
+        - canManagePeople
+        - canViewProjectTemplates
+        - canManageProjectTemplates
+      - name: companyIds
+        in: query
+        description: company ids
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/people.MultiResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        403:
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/{projectId}/quickadd.json:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Using a specific syntax it's possible to add multiple tasks at once into a
+        specific project. Tasks can be separated by the symbol ~|~ . For more details
+        please check:
+        https://support.teamwork.com/projects/project-sections/quick-add-new-task
+      operationId: POST_projects_api_v3_projects_{projectId}_quickadd.json
+      parameters:
+      - in: body
+        name: task.QuickAddRequest
+        required: true
+        schema:
+          $ref: '#/definitions/task.QuickAddRequest'
+      - in: path
+        name: projectId
+        required: true
+        type: integer
+      - description: include
+        enum:
+        - cards
+        in: query
+        items:
+          type: string
+        name: include
+        type: array
+      - enum:
+        - id
+        - displayOrder
+        - archived
+        - archivedAt
+        - archivedBy
+        - "createdAt\n\tcreateBy"
+        - updatedAt
+        - visible
+        - status
+        - deleteBy
+        - deletedAt
+        in: query
+        items:
+          type: string
+        name: fields[cards]
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/task.QuickAddResponse'
+        "400":
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        "403":
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+      summary: Quick-add multiple tasks at once.
+      tags:
+      - Tasks
+      x-private: true
   /projects/api/v3/projects/{projectId}/risks:
     get:
       operationId: GET_projects_api_v3_projects_{projectId}_risks
@@ -15048,7 +15560,7 @@ paths:
         enum:
         - all
         - invoiced
-        - not-invoiced
+        - noninvoiced
         default: all
       - name: endDate
         in: query
@@ -16113,99 +16625,15 @@ paths:
           description: 400 Bad Request
           schema:
             $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/teamwork/categories.json:
+  /projects/api/v3/projects/starred.json:
     get:
-      operationId: GET_projects_api_v3_projects_teamwork_categories.json
-      tags:
-      - Categories
-      summary: Returns a list of teamwork project categories
-      produces:
-      - application/json
-      responses:
-        200:
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/category.CategoriesResponse'
-        400:
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        403:
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/teamwork/samples.json:
-    get:
-      operationId: GET_projects_api_v3_projects_teamwork_samples.json
+      operationId: GET_projects_api_v3_projects_starred.json
       tags:
       - Projects
-      summary: Returns a list of teamwork sample projects
-      description: Retrieve all sample projects for the provided filters.
-      produces:
-      - application/json
-      parameters:
-      - name: searchTerm
-        in: query
-        description: filter by project name
-        type: string
-      - name: pageSize
-        in: query
-        description: number of items in a page (not used when generating reports)
-        type: integer
-        default: "50"
-      - name: page
-        in: query
-        description: page number (not used when generating reports)
-        type: integer
-        default: "1"
-      - name: ids
-        in: query
-        description: filter by sample ids
-        type: array
-        items:
-          type: integer
-      - name: fields[sampleprojects]
-        in: query
-        type: array
-        items:
-          type: string
-        enum:
-        - id
-        - name
-        - code
-        - description
-        - icon
-        - imagePreview
-        - categoryId
-        - content
-      - name: categoryIds
-        in: query
-        description: filter by category ids
-        type: array
-        items:
-          type: integer
-      responses:
-        200:
-          description: 200 OK
-          schema:
-            $ref: '#/definitions/project.SampleProjectsResponse'
-        400:
-          description: 400 Bad Request
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-        403:
-          description: 403 Forbidden
-          schema:
-            $ref: '#/definitions/view.ErrorResponse'
-  /projects/api/v3/projects/templates.json:
-    get:
-      operationId: GET_projects_api_v3_projects_templates.json
-      tags:
-      - Projects
-      summary: Returns a list of projects templates
+      summary: Returns a list of starred projects
       description: |-
-        Retrieve all projects templates for the provided filters. Only the projects templates that the
-        logged-in user can access will be returned.
+        Retrieve all starred projects for the provided filters. Only the projects
+        that the logged-in user can access will be returned.
 
 
         On this endpoint you can filter by project custom fields. The syntax for the
@@ -16240,6 +16668,11 @@ paths:
         description: updated after
         type: string
         format: date-time
+      - name: selectedColumns
+        in: query
+        description: select the columns to use in exports.
+        type: string
+        items: {}
       - name: searchTerm
         in: query
         description: filter by project name
@@ -16357,6 +16790,10 @@ paths:
       - name: matchAllProjectTags
         in: query
         description: match all project tags
+        type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
         type: boolean
       - name: isReportDownload
         in: query
@@ -16600,6 +17037,527 @@ paths:
         - name
         - logoUploadedToServer
         - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/project.ProjectsResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        403:
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/teamwork/categories.json:
+    get:
+      operationId: GET_projects_api_v3_projects_teamwork_categories.json
+      tags:
+      - Categories
+      summary: Returns a list of teamwork project categories
+      produces:
+      - application/json
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/category.CategoriesResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        403:
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/teamwork/samples.json:
+    get:
+      operationId: GET_projects_api_v3_projects_teamwork_samples.json
+      tags:
+      - Projects
+      summary: Returns a list of teamwork sample projects
+      description: Retrieve all sample projects for the provided filters.
+      produces:
+      - application/json
+      parameters:
+      - name: searchTerm
+        in: query
+        description: filter by project name
+        type: string
+      - name: pageSize
+        in: query
+        description: number of items in a page (not used when generating reports)
+        type: integer
+        default: "50"
+      - name: page
+        in: query
+        description: page number (not used when generating reports)
+        type: integer
+        default: "1"
+      - name: ids
+        in: query
+        description: filter by sample ids
+        type: array
+        items:
+          type: integer
+      - name: fields[sampleprojects]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - code
+        - description
+        - icon
+        - imagePreview
+        - categoryId
+        - content
+      - name: categoryIds
+        in: query
+        description: filter by category ids
+        type: array
+        items:
+          type: integer
+      responses:
+        200:
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/project.SampleProjectsResponse'
+        400:
+          description: 400 Bad Request
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+        403:
+          description: 403 Forbidden
+          schema:
+            $ref: '#/definitions/view.ErrorResponse'
+  /projects/api/v3/projects/templates.json:
+    get:
+      operationId: GET_projects_api_v3_projects_templates.json
+      tags:
+      - Projects
+      summary: Returns a list of projects templates
+      description: |-
+        Retrieve all projects templates for the provided filters. Only the projects templates that the
+        logged-in user can access will be returned.
+
+
+        On this endpoint you can filter by project custom fields. The syntax for the
+        query parameter is the following:
+
+            projectCustomField[id][op]=value
+
+        Where:
+          - [id] is the custom field ID
+          - [op] is the operator to apply when filtering, different operators are
+            allowed according to the custom field type
+          - [value] is the value to apply when filtering
+
+        For example, if I want to filter a dropdown custom field with ID 10 to only
+        return entries that have the value "Option1" we would do the following:
+
+            projectCustomField[10][eq]=Option1
+
+        The allowed operators are:
+          - like
+          - not-like
+          - eq
+          - not
+          - lt
+          - gt
+          - any
+      produces:
+      - application/json
+      parameters:
+      - name: updatedAfter
+        in: query
+        description: updated after
+        type: string
+        format: date-time
+      - name: selectedColumns
+        in: query
+        description: select the columns to use in exports.
+        type: string
+        items: {}
+      - name: searchTerm
+        in: query
+        description: filter by project name
+        type: string
+      - name: reportType
+        in: query
+        description: define the format of the report
+        type: string
+        enum:
+        - project
+        - health
+        default: project
+      - name: reportFormat
+        in: query
+        description: define the format of the report
+        type: string
+        enum:
+        - csv
+        - html
+        - pdf
+        - xls
+        default: pdf
+      - name: projectType
+        in: query
+        description: filter by project type
+        type: string
+      - name: projectStatuses
+        in: query
+        description: filter by project status
+        type: string
+        items: {}
+        enum:
+        - active
+        - current
+        - late
+        - upcoming
+        - completed
+        - deleted
+      - name: orderMode
+        in: query
+        description: order mode
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+      - name: orderBy
+        in: query
+        description: order by
+        type: string
+        enum:
+        - companyname
+        - datecreated
+        - duedate
+        - lastactivity
+        - name
+        - namecaseinsensitive
+        - ownercompany
+        - starred
+        default: name
+      - name: minLastActivityDate
+        in: query
+        description: filter by min last activity date
+        type: string
+        format: date
+      - name: maxLastActivityDate
+        in: query
+        description: filter by max last activity date
+        type: string
+        format: date
+      - name: userId
+        in: query
+        description: filter by user id
+        type: integer
+      - name: projectHealths
+        in: query
+        description: |-
+          filter by project healths
+
+          0: not set
+          1: bad
+          2: ok
+          3: good
+        type: integer
+        items: {}
+        enum:
+        - "0"
+        - "1"
+        - "2"
+        - "3"
+      - name: pageSize
+        in: query
+        description: number of items in a page (not used when generating reports)
+        type: integer
+        default: "50"
+      - name: page
+        in: query
+        description: page number (not used when generating reports)
+        type: integer
+        default: "1"
+      - name: onlyStarredProjects
+        in: query
+        description: filter by starred projects only
+        type: boolean
+      - name: onlyProjectsWithExplicitMembership
+        in: query
+        description: only show projects with explicit membership
+        type: boolean
+        default: "false"
+      - name: onlyArchivedProjects
+        in: query
+        description: return only archived projects
+        type: boolean
+        default: "false"
+      - name: matchAllProjectTags
+        in: query
+        description: match all project tags
+        type: boolean
+      - name: matchAllExcludedTags
+        in: query
+        description: match all excluded project tags
+        type: boolean
+      - name: isReportDownload
+        in: query
+        description: generate a report document
+        type: boolean
+        default: "false"
+      - name: includeProjectUserInfo
+        in: query
+        description: fetch user-specific data such as isStarred
+        type: boolean
+        default: "false"
+      - name: includeCustomFields
+        in: query
+        description: include custom fields
+        type: boolean
+        default: "false"
+      - name: includeCompletedStatus
+        in: query
+        description: optional to include completed projects when filtering by project statuses "current,late".
+        type: boolean
+      - name: includeArchivedProjects
+        in: query
+        description: include archived projects
+        type: boolean
+        default: "false"
+      - name: hideObservedProjects
+        in: query
+        description: hide projects where the logged-in user is just an observer
+        type: boolean
+        default: "false"
+      - name: projectTagIds
+        in: query
+        description: filter by project tag ids
+        type: array
+        items:
+          type: integer
+      - name: projectOwnerIds
+        in: query
+        description: filter by project owner ids
+        type: array
+        items:
+          type: integer
+      - name: projectIds
+        in: query
+        description: filter by project ids
+        type: array
+        items:
+          type: integer
+      - name: projectCompanyIds
+        in: query
+        description: filter by company ids
+        type: array
+        items:
+          type: integer
+      - name: projectCategoryIds
+        in: query
+        description: filter by project category ids
+        type: array
+        items:
+          type: integer
+      - name: include
+        in: query
+        description: include (not used when generating reports)
+        type: array
+        items:
+          type: string
+        enum:
+        - projectOwners
+        - projectUpdates
+        - companies
+        - projectCategories
+        - portfolioCards
+        - portfolioBoards
+        - portfolioColumns
+        - tags
+        - customfields
+        - customfieldProjects
+        - projectBudgets
+      - name: fields[users]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - firstName
+        - lastName
+        - email
+        - companyId
+        - isAdmin
+        - type
+      - name: fields[tags]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - color
+        - count
+      - name: fields[projects]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+      - name: fields[projectcategories]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - color
+      - name: fields[projectUpdates]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - projectId
+        - text
+        - isActive
+        - health
+        - color
+        - dateCreated
+        - deleted
+        - deletedDate
+        - numLikes
+        - reactions
+      - name: fields[projectBudgets]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - projectId
+        - type
+        - status
+        - capacityUsed
+        - capacity
+        - |-
+          originatorBudgetId
+          isRepeating
+        - repeatPeriod
+        - repeatUnit
+        - repeatsRemaining
+        - sequenceNumber
+        - |-
+          startDateTime
+          endDateTime
+        - currencyCode
+        - timelogType
+        - expenseType
+        - defaultRate
+        - |-
+          notificationIds
+          createdByUserId
+        - dateCreated
+        - updatedUserId
+        - dateUpdated
+        - |-
+          completedByUserId
+          dateCompleted
+        - deletedByUserId
+        - dateDeleted
+      - name: fields[portfolioColumns]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - color
+      - name: fields[portfolioCards]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - columnId
+        - projectId
+      - name: fields[portfolioBoards]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - color
+      - name: fields[customfields]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - projectId
+        - entity
+        - name
+        - description
+        - type
+        - options
+        - visibilities
+        - isPrivate
+        - required
+        - createdAt
+        - createdByUserId
+        - updatedAt
+        - updatedByUserId
+        - deleted
+        - deletedAt
+        - deletedByUserId
+      - name: fields[customfieldProjects]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - customfieldId
+        - value
+        - createdAt
+        - createdBy
+      - name: fields[companies]
+        in: query
+        type: array
+        items:
+          type: string
+        enum:
+        - id
+        - name
+        - logoUploadedToServer
+        - logoImage
+      - name: excludeTagIds
+        in: query
+        description: exclude by project tag ids
+        type: array
+        items:
+          type: integer
       responses:
         200:
           description: 200 OK
@@ -18880,9 +19838,29 @@ paths:
         in: query
         name: startDate
         type: string
+      - description: customise the report by selecting columns to be displayed for planned vs actual.
+        in: query
+        items: {}
+        name: selectedColumns
+        type: string
       - description: filter by search term
         in: query
         name: searchTerm
+        type: string
+      - default: plannedvsactual
+        description: define the type of the report
+        enum:
+        - plannedvsactual
+        in: query
+        name: reportType
+        type: string
+      - default: pdf
+        description: define the format of the report
+        enum:
+        - html
+        - pdf
+        in: query
+        name: reportFormat
         type: string
       - description: filter by project status
         enum:
@@ -19078,6 +20056,11 @@ paths:
       - description: match all exclude tags
         in: query
         name: matchAllExcludedTags
+        type: boolean
+      - default: "false"
+        description: generate a report export.
+        in: query
+        name: isReportDownload
         type: boolean
       - description: include tasks latest update action
         in: query
@@ -20065,7 +21048,7 @@ paths:
         enum:
         - all
         - invoiced
-        - not-invoiced
+        - noninvoiced
         default: all
       - name: endDate
         in: query
@@ -23471,6 +24454,19 @@ definitions:
       ids:
         $ref: '#/definitions/payload.UserGroups'
       type:
+        $ref: '#/definitions/payload.NotifyType'
+  payload.NotifyType:
+    title: NotifyType
+    description: |-
+      NotifyType implements json.Unmarshaler to allow testing between a value
+      that explicitly set to null or omitted.
+    type: object
+    properties:
+      "Null":
+        type: boolean
+      Set:
+        type: boolean
+      Value:
         type: string
   payload.NullableInt64Slice:
     title: NullableInt64Slice
@@ -23521,6 +24517,10 @@ definitions:
       included:
         type: object
         properties:
+          ProjectPermissions:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.ProjectPermissions'
           companies:
             type: object
             additionalProperties:
@@ -23539,6 +24539,10 @@ definitions:
       included:
         type: object
         properties:
+          ProjectPermissions:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.ProjectPermissions'
           companies:
             type: object
             additionalProperties:
@@ -23739,6 +24743,8 @@ definitions:
         type: integer
       files:
         type: integer
+      forms:
+        type: integer
       gantt:
         type: integer
       links:
@@ -23781,6 +24787,8 @@ definitions:
       dashboard:
         type: integer
       files:
+        type: integer
+      forms:
         type: integer
       gantt:
         type: integer
@@ -24651,6 +25659,87 @@ definitions:
         type: integer
       type:
         type: string
+  task.QuickAddFailure:
+    title: QuickAddFailure
+    description: QuickAddFailure describes details about a specific failure.
+    type: object
+    properties:
+      error:
+        type: string
+      line:
+        type: integer
+      title:
+        type: string
+  task.QuickAddRequest:
+    title: QuickAddRequest
+    description: |-
+      QuickAddRequest contains information of multiple tasks to be created at one
+      shot.
+    type: object
+    properties:
+      quickAdd:
+        type: object
+        properties:
+          assignees:
+            $ref: '#/definitions/payload.UserGroups'
+          content:
+            type: string
+          description:
+            type: string
+          dueAt:
+            $ref: '#/definitions/payload.Date'
+          grantAccessTo:
+            $ref: '#/definitions/payload.UserGroups'
+          priority:
+            type: string
+          private:
+            type: boolean
+          projectId:
+            type: integer
+          startAt:
+            $ref: '#/definitions/payload.Date'
+          tasklistId:
+            type: integer
+      quickAddOptions:
+        type: object
+        properties:
+          notify:
+            type: boolean
+          useDefaults:
+            type: boolean
+  task.QuickAddResponse:
+    title: QuickAddResponse
+    description: QuickAddResponse contains result information about the quick add operation.
+    type: object
+    properties:
+      included:
+        type: object
+        properties:
+          cards:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/view.TaskCard'
+      quickAdd:
+        type: object
+        properties:
+          cardIds:
+            type: array
+            items:
+              type: integer
+          failures:
+            type: array
+            items:
+              $ref: '#/definitions/task.QuickAddFailure'
+          success:
+            type: integer
+          taskIds:
+            type: array
+            items:
+              type: integer
+          tasklistIds:
+            type: array
+            items:
+              type: integer
   task.Reminder:
     title: Reminder
     description: Reminder stores all necessary information to create a task reminder.
@@ -26009,6 +27098,8 @@ definitions:
         type: string
       description:
         type: string
+      descriptionHTML:
+        type: string
       id:
         type: integer
       isDeleted:
@@ -26111,6 +27202,7 @@ definitions:
       contentHTML:
         type: string
       contents:
+        description: can be optionally hidden on lists
         type: string
       createdAt:
         type: string
@@ -26745,6 +27837,97 @@ definitions:
         type: string
       suggestedStartDate:
         type: string
+  view.ProjectPermissions:
+    title: ProjectPermissions
+    description: ProjectPermissions determines the user permissions associated with a prokject .
+    type: object
+    properties:
+      active:
+        type: boolean
+      addExpenses:
+        type: boolean
+      addFiles:
+        type: boolean
+      addForms:
+        type: boolean
+      addLinks:
+        type: boolean
+      addMessages:
+        type: boolean
+      addMilestones:
+        type: boolean
+      addNotebooks:
+        type: boolean
+      addProjectUpdate:
+        type: boolean
+      addRisks:
+        type: boolean
+      addTaskLists:
+        type: boolean
+      addTasks:
+        type: boolean
+      addTime:
+        type: boolean
+      canAccess:
+        type: boolean
+      canManagePeople:
+        type: boolean
+      canManageProjectBudget:
+        type: boolean
+      canManageProjectTemplates:
+        type: boolean
+      canManageRates:
+        type: boolean
+      canManageSchedule:
+        type: boolean
+      canViewForms:
+        type: boolean
+      canViewProjectBudget:
+        type: boolean
+      canViewProjectMembers:
+        type: boolean
+      canViewProjectTemplates:
+        type: boolean
+      canViewRates:
+        type: boolean
+      canViewSchedule:
+        type: boolean
+      editAllTasks:
+        type: boolean
+      inOwnerCompany:
+        type: boolean
+      isArchived:
+        type: boolean
+      isObserving:
+        type: boolean
+      manageCustomFields:
+        type: boolean
+      projectAdministrator:
+        type: boolean
+      receiveEmailNotifications:
+        type: boolean
+      setPrivacy:
+        type: boolean
+      viewAllTimeLogs:
+        type: boolean
+      viewEstimatedTime:
+        type: boolean
+      viewInvoices:
+        type: boolean
+      viewLinks:
+        type: boolean
+      viewMessagesAndFiles:
+        type: boolean
+      viewNotebooks:
+        type: boolean
+      viewProjectUpdate:
+        type: boolean
+      viewRiskRegister:
+        type: boolean
+      viewTasksAndMilestones:
+        type: boolean
+      viewTime:
+        type: boolean
   view.ProjectSchedule:
     title: ProjectSchedule
     description: |-
@@ -27075,6 +28258,8 @@ definitions:
     description: Task defines how entity.Task should be rendered.
     type: object
     properties:
+      accumulatedEstimatedMinutes:
+        type: integer
       assigneeCompanies:
         type: array
         items:
@@ -27461,6 +28646,10 @@ definitions:
       id:
         type: integer
       isAdmin:
+        type: boolean
+      isClientUser:
+        type: boolean
+      isServiceAccount:
         type: boolean
       lastName:
         type: string
