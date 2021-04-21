@@ -88,6 +88,7 @@ docker run --rm \
 # TODO: check if the examples don't compile
 
 if [[ -z "$GO_CLIENT_BRANCH" ]]; then
+    echo "GO_CLIENT_BRANCH: ** $GO_CLIENT_BRANCH ** - GITHUB_HEAD_REF: ** $GITHUB_HEAD_REF **"
     GO_CLIENT_BRANCH="update/at_$CURDATE"
 fi
 
