@@ -90,6 +90,8 @@ docker run --rm \
 if [[ -z "$GO_CLIENT_BRANCH" ]]; then
     echo "GO_CLIENT_BRANCH: ** $GO_CLIENT_BRANCH ** - GITHUB_HEAD_REF: ** $GITHUB_HEAD_REF **"
     GO_CLIENT_BRANCH="update/at_$CURDATE"
+else
+    echo "GO_CLIENT_BRANCH: ** $GO_CLIENT_BRANCH ** - GITHUB_HEAD_REF: ** $GITHUB_HEAD_REF **"
 fi
 
 if ! [[ -z "CREATE_PR" ]]
@@ -103,6 +105,7 @@ then
     git add ./projv1
     git add ./projv2
     git add ./projv3
+    echo "going to commit: $GO_CLIENT_MSG"
     git commit -am "$GO_CLIENT_MSG"
     git push -u origin $GO_CLIENT_BRANCH
     gh pr create --base main \
