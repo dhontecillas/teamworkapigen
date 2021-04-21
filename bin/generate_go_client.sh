@@ -88,13 +88,13 @@ docker run --rm \
 # TODO: check if the examples don't compile
 
 if [[ -z "$GO_CLIENT_BRANCH" ]]; then
-    GO_CLIENT_BRANCH="update/at_$DATE"
+    GO_CLIENT_BRANCH="update/at_$CURDATE"
 fi
 
 if ! [[ -z "CREATE_PR" ]]
 then
-    echo "Commiting to a new branch"
-    GO_CLIENT_MSG="Update API with $GO_CLIENT_BRANCH at $DATE"
+    echo "Commiting to a new branch: $GO_CLIENT_BRANCH"
+    GO_CLIENT_MSG="Update API with $GO_CLIENT_BRANCH at $CURDATE"
     git config --global user.email $GH_USER_EMAIL
     git config --global user.name $GH_USER_NAME
     git checkout $GO_CLIENT_BRANCH || git checkout -b $GO_CLIENT_BRANCH
