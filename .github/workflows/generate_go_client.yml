@@ -1,6 +1,5 @@
 name: pull request
-# on: pull_request
-on: dispatch
+on: pull_request
 env:
   GO_VERSION: "1.16.x"
 jobs:
