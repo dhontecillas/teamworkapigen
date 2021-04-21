@@ -7,8 +7,6 @@
 # To get help about config options for language specifics:
 # docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli config-help -g go
 
-set -e
-
 GENLANG=go
 export CURDATE=$(date +%Y%m%d_%H%m%S)
 export CURDIR=$PWD
@@ -18,7 +16,6 @@ echo "************************"
 echo "PROJDIR: $PROJDIR"
 echo "CURDIR: $CURDIR"
 echo "PWD: $PWD"
-echo "GH: $GITHUB_TOKEN"
 echo "************************"
 
 # export OPENAPIGEN="openapitools/openapi-generator-cli:v5.1.0"
@@ -88,20 +85,24 @@ docker run --rm \
     golang:1.16-buster \
     go build -o createtimelog ./examples/createtimelog
 
-CREATE_PR="true"
+# TODO: check if the examples don't compile
+
+if [[ -z "$GO_CLIENT_BRANCH" ]]; then
+    GO_CLIENT_BRANCH="update/at_$DATE"
+fi
+
 if ! [[ -z "CREATE_PR" ]]
 then
     echo "Commiting to a new branch"
-    export GO_CLIENT_BRANCH="update/at_$DATE"
-    export GO_CLIENT_MSG="Update API at $DATE"
+    GO_CLIENT_MSG="Update API with $GO_CLIENT_BRANCH at $DATE"
     git config --global user.email $GH_USER_EMAIL
     git config --global user.name $GH_USER_NAME
-    git checkout -b GO_CLIENT_BRANCH
+    git checkout $GO_CLIENT_BRANCH || git checkout -b $GO_CLIENT_BRANCH
     git add ./pmv1
     git add ./projv1
     git add ./projv2
     git add ./projv3
-    git commit -am "GO_CLIENT_MSG"
+    git commit -am "$GO_CLIENT_MSG"
     git push -u origin $GO_CLIENT_BRANCH
     gh pr create --base main \
         --head $GO_CLIENT_BRANCH \
