@@ -33,5 +33,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           GH_USER_NAME: David Hontecillas
           GH_USER_EMAIL: dhontecillas@gmail.com
-          GO_CLIENT_BRANCH: ${{ github.head.ref }}
+          GO_CLIENT_BRANCH: ${{ github.head_ref }}
           CREATE_PR: true
