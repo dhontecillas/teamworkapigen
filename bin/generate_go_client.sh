@@ -56,10 +56,6 @@ echo "-----------------------"
 echo "***********************"
 
 git clone https://${GITHUB_TOKEN}@github.com/dhontecillas/teamworkapigoclient.git $TMPDIR
-if [ "$?" -ge "0" ]; then
-    echo "cannot checkout repository"
-    exit 1
-fi
 
 cd $TMPDIR
 
